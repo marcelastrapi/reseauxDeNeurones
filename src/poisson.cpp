@@ -2,8 +2,8 @@
 #include <cmath>
 
 Poisson::Poisson() :
-    m_minRnd(-3.14),
-    m_maxRnd(3.14)
+    m_minRnd(-9.14),
+    m_maxRnd(-3.14)
 {
     m_forme = Cercle;
     initialiseLesVariablesAléatoires();
@@ -13,8 +13,8 @@ Poisson::Poisson() :
 void Poisson::calculeNouvelleAngle()
 {
     // en fonction de la pos du requin
-    m_angleDeRotation = m_variablesAléatoires.at(0) * m_requin->getPos().x/m_largeurDuMonde \
-            + m_variablesAléatoires.at(1) * m_requin->getPos().y/m_hauteurDuMonde - 3.14;
+    m_angleDeRotation = -m_variablesAléatoires.at(0) * m_requin->getPos().x/m_largeurDuMonde \
+            - m_variablesAléatoires.at(1) / m_requin->getPos().y/m_hauteurDuMonde - 3.14;
     /* show("m_angleDeRotation",m_angleDeRotation); */
     /* m_angleDeRotation = -3.14/2; */
 }

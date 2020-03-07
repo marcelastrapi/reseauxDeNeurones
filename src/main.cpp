@@ -38,7 +38,7 @@ unsigned int minWinHeight = 4;
 unsigned int windowWidth  = 0; // Default, fullscreen
 unsigned int windowHeight = 0;
 
-unsigned int tickTime = 61; // 24 image/s = 41.66 ms
+unsigned int tickTime = 41; // 24 image/s = 41.66 ms
 unsigned short incrTickTime = 2;
 unsigned int minTickTime = 10;
 
@@ -129,7 +129,7 @@ void creerToutLesEtres(Monde& monde)
     requin->setMaxAngleDeRotation(0.3f);
 
     // Je veux des poissons
-    unsigned int nombreDePoissons = 310;
+    unsigned int nombreDePoissons = 1000;
     Couleur clPoisson = Couleur(0,255,0);
     Etre::nbType taillePoisson = 10;
 
@@ -143,6 +143,7 @@ void creerToutLesEtres(Monde& monde)
         p->setPos( Coord( static_cast<float>(Rnd::_int( 0, static_cast<int>(p->getMaxPosX()) )),\
                     static_cast<float>(Rnd::_int( 0, static_cast<int>(p->getMaxPosY()) )) ));
         p->setRequin(requin);
+        p->setMaxDistanceDeDeplacement(requin->getMaxDistanceDeDeplacement());
         poissons.push_back(p);
         monde.ajouteEtre(p);
         requin->ajouteCible(p); // héhéhéé
