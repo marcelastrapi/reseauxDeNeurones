@@ -117,8 +117,9 @@ void creerToutLesEtres(Monde& monde)
     // Je veux un requin
     requin = new Requin();
     requin->setDimensionDuMonde(monde.getLargeur()+50, monde.getHauteur()+50);
-    requin->setCouleur(Couleur(255,0,0));
-    requin->setDimension(48.540f, 30.f);
+    requin->setCouleur(Couleur(0,0,0));
+    /* requin->setDimension(48.540f, 30.f); */
+    requin->setDimension(10, 30.f);
     /* Coord posDepart = Coord(monde.getLargeur() / 2 - requin->getLargeur(),\ */
     /*         monde.getHauteur() / 2 - requin->getHauteur()); */
     Coord posDepart = Coord(monde.getLargeur() / 2 ,\
