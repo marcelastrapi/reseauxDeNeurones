@@ -77,6 +77,8 @@ Etre::angleType Etre::getAngleEntreMoiEt(const Etre* lui) const
 // sub
 void Etre::avance(Etre::nbType distanceDeDeplacement)
 {
+    if (!m_mouvant) return;
+
     if (distanceDeDeplacement > m_maxDistanceDeDeplacement)
         distanceDeDeplacement = m_maxDistanceDeDeplacement;
 

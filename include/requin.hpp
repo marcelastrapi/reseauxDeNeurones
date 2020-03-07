@@ -14,8 +14,11 @@ class Requin: public Etre
         static const ESPECE espece = REQUIN;
         Requin();
 
+        // setters
+        inline void setNbCiblesMangées(const unsigned int nbCiblesMangée) { m_nbCiblesMangées = nbCiblesMangée; }
         // getters
         inline size_t getNbCibles() const { return m_cibles.getTotal(); }
+        inline unsigned int getNbCiblesMangées() const { return m_nbCiblesMangées; }
 
         // debug
         void debug() const;
@@ -29,6 +32,7 @@ class Requin: public Etre
 
     private:
         Etres m_cibles;
+        unsigned int m_nbCiblesMangées;
 
         // Chasse
         void mange(Etre* etre);

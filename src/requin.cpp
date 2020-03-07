@@ -3,9 +3,9 @@
 #include <utils.hpp>
 
 // Ctor
-Requin::Requin()
+Requin::Requin(): m_nbCiblesMangées(0)
 {
-    m_forme = Rectangle;
+    m_forme = Cercle;
     m_maxDistanceDeDeplacement = 10;
 }
 
@@ -62,6 +62,7 @@ void Requin::detectLaCibleLaPlusProche()
 
 void Requin::mange(Etre* etre)
 {
+    m_nbCiblesMangées++ ;
     etre->reborn();
 }
 

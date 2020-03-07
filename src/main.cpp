@@ -51,8 +51,14 @@ sf::Text noteText;
 sf::Clock clockText;
 unsigned int textTime = 3;
 
+sf::Text tauxDeCarnageText;
+sf::Clock clockTauxDeCarnage;
+unsigned int tauxDeCarnageTime = 1;
+
 Requin* requin;
 vector<Poisson*> poissons;
+
+bool modeMouseOn = false;
 
 //////////////////////////////////////////////////////////////////////
 // Functions
@@ -123,7 +129,7 @@ void creerToutLesEtres(Monde& monde)
     requin->setMaxAngleDeRotation(0.3f);
 
     // Je veux des poissons
-    unsigned int nombreDePoissons = 100;
+    unsigned int nombreDePoissons = 310;
     Couleur clPoisson = Couleur(0,255,0);
     Etre::nbType taillePoisson = 10;
 
@@ -210,6 +216,12 @@ int main (int argc, char* argv[] )
     noteText.setPosition(10,10);
     noteText.setStyle( sf::Text::Bold );
 
+    tauxDeCarnageText.setFont(font);
+    tauxDeCarnageText.setCharacterSize(17);
+    tauxDeCarnageText.setFillColor(sf::Color::Yellow);
+    tauxDeCarnageText.setPosition(windowWidth - 70,10);
+    tauxDeCarnageText.setStyle( sf::Text::Bold );
+
     ////////////////////////////////////////// MONDE
     Monde monde(windowWidth,windowHeight);
     creerToutLesEtres(monde);
@@ -218,6 +230,7 @@ int main (int argc, char* argv[] )
     /* monde.debug(); */
 
     sf::Clock clock;
+    sf::Clock clockTotalTime;
     while (window.isOpen())
     {
         sf::Event event;
@@ -235,6 +248,8 @@ int main (int argc, char* argv[] )
                 }
                 if (event.key.code == sf::Keyboard::R)
                 {
+                    requin->setNbCiblesMangées(0);
+                    clockTotalTime.restart();
                     notify("Reboot");
                 }
                 if (event.key.code == sf::Keyboard::Space)
@@ -251,10 +266,24 @@ int main (int argc, char* argv[] )
             {
                 if (event.mouseButton.button == sf::Mouse::Left)
                 {
-                    continue;
+                    modeMouseOn = true;
+                    requin->setMouvant(false);
                     /* unsigned int xBool = event.mouseButton.x; */
                     /* unsigned int yBool = event.mouseButton.y; */
                 }
+            }
+            if (event.type == sf::Event::MouseButtonReleased)
+            {
+                if (event.mouseButton.button == sf::Mouse::Left)
+                {
+                    modeMouseOn = false;
+                    requin->setMouvant(true);
+                }
+            }
+
+            if (event.type == sf::Event::MouseMoved && modeMouseOn)
+            {
+                requin->setPos(event.mouseMove.x,event.mouseMove.y);
             }
         }
 
@@ -262,6 +291,13 @@ int main (int argc, char* argv[] )
             iDrawSomething = true;
             noteText.setString("");
         }
+
+        if (clockTauxDeCarnage.getElapsedTime().asSeconds() >= tauxDeCarnageTime) {
+            iDrawSomething = true;
+            tauxDeCarnageText.setString(to_string( requin->getNbCiblesMangées()/clockTotalTime.getElapsedTime().asSeconds() ));
+            clockTauxDeCarnage.restart();
+        }
+
 
         if (clock.getElapsedTime().asMilliseconds() >= static_cast<int>(tickTime) ) {
 
@@ -311,7 +347,7 @@ int main (int argc, char* argv[] )
                             sf::CircleShape circle(etre->getLargeur()/2);
                             circle.setFillColor(cl);
                             circle.setPosition(pos.x , pos.y);
-                            circle.setRotation(radToDeg(etre->getAngle()));
+                            /* circle.setRotation(radToDeg(etre->getAngle())); */
 
                             /* note("pos:"+to_string(pos->x)+","+to_string(pos->y)); */
                             window.draw(circle);
@@ -325,7 +361,7 @@ int main (int argc, char* argv[] )
                             sf::RectangleShape rect(sf::Vector2f(etre->getLargeur(),etre->getHauteur()));
                             rect.setFillColor(cl);
                             rect.setPosition(pos.x , pos.y);
-                            rect.setRotation(-radToDeg(etre->getAngle()));
+                            /* rect.setRotation(-radToDeg(etre->getAngle())); */
                             window.draw(rect);
                             iDrawSomething = true;
 
@@ -339,6 +375,7 @@ int main (int argc, char* argv[] )
 
 
             window.draw(noteText);
+            window.draw(tauxDeCarnageText);
 
             if (iDrawSomething) window.display();
             /* play = false; */
