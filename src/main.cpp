@@ -130,7 +130,7 @@ void creerToutLesEtres(Monde& monde)
     requin->setMaxAngleDeRotation(0.3f);
 
     // Je veux des poissons
-    unsigned int nombreDePoissons = 1000;
+    unsigned int nombreDePoissons = 2000;
     Couleur clPoisson = Couleur(0,255,0);
     Etre::nbType taillePoisson = 10;
 
@@ -270,6 +270,7 @@ int main (int argc, char* argv[] )
                 {
                     modeMouseOn = true;
                     requin->setMouvant(false);
+                    requin->setPos(event.mouseButton.x,event.mouseButton.y);
                     /* unsigned int xBool = event.mouseButton.x; */
                     /* unsigned int yBool = event.mouseButton.y; */
                 }

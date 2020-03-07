@@ -57,7 +57,7 @@ void Requin::detectLaCibleLaPlusProche()
     }
     m_minDistDeLaCibleLaPlusProche = minDist;
     m_cibleLaPlusProche = candidat;
-    m_cibleLaPlusProche->setCouleur(255,255,0);
+    /* m_cibleLaPlusProche->setCouleur(255,255,0); */
 }
 
 void Requin::mange(Etre* etre)
