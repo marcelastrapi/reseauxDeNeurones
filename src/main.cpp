@@ -144,7 +144,8 @@ void creerToutLesEtres(Monde& monde)
         p->setPos( Coord( static_cast<float>(Rnd::_int( 0, static_cast<int>(p->getMaxPosX()) )),\
                     static_cast<float>(Rnd::_int( 0, static_cast<int>(p->getMaxPosY()) )) ));
         p->setRequin(requin);
-        p->setMaxDistanceDeDeplacement(requin->getMaxDistanceDeDeplacement());
+        p->setMaxDistanceDeDeplacement(Rnd::_int(30,requin->getMaxDistanceDeDeplacement()*0.7));
+        /* p->setMaxDistanceDeDeplacement(requin->getMaxDistanceDeDeplacement()); */
         poissons.push_back(p);
         monde.ajouteEtre(p);
         requin->ajouteCible(p); // héhéhéé
@@ -314,18 +315,24 @@ int main (int argc, char* argv[] )
             if (play) {
 
                 // Je regarde si le requin à besoin d'une nouvelle cible
-                requin->prendLaDirectionDeLaCibleLaPlusProche();
+                /* requin->prendLaDirectionDeLaCibleLaPlusProche(); */
                 /* requin->debug(); */
-                /* requin->setAngle(3*3.14/4); */
+                /* requin->setAngleDeRotation(3*3.14/4); */
                 /* show("m_minDistDeLaCibleLaPlusProche",requin->m_minDistDeLaCibleLaPlusProche); */
-                requin->avance(requin->m_minDistDeLaCibleLaPlusProche);
+                requin->avance();
                 /* requin->avance(10); */
 
                 /* poissons.at(0)->avance(6); */
-                for (Poisson* poisson: poissons)
+                for (Poisson* p: poissons)
                 {
-                    poisson->calculeNouvelleAngle();
-                    poisson->avance();
+                    /* poisson->calculeNouvelleAngle(); */
+                    auto distance = dist(p->getPos(),p->m_requin->getPos());
+
+                    p->setLargeur( max( min( distance/windowWidth * 100, 10.f), 3.f) );
+                    p->setAngleDeRotation( p->getAngleEntreMoiEt(p->m_requin) );
+                    auto cl = distance/(windowWidth*0.8) * 255;
+                    p->setCouleur(cl,255-cl,0);
+                    p->avance();
                 }
 
             }

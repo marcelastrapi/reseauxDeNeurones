@@ -9,7 +9,7 @@ Etre::Etre():
     m_couleur(Couleur(0,0,0)),
     m_largeurDuMonde(0), m_hauteurDuMonde(0),
     m_largeur(1), m_hauteur(1),
-    m_angleDeRotation(0),
+    m_angleDeDirection(0),
     m_mouvant(false),
     m_maxAngleDeRotation(360),
     m_maxDistanceDeDeplacement(0)
@@ -25,7 +25,7 @@ void Etre::debug() const
     note("couleur:" + m_couleur.toString());
     note("m_maxDistanceDeDeplacement:" + to_string(m_maxDistanceDeDeplacement));
     note("m_maxAngleDeRotation:" + to_string(m_maxAngleDeRotation));
-    note("m_angleDeRotation:" + to_string(m_angleDeRotation));
+    note("m_angleDeDirection:" + to_string(m_angleDeDirection));
 }
 
 // setters
@@ -48,13 +48,13 @@ void Etre::setTop(const nbType top)
     if (getBottom() >= m_hauteurDuMonde) setBottom(m_hauteurDuMonde-1);
 }
 
-void Etre::setAngle(const nbType angle)
+void Etre::setAngleDeRotation(const nbType angle)
 {
 
-    /* if (dist(angle,m_angleDeRotation) > m_maxAngleDeRotation) */
+    /* if (dist(angle,m_angleDeDirection) > m_maxAngleDeRotation) */
     /*     angle = m_maxAngleDeRotation */
 
-    m_angleDeRotation = angle;
+    m_angleDeDirection = angle;
 
 }
 
@@ -82,11 +82,11 @@ void Etre::avance(Etre::nbType distanceDeDeplacement)
     if (distanceDeDeplacement > m_maxDistanceDeDeplacement)
         distanceDeDeplacement = m_maxDistanceDeDeplacement;
 
-    Etre::nbType xDepl = distanceDeDeplacement * cosf(m_angleDeRotation);
-    Etre::nbType yDepl = distanceDeDeplacement * sinf(m_angleDeRotation);
+    Etre::nbType xDepl = distanceDeDeplacement * cosf(m_angleDeDirection);
+    Etre::nbType yDepl = distanceDeDeplacement * sinf(m_angleDeDirection);
 
-    /* show("cos(" + to_string(m_angleDeRotation) + ")",cosf(m_angleDeRotation)); */
-    /* show("sin(" + to_string(m_angleDeRotation) + ")",-sinf(m_angleDeRotation)); */
+    /* show("cos(" + to_string(m_angleDeDirection) + ")",cosf(m_angleDeDirection)); */
+    /* show("sin(" + to_string(m_angleDeDirection) + ")",-sinf(m_angleDeDirection)); */
     /* show("xDepl",xDepl); */
     /* show("yDepl",yDepl); */
 

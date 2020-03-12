@@ -53,10 +53,10 @@ class Etre
         inline void setPos(const nbType x, const nbType y) { setLeft(x);setTop(y); }
         inline void setPos(const Coord& coord) { setPos(coord.x,coord.y); }
         // angle entre -1 et 1
-        void setAngle(const angleType angle);
+        void setAngleDeRotation(const angleType angle);
         inline void setMouvant(const bool mouvant) { m_mouvant = mouvant; }
         inline void setMaxDistanceDeDeplacement(const nbType max) { m_maxDistanceDeDeplacement = max; }
-        inline void setMaxAngleDeRotation(const nbType angleDeRotation) { m_maxAngleDeRotation = angleDeRotation; }
+        inline void setMaxAngleDeRotation(const nbType angleDeDirection) { m_maxAngleDeRotation = angleDeDirection; }
 
         void setLeft(const nbType left);
         void setTop (const nbType top);
@@ -71,7 +71,7 @@ class Etre
         inline nbType getHauteur() const { return m_hauteur; }
         inline Coord getPos() const { return m_pos; }
         inline Couleur& getCouleur() { return m_couleur; }
-        inline angleType getAngle() const { return m_angleDeRotation; }
+        inline angleType getAngle() const { return m_angleDeDirection; }
         inline bool getMouvant() const { return m_mouvant; }
         inline nbType getMaxDistanceDeDeplacement() const { return m_maxDistanceDeDeplacement; }
 
@@ -86,6 +86,8 @@ class Etre
         inline void avance() { avance(m_maxDistanceDeDeplacement); }
         virtual void reborn();
 
+        angleType getAngleEntreMoiEt(const Etre* lui) const;
+
     protected:
         Coord m_pos;
         Forme m_forme;
@@ -94,12 +96,11 @@ class Etre
         nbType m_hauteurDuMonde;
         nbType m_largeur;
         nbType m_hauteur;
-        angleType m_angleDeRotation;
+        angleType m_angleDeDirection;
 
         bool m_mouvant;
         angleType m_maxAngleDeRotation;
         nbType m_maxDistanceDeDeplacement;
 
-        angleType getAngleEntreMoiEt(const Etre* lui) const;
 
 };

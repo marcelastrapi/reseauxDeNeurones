@@ -14,6 +14,7 @@ using std::array;
 class Poisson: public Etre
 {
     public:
+        Etre* m_requin; // pour avoir sa pos en tps réel
         static const ESPECE espece = POISSON;
         Poisson();
 
@@ -30,7 +31,6 @@ class Poisson: public Etre
 
     private:
         // déclariation
-        Etre* m_requin; // pour avoir sa pos en tps réel
         array<nbType,2> m_variablesAléatoires;
 
         // aléa

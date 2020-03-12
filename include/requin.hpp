@@ -26,6 +26,7 @@ class Requin: public Etre
         // sub
         void ajouteCible(Etre* nouvelleCible);
         void avance(Etre::nbType distanceDeDeplacement);
+        inline void avance() { Etre::avance(); }
 
         Etre::nbType m_minDistDeLaCibleLaPlusProche;
         Etre* m_cibleLaPlusProche;

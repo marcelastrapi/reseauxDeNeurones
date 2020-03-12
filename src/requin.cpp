@@ -82,6 +82,6 @@ void Requin::prendLaDirectionDeLaCibleLaPlusProche()
     /*         nouvelleAngle = m_angle - m_maxAngleDeRotation; */
     /* } */
     /* show("nouvelleAngle",nouvelleAngle); */
-    this->setAngle(nouvelleAngle);
+    this->setAngleDeRotation(nouvelleAngle);
     /* show("Nouvelle angle pour requin",m_angle); */
 }
