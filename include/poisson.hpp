@@ -14,7 +14,6 @@ using std::array;
 class Poisson: public Etre
 {
     public:
-        Etre* m_requin; // pour avoir sa pos en tps réel
         static const ESPECE espece = POISSON;
         Poisson();
 
@@ -22,12 +21,11 @@ class Poisson: public Etre
         void debug() const override;
 
         // sub
-        void calculeNouvelleAngle();
+        void calculeNouvelleAngle(const nbType directionRequin);
         // override
         void reborn() override;
 
         // setters
-        inline void setRequin(Etre* requin) { m_requin = requin; }
 
     private:
         // déclariation

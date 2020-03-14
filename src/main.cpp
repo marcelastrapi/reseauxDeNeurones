@@ -56,7 +56,7 @@ sf::Clock clockTauxDeCarnage;
 unsigned int tauxDeCarnageTime = 1;
 
 Requin* requin;
-Requin* requin2;
+/* Requin* requin2; */
 vector<Poisson*> poissons;
 
 bool modeMouseOn = false;
@@ -129,15 +129,15 @@ void creerToutLesEtres(Monde& monde)
     requin->setMaxAngleDeDirection(0.3f);
     requin->debug();
 
-    requin2 = new Requin();
-    requin2->setDimensionDuMonde(monde.getLargeur(), monde.getHauteur());
-    requin2->setDimension(30, 30.f);
-    requin2->setCouleur(Couleur(0,0,255));
-    requin2->setPosAléa();
-    requin2->setMouvant(true);
-    requin2->setMaxDistanceDeDeplacement(10);
-    requin2->setMaxAngleDeDirection(0.3f);
-    requin2->debug();
+    /* requin2 = new Requin(); */
+    /* requin2->setDimensionDuMonde(monde.getLargeur(), monde.getHauteur()); */
+    /* requin2->setDimension(30, 30.f); */
+    /* requin2->setCouleur(Couleur(0,0,255)); */
+    /* requin2->setPosAléa(); */
+    /* requin2->setMouvant(true); */
+    /* requin2->setMaxDistanceDeDeplacement(10); */
+    /* requin2->setMaxAngleDeDirection(0.3f); */
+    /* requin2->debug(); */
 
     // Je veux des poissons
     unsigned int nombreDePoissons = 2000;
@@ -152,19 +152,18 @@ void creerToutLesEtres(Monde& monde)
         p->setPosAléa();
         p->setCouleur(clPoisson);
         p->setMouvant(true);
-        p->setRequin(requin);
         p->setMaxDistanceDeDeplacement(requin->getMaxDistanceDeDeplacement());
 
         poissons.push_back(p);
         monde.ajouteEtre(p);
         requin->ajouteCible(p); // héhéhéé
-        requin2->ajouteCible(p);
+        /* requin2->ajouteCible(p); */
     }
 
     // j'ajoute le requin dans le monde
     // (en dernier pour qu'il soit dessiner sur les poissons
     monde.ajouteEtre(requin);
-    monde.ajouteEtre(requin2);
+    /* monde.ajouteEtre(requin2); */
 
     note("Création du monde avec leurs habitants TERMINÉ");
 
@@ -358,18 +357,18 @@ int main (int argc, char* argv[] )
 
                 // Je regarde si le requin à besoin d'une nouvelle cible
                 requin->prendLaDirectionDeLaCibleLaPlusProche();
-                requin2->prendLaDirectionDeLaCibleLaPlusProche();
+                /* requin2->prendLaDirectionDeLaCibleLaPlusProche(); */
                 /* requin->debug(); */
                 /* requin->setAngleDeDirection(3*3.14/4); */
                 /* show("m_minDistDeLaCibleLaPlusProche",requin->m_minDistDeLaCibleLaPlusProche); */
                 requin->avance();
-                requin2->avance();
+                /* requin2->avance(); */
 
-                /* for (Poisson* p: poissons) */
-                /* { */
-                /*     p->calculeNouvelleAngle(); */
-                /*     p->avance(); */
-                /* } */
+                for (Poisson* p: poissons)
+                {
+                    p->calculeNouvelleAngle(p->getAngleEntreMoiEt(requin));
+                    p->avance();
+                }
 
             }
 

@@ -11,9 +11,9 @@ Poisson::Poisson() :
 }
 
 // sub
-void Poisson::calculeNouvelleAngle()
+void Poisson::calculeNouvelleAngle(const Etre::nbType directionRequin)
 {
-    m_angleDeDirection = 3.14f;
+    m_angleDeDirection = -directionRequin;
 }
 
 /////////// OVERRIDE
@@ -22,7 +22,6 @@ void Poisson::reborn()
     // reset ma pos
     Etre::reborn();
     initialiseLesVariablesAléatoires();
-    calculeNouvelleAngle();
 }
 
 // debug
