@@ -58,11 +58,7 @@ void Etre::setTop(const nbType top)
 {
     m_pos.y = top + m_hautDiv;
     if (getTop() < 0) setTop(0);
-    if (getBottom() >= m_hauteurDuMonde)
-    {
-        note("dépassement vers le bas");
-        setBottom(m_hauteurDuMonde-1);
-    }
+    if (getBottom() >= m_hauteurDuMonde) setBottom(m_hauteurDuMonde-1);
 }
 
 void Etre::setLargeur(const nbType largeur)
