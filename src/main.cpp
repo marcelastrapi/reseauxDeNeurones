@@ -124,7 +124,7 @@ void creerToutLesEtres(Monde& monde)
     Coord posDepart = Coord(monde.getLargeur() / 2 , monde.getHauteur() / 2 );
     requin->setPos(posDepart);
     requin->setMouvant(true);
-    requin->setMaxDistanceDeDeplacement(100);
+    requin->setMaxDistanceDeDeplacement(20);
     requin->setMaxAngleDeDirection(0.3f);
     requin->debug();
 
@@ -139,7 +139,7 @@ void creerToutLesEtres(Monde& monde)
     /* requin2->debug(); */
 
     // Je veux des poissons
-    unsigned int nombreDePoissons = 1000;
+    unsigned int nombreDePoissons = 100;
     Couleur clPoisson = Couleur(0,255,0);
     Etre::nbType taillePoisson = 10;
 
@@ -151,7 +151,7 @@ void creerToutLesEtres(Monde& monde)
         p->setPosAléa();
         p->setCouleur(clPoisson);
         p->setMouvant(true);
-        p->setMaxDistanceDeDeplacement(requin->getMaxDistanceDeDeplacement()-12 );
+        p->setMaxDistanceDeDeplacement(requin->getMaxDistanceDeDeplacement()-2 );
 
         poissons.push_back(p);
         monde.ajouteEtre(p);
