@@ -17,7 +17,7 @@ class Coord {
 
         inline std::string toString() const // TODO supprimer DEBUG
         {
-            return "(" + std::to_string(x) + "," + std::to_string(y);
+            return "(" + std::to_string(x) + "," + std::to_string(y) + ")";
         }
         inline void debug() const
         {

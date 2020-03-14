@@ -45,7 +45,7 @@ void Requin::detectLaCibleLaPlusProche()
         distance = dist(tmp->getPos(), m_pos);
         // Si je vois que la distance la cible //TODO faudrait que ce soit plus précis
         // est assez petite ... alors MANGE-LE
-        if (distance < tmp->getLargeur()) {
+        if (distance < tmp->getRayon() + this->getRayon()) {
             this->mange(tmp);
             continue;
         }
@@ -57,7 +57,6 @@ void Requin::detectLaCibleLaPlusProche()
     }
     m_minDistDeLaCibleLaPlusProche = minDist;
     m_cibleLaPlusProche = candidat;
-    /* m_cibleLaPlusProche->setCouleur(255,255,0); */
 }
 
 void Requin::mange(Etre* etre)
@@ -82,6 +81,6 @@ void Requin::prendLaDirectionDeLaCibleLaPlusProche()
     /*         nouvelleAngle = m_angle - m_maxAngleDeRotation; */
     /* } */
     /* show("nouvelleAngle",nouvelleAngle); */
-    this->setAngleDeRotation(nouvelleAngle);
+    this->setAngleDeDirection(nouvelleAngle);
     /* show("Nouvelle angle pour requin",m_angle); */
 }

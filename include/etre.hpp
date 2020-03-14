@@ -21,11 +21,16 @@ enum ESPECE
 };
 
 /* \brief class Etre
-   // angle en radian
-   //    0     va à droite
-   //    PI/2  monte
-   //    PI    va è gauche
-   //   -PI/2  descend
+
+   pos est un Coord au centre de l'être
+
+   angle en radian
+      0     va à droite
+      PI/2  monte
+      PI    va è gauche
+     -PI/2  descend
+   
+   
 */
 class Etre
 {
@@ -47,20 +52,21 @@ class Etre
         inline void setCouleur(const Couleur::clType r, const Couleur::clType g, const Couleur::clType b, const Couleur::clType a=255) { setCouleur(Couleur(r,g,b,a)); }
         void setDimensionDuMonde(const nbType largeur, const nbType hauteur);
         // diametre | côté
-        inline void setLargeur(const nbType largeur) { m_largeur = largeur; }
-        inline void setHauteur(const nbType hauteur) { m_hauteur = hauteur; }
+        void setLargeur(const nbType largeur);
+        void setHauteur(const nbType hauteur);
         void setDimension(const nbType largeur, const nbType hauteur);
-        inline void setPos(const nbType x, const nbType y) { setLeft(x);setTop(y); }
+        inline void setPos(const nbType x, const nbType y) { setLeft(x-m_largDiv);setTop(y-m_hautDiv); }
         inline void setPos(const Coord& coord) { setPos(coord.x,coord.y); }
-        // angle entre -1 et 1
-        void setAngleDeRotation(const angleType angle);
+        void setPosAléa();
+        // angle entre 0 et 2pi
+        void setAngleDeDirection(const angleType angle);
         inline void setMouvant(const bool mouvant) { m_mouvant = mouvant; }
         inline void setMaxDistanceDeDeplacement(const nbType max) { m_maxDistanceDeDeplacement = max; }
-        inline void setMaxAngleDeRotation(const nbType angleDeDirection) { m_maxAngleDeRotation = angleDeDirection; }
+        inline void setMaxAngleDeDirection(const nbType angleDeDirection) { m_maxAngleDeDirection = angleDeDirection; }
 
         void setLeft(const nbType left);
         void setTop (const nbType top);
-        inline void setRight (const nbType right)  { setLeft(right - m_largeur); }
+        inline void setRight (const nbType right)  { setLeft(right -  m_largeur); }
         inline void setBottom(const nbType bottom) { setTop (bottom - m_hauteur); }
 
         // getters
@@ -69,16 +75,17 @@ class Etre
         inline nbType getMaxPosY() const { return m_hauteurDuMonde; }
         inline nbType getLargeur() const { return m_largeur; }
         inline nbType getHauteur() const { return m_hauteur; }
+        inline nbType getRayon() const { return m_largDiv; }
         inline Coord getPos() const { return m_pos; }
         inline Couleur& getCouleur() { return m_couleur; }
-        inline angleType getAngle() const { return m_angleDeDirection; }
+        inline angleType getAngleDeDirection() const { return m_angleDeDirection; }
         inline bool getMouvant() const { return m_mouvant; }
         inline nbType getMaxDistanceDeDeplacement() const { return m_maxDistanceDeDeplacement; }
 
-        inline nbType getLeft()   const { return m_pos.x            ; }
-        inline nbType getTop()    const { return m_pos.y            ; }
-        inline nbType getRight()  const { return m_pos.x + m_largeur; }
-        inline nbType getBottom() const { return m_pos.y + m_hauteur; }
+        inline nbType getLeft()   const { return m_pos.x - m_largDiv ; }
+        inline nbType getTop()    const { return m_pos.y - m_hautDiv ; }
+        inline nbType getRight()  const { return m_pos.x + m_largDiv ; }
+        inline nbType getBottom() const { return m_pos.y + m_hautDiv ; }
 
         // sub
         // l'être avance son angle de rotation et la distanceDeDeplacement/maxDistDepl
@@ -96,11 +103,12 @@ class Etre
         nbType m_hauteurDuMonde;
         nbType m_largeur;
         nbType m_hauteur;
-        angleType m_angleDeDirection;
+        nbType m_largDiv;
+        nbType m_hautDiv;
 
         bool m_mouvant;
-        angleType m_maxAngleDeRotation;
         nbType m_maxDistanceDeDeplacement;
-
+        angleType m_angleDeDirection;
+        angleType m_maxAngleDeDirection;
 
 };

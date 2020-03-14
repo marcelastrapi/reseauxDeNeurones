@@ -40,7 +40,7 @@ unsigned int windowHeight = 0;
 
 unsigned int tickTime = 41; // 24 image/s = 41.66 ms
 unsigned short incrTickTime = 2;
-unsigned int minTickTime = 10;
+unsigned int minTickTime = 1;
 
 vector<sf::Color> colors;
 sf::Color bgColor = sf::Color::Black;
@@ -103,6 +103,7 @@ void notify(const string &text)
 // Functions
 void creerToutLesEtres(Monde& monde)
 {
+    note("Création de tout les êtres dans le monde");
     // C'est ici que je décide ce qui constitue ce monde.
 
     // Il va y avoir pleins de poissons qui pourront se déplacer à la surface du
@@ -116,18 +117,16 @@ void creerToutLesEtres(Monde& monde)
 
     // Je veux un requin
     requin = new Requin();
-    requin->setDimensionDuMonde(monde.getLargeur()+50, monde.getHauteur()+50);
-    requin->setCouleur(Couleur(0,0,0));
+    requin->setDimensionDuMonde(monde.getLargeur(), monde.getHauteur());
+    requin->setDimension(30, 30.f);
     /* requin->setDimension(48.540f, 30.f); */
-    requin->setDimension(10, 30.f);
-    /* Coord posDepart = Coord(monde.getLargeur() / 2 - requin->getLargeur(),\ */
-    /*         monde.getHauteur() / 2 - requin->getHauteur()); */
-    Coord posDepart = Coord(monde.getLargeur() / 2 ,\
-            monde.getHauteur() / 2 );
+    requin->setCouleur(Couleur(255,0,0));
+    Coord posDepart = Coord(monde.getLargeur() / 2 , monde.getHauteur() / 2 );
     requin->setPos(posDepart);
     requin->setMouvant(true);
-    requin->setMaxDistanceDeDeplacement(100);
-    requin->setMaxAngleDeRotation(0.3f);
+    requin->setMaxDistanceDeDeplacement(1);
+    requin->setMaxAngleDeDirection(0.3f);
+    requin->debug();
 
     // Je veux des poissons
     unsigned int nombreDePoissons = 2000;
@@ -138,14 +137,13 @@ void creerToutLesEtres(Monde& monde)
     {
         Poisson* p = new Poisson();
         p->setDimensionDuMonde(monde.getLargeur(),monde.getHauteur());
+        p->setDimension(taillePoisson,taillePoisson);
+        p->setPosAléa();
         p->setCouleur(clPoisson);
         p->setMouvant(true);
-        p->setDimension(taillePoisson,taillePoisson);
-        p->setPos( Coord( static_cast<float>(Rnd::_int( 0, static_cast<int>(p->getMaxPosX()) )),\
-                    static_cast<float>(Rnd::_int( 0, static_cast<int>(p->getMaxPosY()) )) ));
         p->setRequin(requin);
-        p->setMaxDistanceDeDeplacement(Rnd::_int(30,requin->getMaxDistanceDeDeplacement()*0.7));
-        /* p->setMaxDistanceDeDeplacement(requin->getMaxDistanceDeDeplacement()); */
+        p->setMaxDistanceDeDeplacement(requin->getMaxDistanceDeDeplacement());
+
         poissons.push_back(p);
         monde.ajouteEtre(p);
         requin->ajouteCible(p); // héhéhéé
@@ -155,7 +153,7 @@ void creerToutLesEtres(Monde& monde)
     // (en dernier pour qu'il soit dessiner sur les poissons
     monde.ajouteEtre(requin);
 
-    show("nombre de cible pourle requin",requin->getNbCibles());
+    note("Création du monde avec leurs habitants TERMINÉ");
 
 }
 
@@ -228,7 +226,6 @@ int main (int argc, char* argv[] )
     ////////////////////////////////////////// MONDE
     Monde monde(windowWidth,windowHeight);
     creerToutLesEtres(monde);
-    show("nbEtres",monde.getNbEtres());
 
     /* monde.debug(); */
 
@@ -289,6 +286,18 @@ int main (int argc, char* argv[] )
             {
                 requin->setPos(event.mouseMove.x,event.mouseMove.y);
             }
+
+            if (event.key.code == sf::Keyboard::Add || (event.type == sf::Event::MouseWheelMoved && event.mouseWheel.delta == -1))
+            {
+                tickTime -= incrTickTime;
+                if (tickTime < minTickTime) tickTime = minTickTime;
+                notify("tickTime:"+to_string(tickTime)+"ms");
+            }
+            if (event.key.code == sf::Keyboard::Subtract || (event.type == sf::Event::MouseWheelMoved && event.mouseWheel.delta == 1))
+            {
+                tickTime += incrTickTime;
+                notify("tickTime:"+to_string(tickTime)+"ms");
+            }
         }
 
         if (clockText.getElapsedTime().asSeconds() >= textTime) {
@@ -315,25 +324,17 @@ int main (int argc, char* argv[] )
             if (play) {
 
                 // Je regarde si le requin à besoin d'une nouvelle cible
-                /* requin->prendLaDirectionDeLaCibleLaPlusProche(); */
+                requin->prendLaDirectionDeLaCibleLaPlusProche();
                 /* requin->debug(); */
-                /* requin->setAngleDeRotation(3*3.14/4); */
+                /* requin->setAngleDeDirection(3*3.14/4); */
                 /* show("m_minDistDeLaCibleLaPlusProche",requin->m_minDistDeLaCibleLaPlusProche); */
                 requin->avance();
-                /* requin->avance(10); */
 
-                /* poissons.at(0)->avance(6); */
-                for (Poisson* p: poissons)
-                {
-                    /* poisson->calculeNouvelleAngle(); */
-                    auto distance = dist(p->getPos(),p->m_requin->getPos());
-
-                    p->setLargeur( max( min( distance/windowWidth * 100, 10.f), 3.f) );
-                    p->setAngleDeRotation( p->getAngleEntreMoiEt(p->m_requin) );
-                    auto cl = distance/(windowWidth*0.8) * 255;
-                    p->setCouleur(cl,255-cl,0);
-                    p->avance();
-                }
+                /* for (Poisson* p: poissons) */
+                /* { */
+                /*     p->calculeNouvelleAngle(); */
+                /*     p->avance(); */
+                /* } */
 
             }
 
@@ -341,23 +342,24 @@ int main (int argc, char* argv[] )
             Etre* etre;
             sf::Color cl;
             Couleur* mcl;
-            Coord pos;
+            Etre::nbType posx,posy;
             for (unsigned int i = 0; i < monde.getNbEtres(); i++)
             {
                 etre = monde.getEtreNo(i);
                 mcl = &etre->getCouleur();
                 cl = sf::Color(mcl->r,mcl->g,mcl->b,mcl->a);
-                pos = etre->getPos();
+                posx = etre->getLeft();
+                posy = etre->getTop();
 
                 /* etre->debug(); */
                 switch (etre->getForme()) 
                 {
                     case Cercle:
                         {
-                            sf::CircleShape circle(etre->getLargeur()/2);
+                            sf::CircleShape circle(etre->getLargeur()*0.5f);
                             circle.setFillColor(cl);
-                            circle.setPosition(pos.x , pos.y);
-                            /* circle.setRotation(radToDeg(etre->getAngle())); */
+                            circle.setPosition(posx , posy);
+                            /* circle.setRotation(radToDeg(etre->getAngleDeDirection())); */
 
                             /* note("pos:"+to_string(pos->x)+","+to_string(pos->y)); */
                             window.draw(circle);
@@ -370,8 +372,8 @@ int main (int argc, char* argv[] )
                         {
                             sf::RectangleShape rect(sf::Vector2f(etre->getLargeur(),etre->getHauteur()));
                             rect.setFillColor(cl);
-                            rect.setPosition(pos.x , pos.y);
-                            /* rect.setRotation(-radToDeg(etre->getAngle())); */
+                            rect.setPosition(posx , posy);
+                            /* rect.setRotation(-radToDeg(etre->getAngleDeDirection())); */
                             window.draw(rect);
                             iDrawSomething = true;
 

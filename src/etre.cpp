@@ -9,10 +9,11 @@ Etre::Etre():
     m_couleur(Couleur(0,0,0)),
     m_largeurDuMonde(0), m_hauteurDuMonde(0),
     m_largeur(1), m_hauteur(1),
-    m_angleDeDirection(0),
+    m_largDiv(0), m_hautDiv(0),
     m_mouvant(false),
-    m_maxAngleDeRotation(360),
-    m_maxDistanceDeDeplacement(0)
+    m_maxDistanceDeDeplacement(0),
+    m_angleDeDirection(0),
+    m_maxAngleDeDirection(360)
 { }
 
 // debug
@@ -24,7 +25,7 @@ void Etre::debug() const
     note("dimensionDuMonde: " + to_string(m_largeurDuMonde) + ',' + to_string(m_hauteurDuMonde) );
     note("couleur:" + m_couleur.toString());
     note("m_maxDistanceDeDeplacement:" + to_string(m_maxDistanceDeDeplacement));
-    note("m_maxAngleDeRotation:" + to_string(m_maxAngleDeRotation));
+    note("m_maxAngleDeDirection:" + to_string(m_maxAngleDeDirection));
     note("m_angleDeDirection:" + to_string(m_angleDeDirection));
 }
 
@@ -35,33 +36,56 @@ void Etre::setDimensionDuMonde(const nbType largeur, const nbType hauteur)
     m_hauteurDuMonde = hauteur;
 }
 
+void Etre::setPosAléa()
+{
+    m_pos.x = static_cast<float>( Rnd::_int( 
+                static_cast<int>(m_largDiv),
+                static_cast<int>(m_largeurDuMonde - m_largDiv) 
+                ));
+    m_pos.y = static_cast<float>( Rnd::_int( 
+                static_cast<int>(m_hautDiv),
+                static_cast<int>(m_hauteurDuMonde - m_hautDiv) 
+                ));
+}
+
 void Etre::setLeft(const nbType left)
 {
-    m_pos.x = left;
-    if (left < 0) m_pos.x = 0;
+    m_pos.x = left + m_largDiv;
+    if (getLeft() < 0) setLeft(0);
     if (getRight() >= m_largeurDuMonde) setRight(m_largeurDuMonde-1);
 }
 void Etre::setTop(const nbType top)
 {
-    m_pos.y = top;
-    if (top < 0) m_pos.y  = 0;
+    m_pos.y = top + m_hautDiv;
+    if (getTop() < 0) setTop(0);
     if (getBottom() >= m_hauteurDuMonde) setBottom(m_hauteurDuMonde-1);
 }
 
-void Etre::setAngleDeRotation(const nbType angle)
+void Etre::setLargeur(const nbType largeur)
 {
-
-    /* if (dist(angle,m_angleDeDirection) > m_maxAngleDeRotation) */
-    /*     angle = m_maxAngleDeRotation */
-
-    m_angleDeDirection = angle;
-
+    m_largeur = largeur;
+    m_largDiv = largeur*0.5f;
+}
+void Etre::setHauteur(const nbType hauteur)
+{
+    m_hauteur = hauteur;
+    m_largDiv = hauteur*0.5f;
 }
 
 void Etre::setDimension(const nbType largeur, const nbType hauteur)
 {
-    m_largeur = largeur;
-    m_hauteur = hauteur;
+    setLargeur(largeur);
+    setHauteur(hauteur);
+}
+
+void Etre::setAngleDeDirection(const nbType angle)
+{
+
+    /* if (dist(angle,m_angleDeDirection) > m_maxAngleDeDirection) */
+    /*     angle = m_maxAngleDeDirection */
+
+    m_angleDeDirection = angle;
+
 }
 
 
