@@ -40,7 +40,7 @@ unsigned int windowHeight = 0;
 
 unsigned int tickTime = 41; // 24 image/s = 41.66 ms
 unsigned short incrTickTime = 2;
-unsigned int minTickTime = 1;
+unsigned int minTickTime = 2;
 
 vector<sf::Color> colors;
 sf::Color bgColor = sf::Color::Black;
@@ -259,6 +259,26 @@ int main (int argc, char* argv[] )
                         notify("PLAY"); 
                     else
                         notify("PAUSE"); 
+                }
+                if (event.key.code == sf::Keyboard::Left)
+                {
+                    requin->setAngleDeDirection(3.14f);
+                    requin->avance();
+                }
+                if (event.key.code == sf::Keyboard::Up)
+                {
+                    requin->setAngleDeDirection(3.14f*0.5f);
+                    requin->avance();
+                }
+                if (event.key.code == sf::Keyboard::Right)
+                {
+                    requin->setAngleDeDirection(0.f);
+                    requin->avance();
+                }
+                if (event.key.code == sf::Keyboard::Down)
+                {
+                    requin->setAngleDeDirection(-3.14f*0.5f);
+                    requin->avance();
                 }
             }
 

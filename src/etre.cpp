@@ -38,14 +38,14 @@ void Etre::setDimensionDuMonde(const nbType largeur, const nbType hauteur)
 
 void Etre::setPosAléa()
 {
-    m_pos.x = static_cast<float>( Rnd::_int( 
-                static_cast<int>(m_largDiv),
-                static_cast<int>(m_largeurDuMonde - m_largDiv) 
-                ));
-    m_pos.y = static_cast<float>( Rnd::_int( 
-                static_cast<int>(m_hautDiv),
-                static_cast<int>(m_hauteurDuMonde - m_hautDiv) 
-                ));
+    setLeft(static_cast<float>( Rnd::_int( 
+                static_cast<int>(0),
+                static_cast<int>(m_largeurDuMonde - m_largeur) 
+                )));
+    setTop(static_cast<float>( Rnd::_int( 
+                static_cast<int>(0),
+                static_cast<int>(m_hauteurDuMonde - m_hauteur) 
+                )));
 }
 
 void Etre::setLeft(const nbType left)
@@ -58,7 +58,11 @@ void Etre::setTop(const nbType top)
 {
     m_pos.y = top + m_hautDiv;
     if (getTop() < 0) setTop(0);
-    if (getBottom() >= m_hauteurDuMonde) setBottom(m_hauteurDuMonde-1);
+    if (getBottom() >= m_hauteurDuMonde)
+    {
+        note("dépassement vers le bas");
+        setBottom(m_hauteurDuMonde-1);
+    }
 }
 
 void Etre::setLargeur(const nbType largeur)
@@ -69,7 +73,7 @@ void Etre::setLargeur(const nbType largeur)
 void Etre::setHauteur(const nbType hauteur)
 {
     m_hauteur = hauteur;
-    m_largDiv = hauteur*0.5f;
+    m_hautDiv = hauteur*0.5f;
 }
 
 void Etre::setDimension(const nbType largeur, const nbType hauteur)
@@ -119,6 +123,5 @@ void Etre::avance(Etre::nbType distanceDeDeplacement)
 }
 void Etre::reborn()
 {
-    m_pos = Coord( static_cast<float>(Rnd::_int( 0, static_cast<int>(getMaxPosX()) )),\
-                   static_cast<float>(Rnd::_int( 0, static_cast<int>(getMaxPosY()) )) );
+    setPosAléa();
 }
