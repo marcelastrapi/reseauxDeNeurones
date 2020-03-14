@@ -22,7 +22,7 @@ class Poisson: public Etre
 
         // sub
         void calculeNouvelleAngle(const nbType directionRequin);
-        // override
+
         void reborn() override;
 
         // setters

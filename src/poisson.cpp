@@ -13,7 +13,7 @@ Poisson::Poisson() :
 // sub
 void Poisson::calculeNouvelleAngle(const Etre::nbType directionRequin)
 {
-    m_angleDeDirection = -directionRequin;
+    m_angleDeDirection = directionRequin + cosf(m_variablesAléatoires[0]);
 }
 
 /////////// OVERRIDE
@@ -35,5 +35,5 @@ void Poisson::debug() const
 void Poisson::initialiseLesVariablesAléatoires()
 {
     for (auto& varAlea : m_variablesAléatoires)
-        varAlea = static_cast<Etre::nbType>( Rnd::_double()*3.14 );
+        varAlea = static_cast<Etre::nbType>( Rnd::_double()*2 -1 );
 }

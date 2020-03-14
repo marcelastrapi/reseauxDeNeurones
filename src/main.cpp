@@ -140,7 +140,7 @@ void creerToutLesEtres(Monde& monde)
     /* requin2->debug(); */
 
     // Je veux des poissons
-    unsigned int nombreDePoissons = 2000;
+    unsigned int nombreDePoissons = 1001;
     Couleur clPoisson = Couleur(0,255,0);
     Etre::nbType taillePoisson = 10;
 
