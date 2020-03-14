@@ -32,7 +32,7 @@ class Poisson: public Etre
     private:
         // déclariation
         std::time_t m_epochNaissance;
-        std::time_t m_oldTempsDeVie;
+        /* std::time_t m_oldTempsDeVie; */
 
         // aléa
         nbType m_minRnd;

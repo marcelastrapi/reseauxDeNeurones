@@ -22,18 +22,20 @@ class Requin: public Etre
         inline size_t getNbCibles() const { return m_cibles.getTotal(); }
         inline unsigned int getNbCiblesMangées() const { return m_nbCiblesMangées; }
 
-        Etre* getProchaineCible() {
-            /* m_cibleEnCours = (m_cibleEnCours + 1)% m_cibles.getTotal(); */
-            auto distance = dist(m_cibles.getEtreNo(m_cibleEnCours)->getPos(), m_pos);
-            // Si je vois que la distance la cible //TODO faudrait que ce soit plus précis
-            // est assez petite ... alors MANGE-LE
+        Etre* getProchaineCible() 
+        {
+            Etre* cibleEnCours = m_cibles.getEtreNo(m_icibleEnCours);
+            auto distance = dist(cibleEnCours->getPos(), m_pos);
 
-            if (distance < m_cibles.getEtreNo(m_cibleEnCours)->getRayon() + getRayon()) {
-                mange(m_cibles.getEtreNo(m_cibleEnCours));
-                m_cibleEnCours = (m_cibleEnCours + 1)% m_cibles.getTotal();
+            if (distance <= cibleEnCours->getRayon() + getRayon())
+            {
+                mange(cibleEnCours);
+                m_icibleEnCours = (m_icibleEnCours + 1)% m_cibles.getTotal();
             }
 
-            return m_cibles.getEtreNo(m_cibleEnCours);
+            /* note("prochaineCible"); */
+            /* m_cibles.getEtreNo(m_icibleEnCours)->debug(); */
+            return m_cibles.getEtreNo(m_icibleEnCours);
         }
 
         // debug
@@ -50,7 +52,7 @@ class Requin: public Etre
     private:
         Etres m_cibles;
         unsigned int m_nbCiblesMangées;
-        size_t m_cibleEnCours;
+        size_t m_icibleEnCours;
 
         // Chasse
         void mange(Etre* etre);

@@ -3,9 +3,9 @@
 #include <utils.hpp>
 
 Poisson::Poisson() :
-    m_epochNaissance(std::time(nullptr)),
     m_maxTempsDeVie(0),
-    m_oldTempsDeVie(0),
+    /* m_oldTempsDeVie(0), */
+    m_epochNaissance(std::time(nullptr)),
     m_minRnd(-3.14f),
     m_maxRnd(3.14f)
 {
@@ -26,15 +26,12 @@ void Poisson::renaît()
     Etre::renaît();
     auto nouvelleEpoch = std::time(nullptr);
     auto tempsDeVie = nouvelleEpoch - m_epochNaissance;
-    if (tempsDeVie > m_maxTempsDeVie) m_maxTempsDeVie = tempsDeVie;
-    m_epochNaissance = nouvelleEpoch;
-    /* initialiseLesVariablesAléatoires(); */
-    if (tempsDeVie > m_oldTempsDeVie)
-        m_variablesAléatoires[0] += 0.1;
+    if (tempsDeVie > m_maxTempsDeVie) 
+        m_maxTempsDeVie = tempsDeVie;
     else
-        m_variablesAléatoires[0] -= 0.1;
+        m_variablesAléatoires[0] += 0.1;
 
-    m_oldTempsDeVie = tempsDeVie;
+    /* m_oldTempsDeVie = tempsDeVie; */
 }
 
 // debug
