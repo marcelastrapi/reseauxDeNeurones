@@ -29,7 +29,7 @@ void Poisson::renaît()
     if (tempsDeVie > m_maxTempsDeVie) m_maxTempsDeVie = tempsDeVie;
     m_epochNaissance = nouvelleEpoch;
     /* initialiseLesVariablesAléatoires(); */
-    if (tempsDeVie < m_oldTempsDeVie)
+    if (tempsDeVie > m_oldTempsDeVie)
         m_variablesAléatoires[0] += 0.1;
     else
         m_variablesAléatoires[0] -= 0.1;

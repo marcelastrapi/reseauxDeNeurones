@@ -3,7 +3,7 @@
 #include <utils.hpp>
 
 // Ctor
-Requin::Requin(): m_nbCiblesMangées(0)
+Requin::Requin(): m_nbCiblesMangées(0),m_cibleEnCours(0)
 {
     m_forme = Cercle;
     m_maxDistanceDeDeplacement = 10;

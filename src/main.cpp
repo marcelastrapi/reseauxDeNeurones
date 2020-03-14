@@ -1,7 +1,6 @@
 #include <SFML/Graphics.hpp>
 
 #include <rnd.hpp>
-#include <utils.hpp>
 #include <displayer.hpp>
 using namespace displayer;
 
@@ -125,7 +124,7 @@ void creerToutLesEtres(Monde& monde)
     Coord posDepart = Coord(monde.getLargeur() / 2 , monde.getHauteur() / 2 );
     requin->setPos(posDepart);
     requin->setMouvant(true);
-    requin->setMaxDistanceDeDeplacement(20);
+    requin->setMaxDistanceDeDeplacement(100);
     requin->setMaxAngleDeDirection(0.3f);
     requin->debug();
 
@@ -140,7 +139,7 @@ void creerToutLesEtres(Monde& monde)
     /* requin2->debug(); */
 
     // Je veux des poissons
-    unsigned int nombreDePoissons = 1001;
+    unsigned int nombreDePoissons = 1000;
     Couleur clPoisson = Couleur(0,255,0);
     Etre::nbType taillePoisson = 10;
 
@@ -152,7 +151,7 @@ void creerToutLesEtres(Monde& monde)
         p->setPosAléa();
         p->setCouleur(clPoisson);
         p->setMouvant(true);
-        p->setMaxDistanceDeDeplacement(requin->getMaxDistanceDeDeplacement() +2);
+        p->setMaxDistanceDeDeplacement(requin->getMaxDistanceDeDeplacement()-12 );
 
         poissons.push_back(p);
         monde.ajouteEtre(p);
@@ -295,7 +294,7 @@ int main (int argc, char* argv[] )
 
                 if (event.key.code == sf::Keyboard::D)
                 {
-                    auto bestTempsDeVie = 0;
+                    std::time_t bestTempsDeVie = 0;
                     Poisson* meilleurPoisson;
                     for (Poisson* p: poissons)
                     {
@@ -372,11 +371,8 @@ int main (int argc, char* argv[] )
             if (play) {
 
                 // Je regarde si le requin à besoin d'une nouvelle cible
-                requin->prendLaDirectionDeLaCibleLaPlusProche();
-                /* requin2->prendLaDirectionDeLaCibleLaPlusProche(); */
-                /* requin->debug(); */
-                /* requin->setAngleDeDirection(3*3.14/4); */
-                /* show("m_minDistDeLaCibleLaPlusProche",requin->m_minDistDeLaCibleLaPlusProche); */
+                /* requin->prendLaDirectionDeLaCibleLaPlusProche(); */
+                requin->setAngleDeDirection(requin->getAngleEntreMoiEt(requin->getProchaineCible()));
                 requin->avance();
                 /* requin2->avance(); */
 
