@@ -125,7 +125,7 @@ void creerToutLesEtres(Monde& monde)
     Coord posDepart = Coord(monde.getLargeur() / 2 , monde.getHauteur() / 2 );
     requin->setPos(posDepart);
     requin->setMouvant(true);
-    requin->setMaxDistanceDeDeplacement(10);
+    requin->setMaxDistanceDeDeplacement(20);
     requin->setMaxAngleDeDirection(0.3f);
     requin->debug();
 
@@ -152,7 +152,7 @@ void creerToutLesEtres(Monde& monde)
         p->setPosAléa();
         p->setCouleur(clPoisson);
         p->setMouvant(true);
-        p->setMaxDistanceDeDeplacement(requin->getMaxDistanceDeDeplacement());
+        p->setMaxDistanceDeDeplacement(requin->getMaxDistanceDeDeplacement() +2);
 
         poissons.push_back(p);
         monde.ajouteEtre(p);
@@ -291,6 +291,22 @@ int main (int argc, char* argv[] )
                 {
                     requin->setAngleDeDirection(-3.14f*0.5f);
                     requin->avance();
+                }
+
+                if (event.key.code == sf::Keyboard::D)
+                {
+                    auto bestTempsDeVie = 0;
+                    Poisson* meilleurPoisson;
+                    for (Poisson* p: poissons)
+                    {
+                        if (p->m_maxTempsDeVie > bestTempsDeVie) {
+                            bestTempsDeVie = p->m_maxTempsDeVie;
+                            meilleurPoisson = p;
+                        }
+                    }
+                    show("bestTempsDeVie",bestTempsDeVie);
+                    show("var1",meilleurPoisson->m_variablesAléatoires[0]);
+                    meilleurPoisson->debug();
                 }
             }
 

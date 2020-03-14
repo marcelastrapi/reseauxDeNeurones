@@ -62,7 +62,7 @@ void Requin::detectLaCibleLaPlusProche()
 void Requin::mange(Etre* etre)
 {
     m_nbCiblesMangées++ ;
-    etre->reborn();
+    etre->renaît();
 }
 
 void Requin::prendLaDirectionDeLaCibleLaPlusProche()

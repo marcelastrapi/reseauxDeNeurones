@@ -1,7 +1,7 @@
 #pragma once
-
 #include <etre.hpp>
 
+#include <ctime>
 #include <displayer.hpp>
 using namespace displayer;
 
@@ -23,13 +23,16 @@ class Poisson: public Etre
         // sub
         void calculeNouvelleAngle(const nbType directionRequin);
 
-        void reborn() override;
+        void renaît() override;
 
         // setters
 
+        std::time_t m_maxTempsDeVie;
+        array<nbType,2> m_variablesAléatoires;
     private:
         // déclariation
-        array<nbType,2> m_variablesAléatoires;
+        std::time_t m_epochNaissance;
+        std::time_t m_oldTempsDeVie;
 
         // aléa
         nbType m_minRnd;

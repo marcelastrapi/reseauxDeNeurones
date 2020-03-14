@@ -91,7 +91,7 @@ class Etre
         // l'être avance son angle de rotation et la distanceDeDeplacement/maxDistDepl
         void avance(nbType distanceDeDeplacement);
         inline void avance() { avance(m_maxDistanceDeDeplacement); }
-        virtual void reborn();
+        virtual void renaît();
 
         angleType getAngleEntreMoiEt(const Etre* lui) const;
 

@@ -3,6 +3,9 @@
 #include <utils.hpp>
 
 Poisson::Poisson() :
+    m_epochNaissance(std::time(nullptr)),
+    m_maxTempsDeVie(0),
+    m_oldTempsDeVie(0),
     m_minRnd(-3.14f),
     m_maxRnd(3.14f)
 {
@@ -13,15 +16,25 @@ Poisson::Poisson() :
 // sub
 void Poisson::calculeNouvelleAngle(const Etre::nbType directionRequin)
 {
-    m_angleDeDirection = directionRequin + cosf(m_variablesAléatoires[0]);
+    m_angleDeDirection = directionRequin + m_variablesAléatoires[0];
 }
 
 /////////// OVERRIDE
-void Poisson::reborn()
+void Poisson::renaît()
 {
     // reset ma pos
-    Etre::reborn();
-    initialiseLesVariablesAléatoires();
+    Etre::renaît();
+    auto nouvelleEpoch = std::time(nullptr);
+    auto tempsDeVie = nouvelleEpoch - m_epochNaissance;
+    if (tempsDeVie > m_maxTempsDeVie) m_maxTempsDeVie = tempsDeVie;
+    m_epochNaissance = nouvelleEpoch;
+    /* initialiseLesVariablesAléatoires(); */
+    if (tempsDeVie < m_oldTempsDeVie)
+        m_variablesAléatoires[0] += 0.1;
+    else
+        m_variablesAléatoires[0] -= 0.1;
+
+    m_oldTempsDeVie = tempsDeVie;
 }
 
 // debug
@@ -35,5 +48,5 @@ void Poisson::debug() const
 void Poisson::initialiseLesVariablesAléatoires()
 {
     for (auto& varAlea : m_variablesAléatoires)
-        varAlea = static_cast<Etre::nbType>( Rnd::_double()*2 -1 );
+        varAlea = static_cast<Etre::nbType>( Rnd::_double()*3.14*2 - 3.14 );
 }
