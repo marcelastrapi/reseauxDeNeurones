@@ -37,7 +37,7 @@ unsigned int minWinHeight = 4;
 unsigned int windowWidth  = 0; // Default, fullscreen
 unsigned int windowHeight = 0;
 
-unsigned int tickTime = 41; // 24 image/s = 41.66 ms
+unsigned int tickTime = 2; // 24 image/s = 41.66 ms
 unsigned short incrTickTime = 2;
 unsigned int minTickTime = 2;
 
@@ -151,7 +151,7 @@ void creerToutLesEtres(Monde& monde)
         p->setPosAléa();
         p->setCouleur(clPoisson);
         p->setMouvant(true);
-        p->setMaxDistanceDeDeplacement(8);
+        p->setMaxDistanceDeDeplacement(4);
         /* p->setMaxDistanceDeDeplacement(requin->getMaxDistanceDeDeplacement() ); */
 
         poissons.push_back(p);
@@ -185,7 +185,7 @@ int main (int argc, char* argv[] )
 
     gereLesArguments(args);
 
-    Rnd::randomize();
+    /* Rnd::randomize(); */
 
     // Initialize colors tbl
     colors.push_back(sf::Color::Red);
@@ -262,6 +262,8 @@ int main (int argc, char* argv[] )
                 {
                     requin->setNbCiblesMangées(0);
                     clockTotalTime.restart();
+                    for (Poisson* p: poissons)
+                        p->initialiseLesVariablesAléatoires();
                     notify("Reboot");
                 }
                 if (event.key.code == sf::Keyboard::Space)
@@ -295,7 +297,7 @@ int main (int argc, char* argv[] )
 
                 if (event.key.code == sf::Keyboard::D)
                 {
-                    std::time_t bestTempsDeVie = 0;
+                    long bestTempsDeVie;
                     Poisson* meilleurPoisson;
                     for (Poisson* p: poissons)
                     {
@@ -304,8 +306,8 @@ int main (int argc, char* argv[] )
                             meilleurPoisson = p;
                         }
                     }
-                    show("bestTempsDeVie",bestTempsDeVie);
-                    show("var1",meilleurPoisson->m_variablesAléatoires[0]);
+                    /* note("bestTempsDeVie:"+to_string(bestTempsDeVie.count())); */
+                    /* show("var1",meilleurPoisson->m_variablesAléatoires[0]); */
                     meilleurPoisson->debug();
                 }
             }

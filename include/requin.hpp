@@ -30,6 +30,9 @@ class Requin: public Etre
             if (distance <= cibleEnCours->getRayon() + getRayon())
             {
                 mange(cibleEnCours);
+                /* note("J'ai enfin bouffer:"); */
+                /* cibleEnCours->debug(); */
+
                 m_icibleEnCours = (m_icibleEnCours + 1)% m_cibles.getTotal();
             }
 

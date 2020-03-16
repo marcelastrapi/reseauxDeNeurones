@@ -34,3 +34,24 @@ inline float degToRad(const float angle)
     return angle * static_cast<float>(3.141592653589793238463/180);
 }
 
+
+// Pour le temps
+#include <chrono>
+
+inline long getEpochNow()
+{
+    using namespace std::chrono;
+
+    auto now = system_clock::now();
+    auto now_ms = time_point_cast<milliseconds>(now);
+
+    auto value = now_ms.time_since_epoch();
+
+    return value.count();
+
+}
+
+/* inline std::string millisecondsToString(const milliseconds& ms) */
+/* { */
+/*     return "nan mais nan..."; */
+/* } */

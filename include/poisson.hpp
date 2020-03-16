@@ -1,12 +1,14 @@
 #pragma once
 #include <etre.hpp>
 
-#include <ctime>
 #include <displayer.hpp>
 using namespace displayer;
 
 #include <array>
 using std::array;
+
+#include <cmath>
+#include <utils.hpp>
 
 /* \brief class Poisson
    un petit poisson
@@ -15,6 +17,7 @@ class Poisson: public Etre
 {
     public:
         static const ESPECE espece = POISSON;
+        static const size_t NB_TPS_DE_VIE = 10;
         Poisson();
 
         // debug
@@ -27,19 +30,22 @@ class Poisson: public Etre
 
         // setters
 
-        std::time_t m_maxTempsDeVie;
+        long m_maxTempsDeVie;
         array<nbType,2> m_variablesAléatoires;
     private:
         // déclariation
-        std::time_t m_epochNaissance;
+        long m_epochNaissance;
+        array<long,NB_TPS_DE_VIE> m_tempsDeVie;
+        size_t m_iTempsDeVie;
+        nbType m_valeursAAjouterAVarAléa;
         /* std::time_t m_oldTempsDeVie; */
 
         // aléa
-        nbType m_minRnd;
-        nbType m_maxRnd;
+        /* nbType m_minRnd; */
+        /* nbType m_maxRnd; */
 
         // sub
-        void initialiseLesVariablesAléatoires();
+    public: void initialiseLesVariablesAléatoires();
 
 
 };
