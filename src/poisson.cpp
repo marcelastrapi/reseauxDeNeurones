@@ -65,7 +65,6 @@ void Poisson::renaît()
         note("pas assez d'infos de temps de vie pour savoir quoi changer, je ne change rien");
     else
     {
-
         // si le poisson s'est mieux débrouillé maintenant que la dernière fois,
         // alors je continue d'avancer dans le même sens
         if (m_tempsDeVie.at(itempsDeVieLePlusRécent) > m_tempsDeVie.at(itempsDeVieLePlusVieux))

@@ -174,6 +174,7 @@ void creerToutLesEtres(Monde& monde)
 ////////////////////////////////////////////////////
 //                    MAIN                        //
 ////////////////////////////////////////////////////
+#include <neurone.hpp>
 int main (int argc, char* argv[] )
 {
     // Convertion le tableau d'argument en vector (plus pratique)
@@ -184,6 +185,16 @@ int main (int argc, char* argv[] )
     }
 
     gereLesArguments(args);
+
+    ////////////////////////////////////////  
+    // TEST
+    ////////////////////////////////////////  
+    Neurone neurone;
+    neurone.calculeMaValeurEnFonctionDesMesConnections();
+
+    return 0;
+    ////////////////////////////////////////  
+
 
     /* Rnd::randomize(); */
 
@@ -379,11 +390,10 @@ int main (int argc, char* argv[] )
                 requin->avance();
                 /* requin2->avance(); */
 
-                for (Poisson* p: poissons)
-                {
-                    p->calculeNouvelleAngle(p->getAngleEntreMoiEt(requin));
-                    p->avance();
-                }
+                /* for (Poisson* p: poissons) */
+                /* { */
+                /*     p->avance(); */
+                /* } */
 
             }
 
