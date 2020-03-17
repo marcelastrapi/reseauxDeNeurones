@@ -24,3 +24,10 @@ Coord Monde::getRoundCoord(Etre::nbType x, Etre::nbType y)
     rep.y = y;
     return rep;
 }
+
+// Sub
+void Monde::tic()
+{
+    for (Etre* e: m_etres)
+        e->tic();
+}

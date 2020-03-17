@@ -38,8 +38,8 @@ unsigned int windowWidth  = 0; // Default, fullscreen
 unsigned int windowHeight = 0;
 
 unsigned int tickTime = 2; // 24 image/s = 41.66 ms
-unsigned short incrTickTime = 2;
-unsigned int minTickTime = 2;
+unsigned short incrTickTime = 2; // en ms
+unsigned int minTickTime = 2; // en ms
 
 vector<sf::Color> colors;
 sf::Color bgColor = sf::Color::Black;
@@ -48,11 +48,21 @@ bool iDrawSomething = true;
 
 sf::Text noteText;
 sf::Clock clockText;
-unsigned int textTime = 3;
+unsigned int textTime = 3; // en seconde
 
 sf::Text tauxDeCarnageText;
 sf::Clock clockTauxDeCarnage;
-unsigned int tauxDeCarnageTime = 1;
+unsigned int tauxDeCarnageTime = 1; // en seconde
+
+sf::Clock clockDuMonde;
+unsigned int tempsDuMonde = 10; // en millisecond
+
+enum Mode
+{
+    TEMPS_DU_MONDE,
+    TEMPS_AFFICHAGE
+};
+Mode mode = TEMPS_DU_MONDE;
 
 Requin* requin;
 /* Requin* requin2; */
@@ -174,7 +184,7 @@ void creerToutLesEtres(Monde& monde)
 ////////////////////////////////////////////////////
 //                    MAIN                        //
 ////////////////////////////////////////////////////
-#include <neurone.hpp>
+#include <ligneDeNeurones.hpp>
 int main (int argc, char* argv[] )
 {
     // Convertion le tableau d'argument en vector (plus pratique)
@@ -189,8 +199,19 @@ int main (int argc, char* argv[] )
     ////////////////////////////////////////  
     // TEST
     ////////////////////////////////////////  
-    Neurone neurone;
-    neurone.calculeMaValeurEnFonctionDesMesConnections();
+    LigneDeNeurones input(1);
+    LigneDeNeurones hiddenLayer1(8);
+    LigneDeNeurones hiddenLayer2(8);
+    LigneDeNeurones output(1);
+
+    input.connecteMoiÀUneAutreLigne(hiddenLayer1);
+    hiddenLayer1.connecteMoiÀUneAutreLigne(hiddenLayer2);
+    hiddenLayer2.connecteMoiÀUneAutreLigne(output);
+
+    input.print();
+    hiddenLayer1.print();
+    hiddenLayer2.print();
+    output.print();
 
     return 0;
     ////////////////////////////////////////  
@@ -269,6 +290,7 @@ int main (int argc, char* argv[] )
                     displayer::note("Quit");
                     exit(0);
                 }
+
                 if (event.key.code == sf::Keyboard::R)
                 {
                     requin->setNbCiblesMangées(0);
@@ -277,6 +299,7 @@ int main (int argc, char* argv[] )
                         p->initialiseLesVariablesAléatoires();
                     notify("Reboot");
                 }
+
                 if (event.key.code == sf::Keyboard::Space)
                 {
                     play = !play;
@@ -285,6 +308,18 @@ int main (int argc, char* argv[] )
                     else
                         notify("PAUSE"); 
                 }
+
+                if (event.key.code == sf::Keyboard::M)
+                {
+                    if (mode == TEMPS_DU_MONDE) {
+                        mode = TEMPS_AFFICHAGE;
+                        notify("TEMPS_AFFICHAGE"); 
+                    }else{
+                        mode = TEMPS_DU_MONDE;
+                        notify("TEMPS_DU_MONDE"); 
+                    }
+                }
+
                 if (event.key.code == sf::Keyboard::Left)
                 {
                     requin->setAngleDeDirection(3.14f);
@@ -350,9 +385,20 @@ int main (int argc, char* argv[] )
 
             if (event.key.code == sf::Keyboard::Add || (event.type == sf::Event::MouseWheelMoved && event.mouseWheel.delta == -1))
             {
-                tickTime -= incrTickTime;
-                if (tickTime < minTickTime) tickTime = minTickTime;
-                notify("tickTime:"+to_string(tickTime)+"ms");
+                switch (mode)
+                {
+                    case TEMPS_DU_MONDE:
+                        tempsDuMonde -= incrTickTime;
+                        if (tempsDuMonde < minTickTime) tempsDuMonde = minTickTime;
+                        notify("tempsDuMonde:"+to_string(tickTime)+"ms");
+                        break;
+
+                    case TEMPS_AFFICHAGE:
+                        tickTime -= incrTickTime;
+                        if (tickTime < minTickTime) tickTime = minTickTime;
+                        notify("tickTime:"+to_string(tickTime)+"ms");
+                        break;
+                }
             }
             if (event.key.code == sf::Keyboard::Subtract || (event.type == sf::Event::MouseWheelMoved && event.mouseWheel.delta == 1))
             {
@@ -372,17 +418,12 @@ int main (int argc, char* argv[] )
             clockTauxDeCarnage.restart();
         }
 
+        if (clockDuMonde.getElapsedTime().asMilliseconds() >= tempsDuMonde)
+        {
+            if (play) 
+            {
 
-        if (clock.getElapsedTime().asMilliseconds() >= static_cast<int>(tickTime) ) {
-
-            clock.restart();
-
-            // Comme ca je ne redessine pas 2 fois de suite la même image
-            if (!iDrawSomething) iDrawSomething = false;
-
-            window.clear(bgColor);
-
-            if (play) {
+                // TODO faire en sorte que ce soit le monde qui avant d'un pas plutot que chaque être ici
 
                 // Je regarde si le requin à besoin d'une nouvelle cible
                 /* requin->prendLaDirectionDeLaCibleLaPlusProche(); */
@@ -396,6 +437,17 @@ int main (int argc, char* argv[] )
                 /* } */
 
             }
+        }
+
+        if (clock.getElapsedTime().asMilliseconds() >= static_cast<int>(tickTime) ) {
+
+            clock.restart();
+
+            // Comme ca je ne redessine pas 2 fois de suite la même image
+            if (!iDrawSomething) iDrawSomething = false;
+
+            window.clear(bgColor);
+
 
             // Je dessine tout le monde
             Etre* etre;
@@ -411,7 +463,7 @@ int main (int argc, char* argv[] )
                 posy = etre->getTop();
 
                 /* etre->debug(); */
-                switch (etre->getForme()) 
+                switch (etre->forme()) 
                 {
                     case Cercle:
                         {

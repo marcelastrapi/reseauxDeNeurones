@@ -70,7 +70,7 @@ class Etre
         inline void setBottom(const nbType bottom) { setTop (bottom - m_hauteur); }
 
         // getters
-        inline Forme getForme() const { return m_forme; }
+        inline Forme forme() const { return m_forme; }
         inline nbType getMaxPosX() const { return m_largeurDuMonde; }
         inline nbType getMaxPosY() const { return m_hauteurDuMonde; }
         inline nbType getLargeur() const { return m_largeur; }
@@ -81,6 +81,8 @@ class Etre
         inline angleType getAngleDeDirection() const { return m_angleDeDirection; }
         inline bool getMouvant() const { return m_mouvant; }
         inline nbType getMaxDistanceDeDeplacement() const { return m_maxDistanceDeDeplacement; }
+        inline bool estVivant() const { return m_estVivant; }
+        inline nbType tempsDeVie() const { return m_tempsDeVie; }
 
         inline nbType getLeft()   const { return m_pos.x - m_largDiv ; }
         inline nbType getTop()    const { return m_pos.y - m_hautDiv ; }
@@ -91,7 +93,10 @@ class Etre
         // l'être avance son angle de rotation et la distanceDeDeplacement/maxDistDepl
         void avance(nbType distanceDeDeplacement);
         inline void avance() { avance(m_maxDistanceDeDeplacement); }
+
         virtual void renaît();
+
+        void tic();
 
         angleType getAngleEntreMoiEt(const Etre* lui) const;
 
@@ -110,5 +115,8 @@ class Etre
         nbType m_maxDistanceDeDeplacement;
         angleType m_angleDeDirection;
         angleType m_maxAngleDeDirection;
+
+        bool m_estVivant;
+        nbType m_tempsDeVie;
 
 };

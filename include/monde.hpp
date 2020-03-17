@@ -21,7 +21,8 @@ class Monde
         // Setters
         inline void ajouteEtre(Etre* etre) { m_toutLesEtres.ajouteEtre(etre); }
 
-
+        // Sub
+        void tic();
 
         // Display
         void debug() const {

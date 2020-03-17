@@ -3,32 +3,54 @@
 #include <vector>
 
 #include <utils.hpp>
+#include <displayer.hpp>
+using namespace displayer;
+
+#include <rnd.hpp>
 
 typedef float nbType;
 
 class Neurone
 {
+    private:
+        using Neurones = std::vector<Neurone*>;
+
     public:
+        using iterator = Neurones::iterator;
+        using const_iterator = Neurones::const_iterator;
+
         Neurone();
-        
+
+        // Pour pouvoir faire comme dans un vector (itérer)
+        iterator begin() { return m_neuronesConnectés.begin(); }
+        iterator end() { return m_neuronesConnectés.end(); }
+        const_iterator begin() const { return m_neuronesConnectés.begin(); }
+        const_iterator end() const { return m_neuronesConnectés.end(); }
+        const_iterator cbegin() const { return m_neuronesConnectés.cbegin(); }
+        const_iterator cend() const { return m_neuronesConnectés.cend(); }
+
         // setters
+        void setPoidsAléa(const nbType min = 0, const nbType max = 1);
+        inline void setPoids(const nbType poids) { m_poids = poids; }
+        inline void setValeur(const nbType valeur) { m_valeur = valeur; }
 
         // getters
         inline nbType getPoids() const { return m_poids; }
         inline nbType getValeur() const { return m_valeur; }
+        inline size_t getNbConnexions() const { return m_neuronesConnectés.size(); }
 
         // sub
-        void ajouteMoiUneConnexionVersUnNeurone(Neurone* neurone);
-        void calculeMaValeurEnFonctionDesMesConnections();
+        void connecteMoiÀUnAutreNeurone(Neurone* neurone);
+        void print() const;
 
         // functions
+        nbType calculeMaValeurEnFonctionDesMesConnections();
 
     private:
         nbType m_poids;
         nbType m_valeur;
         nbType m_min;
-        // vector de pointeur vers les neurons qui sont connecté à mois
-        std::vector<Neurone*> m_neuronesConnectés;
-
+        // vector de pointeur vers les neurones qui sont connecté à moi
+        Neurones m_neuronesConnectés;
 
 };

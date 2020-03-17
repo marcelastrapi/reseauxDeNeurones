@@ -117,7 +117,14 @@ void Etre::avance(Etre::nbType distanceDeDeplacement)
     setPos(m_pos.x + xDepl, m_pos.y - yDepl);
 
 }
+
 void Etre::renaît()
 {
     setPosAléa();
+    m_tempsDeVie = 0;
+}
+
+void Etre::tic()
+{
+    m_tempsDeVie++;
 }
