@@ -136,7 +136,7 @@ void creerToutLesEtres(Monde& monde)
     requin->setMouvant(true);
     requin->setMaxDistanceDeDeplacement(4);
     requin->setMaxAngleDeDirection(0.3f);
-    requin->debug();
+    requin->print();
 
     /* requin2 = new Requin(); */
     /* requin2->setDimensionDuMonde(monde.getLargeur(), monde.getHauteur()); */
@@ -146,7 +146,7 @@ void creerToutLesEtres(Monde& monde)
     /* requin2->setMouvant(true); */
     /* requin2->setMaxDistanceDeDeplacement(10); */
     /* requin2->setMaxAngleDeDirection(0.3f); */
-    /* requin2->debug(); */
+    /* requin2->print(); */
 
     // Je veux des poissons
     unsigned int nombreDePoissons = 1;
@@ -199,6 +199,9 @@ int main (int argc, char* argv[] )
     ////////////////////////////////////////  
     // TEST
     ////////////////////////////////////////  
+
+    Rnd::randomize();
+
     LigneDeNeurones input(1);
     LigneDeNeurones hiddenLayer1(8);
     LigneDeNeurones hiddenLayer2(8);
@@ -208,6 +211,12 @@ int main (int argc, char* argv[] )
     hiddenLayer1.connecteMoiÀUneAutreLigne(hiddenLayer2);
     hiddenLayer2.connecteMoiÀUneAutreLigne(output);
 
+    input.neurones(0)->valeur(3);
+    hiddenLayer1.effectueLesCalculesDesValeursPourToutMesNeurones();
+    hiddenLayer2.effectueLesCalculesDesValeursPourToutMesNeurones();
+    output.effectueLesCalculesDesValeursPourToutMesNeurones();
+
+
     input.print();
     hiddenLayer1.print();
     hiddenLayer2.print();
@@ -216,8 +225,6 @@ int main (int argc, char* argv[] )
     return 0;
     ////////////////////////////////////////  
 
-
-    /* Rnd::randomize(); */
 
     // Initialize colors tbl
     colors.push_back(sf::Color::Red);
@@ -271,7 +278,7 @@ int main (int argc, char* argv[] )
     Monde monde(windowWidth,windowHeight);
     creerToutLesEtres(monde);
 
-    /* monde.debug(); */
+    /* monde.print(); */
 
     sf::Clock clock;
     sf::Clock clockTotalTime;
@@ -354,7 +361,7 @@ int main (int argc, char* argv[] )
                     }
                     /* note("bestTempsDeVie:"+to_string(bestTempsDeVie.count())); */
                     /* show("var1",meilleurPoisson->m_variablesAléatoires[0]); */
-                    meilleurPoisson->debug();
+                    meilleurPoisson->print();
                 }
             }
 
@@ -462,7 +469,7 @@ int main (int argc, char* argv[] )
                 posx = etre->getLeft();
                 posy = etre->getTop();
 
-                /* etre->debug(); */
+                /* etre->print(); */
                 switch (etre->forme()) 
                 {
                     case Cercle:

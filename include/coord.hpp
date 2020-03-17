@@ -15,11 +15,11 @@ class Coord {
             this->y = copy.y;
         }
 
-        inline std::string toString() const // TODO supprimer DEBUG
+        inline std::string toString() const // TODO supprimer print
         {
             return "(" + std::to_string(x) + "," + std::to_string(y) + ")";
         }
-        inline void debug() const
+        inline void print() const
         {
             displayer::note("coord:"+toString());
         }

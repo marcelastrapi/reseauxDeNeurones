@@ -20,8 +20,8 @@ class Poisson: public Etre
         static const size_t NB_TPS_DE_VIE = 10;
         Poisson();
 
-        // debug
-        void debug() const override;
+        // print
+        void print() const override;
 
         // sub
         void calculeNouvelleAngle(const nbType directionRequin);

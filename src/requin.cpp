@@ -9,10 +9,10 @@ Requin::Requin(): m_nbCiblesMangées(0),m_icibleEnCours(0)
     m_maxDistanceDeDeplacement = 10;
 }
 
-//debug
-void Requin::debug() const
+//print
+void Requin::print() const
 {
-    Etre::debug();
+    Etre::print();
     note("Je suis un requin");
 }
 

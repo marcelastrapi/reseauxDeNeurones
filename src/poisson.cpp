@@ -82,10 +82,10 @@ void Poisson::renaît()
     /* m_oldTempsDeVie = tempsDeVie; */
 }
 
-// debug
-void Poisson::debug() const
+// print
+void Poisson::print() const
 {
-    Etre::debug();
+    Etre::print();
     note("Je suis un poisson");
     show("Je suis vivant depuis",getEpochNow() - m_epochNaissance);
 }

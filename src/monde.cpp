@@ -28,6 +28,6 @@ Coord Monde::getRoundCoord(Etre::nbType x, Etre::nbType y)
 // Sub
 void Monde::tic()
 {
-    for (Etre* e: m_etres)
+    for (Etre* e: m_toutLesEtres)
         e->tic();
 }

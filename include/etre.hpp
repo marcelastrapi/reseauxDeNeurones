@@ -32,6 +32,9 @@ enum ESPECE
    
    
 */
+
+typedef long Tic;
+
 class Etre
 {
 
@@ -43,11 +46,11 @@ class Etre
         Etre();
         virtual ~Etre() {}
 
-        //debug
-        virtual void debug() const = 0;
+        //print
+        virtual void print() const = 0;
 
         // setters
-        inline void setForme(const Forme forme) { m_forme = forme; }
+        inline void forme(const Forme forme) { m_forme = forme; }
         inline void setCouleur(const Couleur& cl) { m_couleur = cl; }
         inline void setCouleur(const Couleur::clType r, const Couleur::clType g, const Couleur::clType b, const Couleur::clType a=255) { setCouleur(Couleur(r,g,b,a)); }
         void setDimensionDuMonde(const nbType largeur, const nbType hauteur);
@@ -68,6 +71,7 @@ class Etre
         void setTop (const nbType top);
         inline void setRight (const nbType right)  { setLeft(right -  m_largeur); }
         inline void setBottom(const nbType bottom) { setTop (bottom - m_hauteur); }
+        inline void estVivant(const bool vivant) { m_estVivant = vivant; }
 
         // getters
         inline Forme forme() const { return m_forme; }
@@ -82,7 +86,7 @@ class Etre
         inline bool getMouvant() const { return m_mouvant; }
         inline nbType getMaxDistanceDeDeplacement() const { return m_maxDistanceDeDeplacement; }
         inline bool estVivant() const { return m_estVivant; }
-        inline nbType tempsDeVie() const { return m_tempsDeVie; }
+        inline Tic tempsDeVie() const { return m_tempsDeVie; }
 
         inline nbType getLeft()   const { return m_pos.x - m_largDiv ; }
         inline nbType getTop()    const { return m_pos.y - m_hautDiv ; }
@@ -117,6 +121,6 @@ class Etre
         angleType m_maxAngleDeDirection;
 
         bool m_estVivant;
-        nbType m_tempsDeVie;
+        Tic m_tempsDeVie;
 
 };

@@ -31,18 +31,18 @@ class Requin: public Etre
             {
                 mange(cibleEnCours);
                 /* note("J'ai enfin bouffer:"); */
-                /* cibleEnCours->debug(); */
+                /* cibleEnCours->print(); */
 
                 m_icibleEnCours = (m_icibleEnCours + 1)% m_cibles.getTotal();
             }
 
             /* note("prochaineCible"); */
-            /* m_cibles.getEtreNo(m_icibleEnCours)->debug(); */
+            /* m_cibles.getEtreNo(m_icibleEnCours)->print(); */
             return m_cibles.getEtreNo(m_icibleEnCours);
         }
 
-        // debug
-        void debug() const;
+            // print
+        void print() const;
 
         // sub
         void ajouteCible(Etre* nouvelleCible);

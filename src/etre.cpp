@@ -17,7 +17,7 @@ Etre::Etre():
 { }
 
 // debug
-void Etre::debug() const
+void Etre::print() const
 {
     note("_______________________________________________________");
     note("pos:" + to_string(m_pos.x) + "," + to_string(m_pos.y) );
@@ -88,7 +88,6 @@ void Etre::setAngleDeDirection(const nbType angle)
 
 }
 
-
 // functions 
 Etre::angleType Etre::getAngleEntreMoiEt(const Etre* lui) const
 {
@@ -126,5 +125,9 @@ void Etre::renaît()
 
 void Etre::tic()
 {
-    m_tempsDeVie++;
+    if (m_estVivant)
+    {
+        m_tempsDeVie++;
+        if (m_mouvant) avance();
+    }
 }

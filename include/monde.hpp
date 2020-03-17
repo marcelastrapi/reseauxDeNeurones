@@ -25,9 +25,9 @@ class Monde
         void tic();
 
         // Display
-        void debug() const {
+        void print() const {
             for (unsigned int i = 0; i < getNbEtres(); i++)
-                m_toutLesEtres.getEtreNo(i)->debug();
+                m_toutLesEtres.getEtreNo(i)->print();
         }
 
     private:

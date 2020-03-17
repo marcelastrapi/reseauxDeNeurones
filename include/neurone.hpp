@@ -30,14 +30,14 @@ class Neurone
         const_iterator cend() const { return m_neuronesConnectés.cend(); }
 
         // setters
-        void setPoidsAléa(const nbType min = 0, const nbType max = 1);
-        inline void setPoids(const nbType poids) { m_poids = poids; }
-        inline void setValeur(const nbType valeur) { m_valeur = valeur; }
+        void poidsAléa(const nbType min = 0, const nbType max = 1);
+        inline void poids(const nbType poids) { m_poids = poids; }
+        inline void valeur(const nbType valeur) { m_valeur = valeur; }
 
         // getters
-        inline nbType getPoids() const { return m_poids; }
-        inline nbType getValeur() const { return m_valeur; }
-        inline size_t getNbConnexions() const { return m_neuronesConnectés.size(); }
+        inline nbType poids() const { return m_poids; }
+        inline nbType valeur() const { return m_valeur; }
+        inline size_t nbConnexions() const { return m_neuronesConnectés.size(); }
 
         // sub
         void connecteMoiÀUnAutreNeurone(Neurone* neurone);
