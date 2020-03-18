@@ -30,6 +30,13 @@ void RéseauDeNeurones::nbHiddenLayers(const size_t nbHiddenLayers)
 
 }
 
+void RéseauDeNeurones::poidsAléa(const nbType min, const nbType max)
+{
+    m_output.poidsAléa(min,max);
+    for (LigneDeNeurones* hiddenLayer: m_hiddenLayers)
+        hiddenLayer->poidsAléa(min,max);
+    m_output.poidsAléa(min,max);
+}
 
 // sub
 void RéseauDeNeurones::print(bool tout) const
@@ -45,8 +52,8 @@ void RéseauDeNeurones::print(bool tout) const
     if (tout)
     {
         m_input.print();
-        for (LigneDeNeurones* ligne: m_hiddenLayers)
-            ligne->print();
+        for (LigneDeNeurones* hiddenLayer: m_hiddenLayers)
+            hiddenLayer->print();
         m_output.print();
     }
 }
@@ -61,7 +68,7 @@ void RéseauDeNeurones::connecteLesLignesEntreElles()
 
         LignesDeNeurones::iterator it = m_hiddenLayers.begin();
         std::advance(it,1);
-            for (size_t i = 0; i < nbHiddenLayers() - 1; i++)
+        for (size_t i = 0; i < nbHiddenLayers() - 1; i++)
             m_hiddenLayers.at(i)->connecteMoiÀUneAutreLigne(*m_hiddenLayers.at(i+1));
 
         m_hiddenLayers.at(nbHiddenLayers()-1)->connecteMoiÀUneAutreLigne(m_output);

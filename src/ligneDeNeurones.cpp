@@ -60,7 +60,7 @@ void LigneDeNeurones::calculeLesValeursDeToutMesNeurones()
 }
 void LigneDeNeurones::print() const
 {
-    note("_ Je suis une Ligne De Neurones");
+    note("_ Je suis une Ligne De Neurones ______________________________");
     show("  Nombre de neurones",m_neurones.size());
     note("______ Je print mes neurones");
     for (Neurone* n: m_neurones)

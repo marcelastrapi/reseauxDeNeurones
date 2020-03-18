@@ -18,6 +18,7 @@ class RéseauDeNeurones
         inline void nbNeuronesInput(const size_t nbNeurones){ m_input.nbNeurones(nbNeurones) ;}
         inline void nbNeuronesOuput(const size_t nbNeurones){ m_output.nbNeurones(nbNeurones);}
         void nbHiddenLayers(const size_t nbHiddenLayers);
+        void poidsAléa(const nbType min = 0, const nbType max = 1);
 
         // getters
         inline LigneDeNeurones& input() { return m_input; }

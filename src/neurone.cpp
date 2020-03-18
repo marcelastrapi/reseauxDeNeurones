@@ -3,7 +3,7 @@
 Neurone::Neurone():
     m_poids(0),
     m_valeur(0),
-    m_min(0)
+    m_seuil(0)
 {
     poidsAléa();
 }
@@ -11,7 +11,7 @@ Neurone::Neurone():
 // setters
 void Neurone::poidsAléa(const nbType min, const nbType max)
 {
-    m_poids = Rnd::rnd(min,max);
+    m_poids = Rnd::rnd<nbType>(min,max);
 }
 
 // getters
@@ -44,7 +44,7 @@ nbType Neurone::calculeMaValeurEnFonctionDesMesConnections()
     }
 
     // ce produit passer par la fonction max(0,x) sera ma valeur
-    m_valeur = max(m_min,m_valeur);
+    m_valeur = max(m_seuil,m_valeur);
 
     return m_valeur;
 }

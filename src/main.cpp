@@ -204,11 +204,15 @@ int main (int argc, char* argv[] )
 
     RéseauDeNeurones réseauDeNeurones;
 
+    réseauDeNeurones.input().nbNeurones(2);
     réseauDeNeurones.nbHiddenLayers(2);
     réseauDeNeurones.connecteLesLignesEntreElles();
 
+    réseauDeNeurones.poidsAléa(-3.14f,3.14f);
+    réseauDeNeurones.output().poidsAléa(0,1);
+
     réseauDeNeurones.input().at(0)->valeur(2);
-    réseauDeNeurones.print(true);
+    réseauDeNeurones.input().at(1)->valeur(-3);
     
     réseauDeNeurones.calculeLesValeursDeToutMesNeurones();
 

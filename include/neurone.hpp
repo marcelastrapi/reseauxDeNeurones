@@ -51,7 +51,7 @@ class Neurone
     private:
         nbType m_poids;
         nbType m_valeur;
-        nbType m_min;
+        nbType m_seuil;
         // vector de pointeur vers les neurones qui sont connecté à moi
         Neurones m_neuronesConnectés;
 
