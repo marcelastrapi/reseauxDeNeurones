@@ -184,7 +184,7 @@ void creerToutLesEtres(Monde& monde)
 ////////////////////////////////////////////////////
 //                    MAIN                        //
 ////////////////////////////////////////////////////
-#include <ligneDeNeurones.hpp>
+#include <reseauDeNeurones.hpp>
 int main (int argc, char* argv[] )
 {
     // Convertion le tableau d'argument en vector (plus pratique)
@@ -202,25 +202,40 @@ int main (int argc, char* argv[] )
 
     Rnd::randomize();
 
-    LigneDeNeurones input(1);
-    LigneDeNeurones hiddenLayer1(8);
-    LigneDeNeurones hiddenLayer2(8);
-    LigneDeNeurones output(1);
+    RéseauDeNeurones réseauDeNeurones;
 
-    input.connecteMoiÀUneAutreLigne(hiddenLayer1);
-    hiddenLayer1.connecteMoiÀUneAutreLigne(hiddenLayer2);
-    hiddenLayer2.connecteMoiÀUneAutreLigne(output);
+    réseauDeNeurones.nbHiddenLayers(2);
+    réseauDeNeurones.connecteLesLignesEntreElles();
 
-    input.neurones(0)->valeur(3);
-    hiddenLayer1.effectueLesCalculesDesValeursPourToutMesNeurones();
-    hiddenLayer2.effectueLesCalculesDesValeursPourToutMesNeurones();
-    output.effectueLesCalculesDesValeursPourToutMesNeurones();
+    réseauDeNeurones.input().at(0)->valeur(2);
+    réseauDeNeurones.print(true);
+    
+    réseauDeNeurones.calculeLesValeursDeToutMesNeurones();
 
+    for (auto val: réseauDeNeurones.tableauxDesRésultats())
+        show("val",val);
 
-    input.print();
-    hiddenLayer1.print();
-    hiddenLayer2.print();
-    output.print();
+    réseauDeNeurones.print(true);
+
+    /* show("res",res); */
+
+    /* LigneDeNeurones hiddenLayer1(8); */
+    /* LigneDeNeurones hiddenLayer2(8); */
+    /* LigneDeNeurones output(1); */
+
+    /* input.connecteMoiÀUneAutreLigne(hiddenLayer1); */
+    /* hiddenLayer1.connecteMoiÀUneAutreLigne(hiddenLayer2); */
+    /* hiddenLayer2.connecteMoiÀUneAutreLigne(output); */
+
+    /* input.neurones(0)->valeur(3); */
+    /* hiddenLayer1.effectueLesCalculesDesValeursPourToutMesNeurones(); */
+    /* hiddenLayer2.effectueLesCalculesDesValeursPourToutMesNeurones(); */
+    /* output.effectueLesCalculesDesValeursPourToutMesNeurones(); */
+
+    /* input.print(); */
+    /* hiddenLayer1.print(); */
+    /* hiddenLayer2.print(); */
+    /* output.print(); */
 
     return 0;
     ////////////////////////////////////////  

@@ -41,7 +41,7 @@ class Requin: public Etre
             return m_cibles.getEtreNo(m_icibleEnCours);
         }
 
-            // print
+        // print
         void print() const;
 
         // sub

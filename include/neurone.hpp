@@ -43,6 +43,8 @@ class Neurone
         void connecteMoiÀUnAutreNeurone(Neurone* neurone);
         void print() const;
 
+        inline void effaceToutesLesConnections() { m_neuronesConnectés.clear(); }
+
         // functions
         nbType calculeMaValeurEnFonctionDesMesConnections();
 

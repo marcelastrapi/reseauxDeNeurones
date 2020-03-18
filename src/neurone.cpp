@@ -37,8 +37,10 @@ nbType Neurone::calculeMaValeurEnFonctionDesMesConnections()
     m_valeur = 0;
     for (const Neurone* n: m_neuronesConnectés)
     {
+        // TODO j'ai pris le poids du neurone d'arriver, parce que j'ai qu'une
+        // entrée mais je ne suis pas sûr que ça fonctionne du coup...
         m_valeur += this->poids() * n->valeur();
-        show("m_valeur",m_valeur);
+        /* show("m_valeur",m_valeur); */
     }
 
     // ce produit passer par la fonction max(0,x) sera ma valeur
