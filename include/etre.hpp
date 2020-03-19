@@ -48,7 +48,7 @@ class Etre
         Etre();
         virtual ~Etre() {}
 
-        //print
+        // print pour débugger
         virtual void print() const = 0;
 
         // setters
@@ -75,6 +75,11 @@ class Etre
         inline void bottom(const nbType _bottom) { top (_bottom - m_hauteur); }
         inline void estVivant(const bool vivant) { m_estVivant = vivant; }
 
+        inline void tableauxDesValeursEnEntrée(const std::vector<nbType>& _tblVals)
+        { m_réseauDeNeurones.tableauxDesValeursEnEntrée(_tblVals); }
+        std::vector<nbType> tableauxDesRésultats() { return m_réseauDeNeurones.tableauxDesRésultats(); }
+        inline void calculeLesValeursDeToutMesNeurones() { m_réseauDeNeurones.calculeLesValeursDeToutMesNeurones(); }
+
         // getters
         Forme forme() const { return m_forme; }
         nbType maxPosX() const { return m_largeurDuMonde; }
@@ -94,6 +99,9 @@ class Etre
         nbType top()    const { return m_pos.y - m_hautDiv ; }
         nbType right()  const { return m_pos.x + m_largDiv ; }
         nbType bottom() const { return m_pos.y + m_hautDiv ; }
+
+        RéseauDeNeurones& réseauDeNeurones() { return m_réseauDeNeurones; }
+        LigneDeNeurones& ouput() { return m_réseauDeNeurones.output(); }
 
         // sub
         // l'être avance son angle de rotation et la distanceDeDeplacement/maxDistDepl

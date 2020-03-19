@@ -8,7 +8,7 @@ class LigneDeNeurones
         using Neurones = std::vector<Neurone*>;
 
     public:
-        using TblRésultats = std::vector<nbType>;
+        using TblValeurs = std::vector<nbType>;
         using iterator = Neurones::iterator;
         using const_iterator = Neurones::const_iterator;
 
@@ -31,7 +31,7 @@ class LigneDeNeurones
         // getters
         inline size_t nbNeurones() const { return m_neurones.size(); }
         inline Neurone* at(const size_t i) { return m_neurones.at(i); }
-        TblRésultats tableauxDesRésultats() const;
+        TblValeurs tableauxDesRésultats() const;
 
 
         // sub

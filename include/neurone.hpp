@@ -32,8 +32,9 @@ class Neurone
         // setters
         void poidsAléa(const nbType min = 0, const nbType max = 1);
         void poidsAléa(const nbType fourchetteAutourDuPoids);
-        inline void poids(const nbType poids) { m_poids = poids; }
-        inline void valeur(const nbType valeur) { m_valeur = valeur; }
+        inline void poids (const nbType _poids ) { m_poids  = _poids ; }
+        inline void valeur(const nbType _valeur) { m_valeur = _valeur; }
+        inline void seuil (const nbType _seuil ) { m_seuil  = _seuil ; }
 
         // getters
         inline nbType poids() const { return m_poids; }

@@ -43,11 +43,12 @@ class Requin: public Etre
         }
 
         // print
-        void print() const;
+        void print() const override;
 
         // sub
         void ajouteCible(Etre* nouvelleCible);
         inline void avance() { Etre::avance(); }
+        void renaît() override;
 
         Etre::nbType m_minDistDeLaCibleLaPlusProche;
         Etre* m_cibleLaPlusProche;

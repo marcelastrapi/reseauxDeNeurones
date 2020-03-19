@@ -35,9 +35,12 @@ class Monde
         unsigned int m_largeur;
         unsigned int m_hauteur;
 
+        Tic m_ticÉcouléDépuisCréation;
+
         // Tout qui est présent dans le monde
         // C'est un tableau de podoubleeurs vers des objets de la class mère Etre
         Etres m_toutLesEtres;
+
 
         Coord getRoundCoord(Etre::nbType x, Etre::nbType y);
 

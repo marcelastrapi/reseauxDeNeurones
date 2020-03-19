@@ -26,6 +26,11 @@ void Requin::ajouteCible(Etre* nouvelleCible)
     m_cibles.ajouteEtre(nouvelleCible);
 }
 
+// override
+void Requin::renaît()
+{
+    m_nbCiblesMangées = 0;
+}
 
 //////////////////////////////////////////////////////////// PRIVATE
 

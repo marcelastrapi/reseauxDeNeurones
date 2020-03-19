@@ -90,6 +90,8 @@ void Etre::angleDeDirection(const nbType angle)
 
 }
 
+// réseaux de neurones
+
 // functions 
 Etre::angleType Etre::getAngleEntreMoiEt(const Etre* lui) const
 {

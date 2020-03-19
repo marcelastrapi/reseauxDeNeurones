@@ -2,7 +2,9 @@
 
 RéseauDeNeurones::RéseauDeNeurones():
     m_input(1),m_output(1)
-{ }
+{
+    /* connecteLesLignesEntreElles(); */
+}
 
 RéseauDeNeurones::RéseauDeNeurones(const size_t _nbNeuronesInput, 
                 const size_t _nbHiddenLayers, 
@@ -11,6 +13,7 @@ RéseauDeNeurones::RéseauDeNeurones(const size_t _nbNeuronesInput,
     m_input(_nbNeuronesInput),m_output(_nbNeuronesOutput)
 {
     nbHiddenLayers(_nbHiddenLayers,_nbNeuronesHiddenLayers);
+    connecteLesLignesEntreElles();
 }
 
 RéseauDeNeurones::~RéseauDeNeurones()
@@ -47,6 +50,13 @@ void RéseauDeNeurones::poidsAléa(const nbType min, const nbType max)
     for (LigneDeNeurones* hiddenLayer: m_hiddenLayers)
         hiddenLayer->poidsAléa(min,max);
     m_output.poidsAléa(min,max);
+}
+
+void RéseauDeNeurones::tableauxDesValeursEnEntrée(const TblValeurs& _tblVals)
+{
+    size_t i = 0;
+    for (const auto& val: _tblVals)
+        m_input.at(i++)->valeur(val);
 }
 
 // sub

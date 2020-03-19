@@ -9,7 +9,8 @@ class RéseauDeNeurones
 
     public:
         using LignesDeNeurones = std::vector<LigneDeNeurones*>;
-        using TblRésultats = std::vector<nbType>;
+        using TblValeurs = std::vector<nbType>;
+        //TODO il faudrait probablement un pointeur intelligent pour ne pas avoir à recopier tout le temps le tableau dans tableauxDesRésultats()
 
         RéseauDeNeurones();
         RéseauDeNeurones(
@@ -24,12 +25,13 @@ class RéseauDeNeurones
         inline void nbNeuronesOuput(const size_t nbNeurones){ m_output.nbNeurones(nbNeurones);}
         void nbHiddenLayers(const size_t nbHiddenLayers, const size_t nbNeurones = 4);
         void poidsAléa(const nbType min = 0, const nbType max = 1);
+        void tableauxDesValeursEnEntrée(const TblValeurs& _tblVals);
 
         // getters
         inline LigneDeNeurones& input() { return m_input; }
         inline LignesDeNeurones& hiddenLayers() { return m_hiddenLayers; }
         inline LigneDeNeurones& output() { return m_output; }
-        inline TblRésultats tableauxDesRésultats() const { return m_output.tableauxDesRésultats(); }
+        inline TblValeurs tableauxDesRésultats() const { return m_output.tableauxDesRésultats(); }
         
         inline size_t nbHiddenLayers() { return m_hiddenLayers.size(); }
 

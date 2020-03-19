@@ -18,11 +18,12 @@ LIBS := -lsfml-system -lsfml-window -lsfml-graphics
 CPPFLAGS ?= $(INC_FLAGS) -MMD -MP -std=c++14
 
 
+release: CPPFLAGS += -O2 -Wall
+release: $(TARGET_EXEC)
+
 debug: CPPFLAGS += -g -DDEBUG $(WARNING)
 debug: $(TARGET_EXEC)
 
-release: CPPFLAGS += -s -O2
-release: clean $(TARGET_EXEC)
 
 $(TARGET_EXEC): $(OBJS)
 	$(CC) $(OBJS) -o $@ $(LIBS)

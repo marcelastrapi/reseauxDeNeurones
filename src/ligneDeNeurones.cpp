@@ -36,9 +36,9 @@ void LigneDeNeurones::nbNeurones(const size_t nbNeurones)
 }
 
 // getters
-LigneDeNeurones::TblRésultats LigneDeNeurones::tableauxDesRésultats() const
+LigneDeNeurones::TblValeurs LigneDeNeurones::tableauxDesRésultats() const
 {
-    TblRésultats rep;
+    TblValeurs rep;
     for (const Neurone* n: m_neurones)
         rep.push_back(n->valeur());
 
