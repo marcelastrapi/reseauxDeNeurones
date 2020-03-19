@@ -3,8 +3,8 @@
 #include <vector>
 
 #include <utils.hpp>
-#include <displayer.hpp>
-using namespace displayer;
+/* #include <displayer.hpp> */
+/* using namespace displayer; */
 
 #include <rnd.hpp>
 
@@ -31,6 +31,7 @@ class Neurone
 
         // setters
         void poidsAléa(const nbType min = 0, const nbType max = 1);
+        void poidsAléa(const nbType fourchetteAutourDuPoids);
         inline void poids(const nbType poids) { m_poids = poids; }
         inline void valeur(const nbType valeur) { m_valeur = valeur; }
 

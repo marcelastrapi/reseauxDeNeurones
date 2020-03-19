@@ -17,17 +17,18 @@ class Requin: public Etre
         Requin();
 
         // setters
-        inline void setNbCiblesMangées(const unsigned int nbCiblesMangée) { m_nbCiblesMangées = nbCiblesMangée; }
-        // getters
-        inline size_t getNbCibles() const { return m_cibles.getTotal(); }
-        inline unsigned int getNbCiblesMangées() const { return m_nbCiblesMangées; }
+        inline void nbCiblesMangées(const unsigned int _nbCiblesMangée) { m_nbCiblesMangées = _nbCiblesMangée; }
 
-        Etre* getProchaineCible() 
+        // getters
+        inline size_t nbCibles() const { return m_cibles.getTotal(); }
+        inline unsigned int nbCiblesMangées() const { return m_nbCiblesMangées; }
+
+        Etre* prochaineCible() 
         {
             Etre* cibleEnCours = m_cibles.getEtreNo(m_icibleEnCours);
-            auto distance = dist(cibleEnCours->getPos(), m_pos);
+            auto distance = dist(cibleEnCours->pos(), m_pos);
 
-            if (distance <= cibleEnCours->getRayon() + getRayon())
+            if (distance <= cibleEnCours->rayon() + rayon())
             {
                 mange(cibleEnCours);
                 /* note("J'ai enfin bouffer:"); */
@@ -46,7 +47,6 @@ class Requin: public Etre
 
         // sub
         void ajouteCible(Etre* nouvelleCible);
-        void avance(Etre::nbType distanceDeDeplacement);
         inline void avance() { Etre::avance(); }
 
         Etre::nbType m_minDistDeLaCibleLaPlusProche;

@@ -11,8 +11,8 @@ class Monde
         Monde(unsigned int largeur = 1000, unsigned int hauteur = 1000);
 
         // Getters
-        inline unsigned int getLargeur() const { return this->m_largeur; }
-        inline unsigned int getHauteur() const { return this->m_hauteur; }
+        inline unsigned int largeur() const { return this->m_largeur; }
+        inline unsigned int hauteur() const { return this->m_hauteur; }
 
         inline Etres& getToutLesEtres() { return this->m_toutLesEtres; }
         inline size_t getNbEtres() const { return this->m_toutLesEtres.getTotal(); }

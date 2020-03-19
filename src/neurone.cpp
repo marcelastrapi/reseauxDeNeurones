@@ -13,6 +13,10 @@ void Neurone::poidsAléa(const nbType min, const nbType max)
 {
     m_poids = Rnd::rnd<nbType>(min,max);
 }
+void Neurone::poidsAléa(const nbType fourchetteAutourDuPoids)
+{
+    m_poids = Rnd::rnd<nbType>(m_poids - fourchetteAutourDuPoids, m_poids + fourchetteAutourDuPoids);
+}
 
 // getters
 

@@ -10,10 +10,13 @@ Etre::Etre():
     m_largeurDuMonde(0), m_hauteurDuMonde(0),
     m_largeur(1), m_hauteur(1),
     m_largDiv(0), m_hautDiv(0),
-    m_mouvant(false),
+    m_estMouvant(false),
     m_maxDistanceDeDeplacement(0),
     m_angleDeDirection(0),
-    m_maxAngleDeDirection(360)
+    m_maxAngleDeDirection(360),
+    m_estVivant(false),
+    m_tempsDeVie(0),
+    m_réseauDeNeurones()
 { }
 
 // debug
@@ -30,13 +33,13 @@ void Etre::print() const
 }
 
 // setters
-void Etre::setDimensionDuMonde(const nbType largeur, const nbType hauteur)
+void Etre::dimensionDuMonde(const nbType largeur, const nbType hauteur)
 {
     m_largeurDuMonde = largeur;
     m_hauteurDuMonde = hauteur;
 }
 
-void Etre::setPosAléa()
+void Etre::posAléa()
 {
     setLeft(static_cast<float>( Rnd::_int( 
                 static_cast<int>(0),
@@ -61,24 +64,24 @@ void Etre::setTop(const nbType top)
     if (getBottom() >= m_hauteurDuMonde) setBottom(m_hauteurDuMonde-1);
 }
 
-void Etre::setLargeur(const nbType largeur)
+void Etre::largeur(const nbType largeur)
 {
     m_largeur = largeur;
     m_largDiv = largeur*0.5f;
 }
-void Etre::setHauteur(const nbType hauteur)
+void Etre::hauteur(const nbType hauteur)
 {
     m_hauteur = hauteur;
     m_hautDiv = hauteur*0.5f;
 }
 
-void Etre::setDimension(const nbType largeur, const nbType hauteur)
+void Etre::dimension(const nbType _largeur, const nbType _hauteur)
 {
-    setLargeur(largeur);
-    setHauteur(hauteur);
+    largeur(_largeur);
+    hauteur(_hauteur);
 }
 
-void Etre::setAngleDeDirection(const nbType angle)
+void Etre::angleDeDirection(const nbType angle)
 {
 
     /* if (dist(angle,m_angleDeDirection) > m_maxAngleDeDirection) */
@@ -91,7 +94,7 @@ void Etre::setAngleDeDirection(const nbType angle)
 // functions 
 Etre::angleType Etre::getAngleEntreMoiEt(const Etre* lui) const
 {
-    auto pos = lui->getPos();
+    auto pos = lui->pos();
     Etre::nbType delta_x = pos.x - m_pos.x;
     Etre::nbType delta_y = m_pos.y - pos.y;
     return atan2f(delta_y, delta_x) ;
@@ -100,7 +103,7 @@ Etre::angleType Etre::getAngleEntreMoiEt(const Etre* lui) const
 // sub
 void Etre::avance(Etre::nbType distanceDeDeplacement)
 {
-    if (!m_mouvant) return;
+    if (!m_estMouvant) return;
 
     if (distanceDeDeplacement > m_maxDistanceDeDeplacement)
         distanceDeDeplacement = m_maxDistanceDeDeplacement;
@@ -113,13 +116,13 @@ void Etre::avance(Etre::nbType distanceDeDeplacement)
     /* show("xDepl",xDepl); */
     /* show("yDepl",yDepl); */
 
-    setPos(m_pos.x + xDepl, m_pos.y - yDepl);
+    pos(m_pos.x + xDepl, m_pos.y - yDepl);
 
 }
 
 void Etre::renaît()
 {
-    setPosAléa();
+    posAléa();
     m_tempsDeVie = 0;
 }
 
@@ -128,6 +131,6 @@ void Etre::tic()
     if (m_estVivant)
     {
         m_tempsDeVie++;
-        if (m_mouvant) avance();
+        if (m_estMouvant) avance();
     }
 }

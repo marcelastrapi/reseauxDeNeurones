@@ -7,6 +7,8 @@ using namespace displayer;
 #include <rnd.hpp>
 #include <couleur.hpp>
 
+#include <reseauDeNeurones.hpp>
+
 enum Forme 
 {
     Cercle,
@@ -51,21 +53,21 @@ class Etre
 
         // setters
         inline void forme(const Forme forme) { m_forme = forme; }
-        inline void setCouleur(const Couleur& cl) { m_couleur = cl; }
-        inline void setCouleur(const Couleur::clType r, const Couleur::clType g, const Couleur::clType b, const Couleur::clType a=255) { setCouleur(Couleur(r,g,b,a)); }
-        void setDimensionDuMonde(const nbType largeur, const nbType hauteur);
+        inline void couleur(const Couleur& cl) { m_couleur = cl; }
+        inline void couleur(const Couleur::clType r, const Couleur::clType g, const Couleur::clType b, const Couleur::clType a=255) { couleur(Couleur(r,g,b,a)); }
+        void dimensionDuMonde(const nbType largeur, const nbType hauteur);
         // diametre | côté
-        void setLargeur(const nbType largeur);
-        void setHauteur(const nbType hauteur);
-        void setDimension(const nbType largeur, const nbType hauteur);
-        inline void setPos(const nbType x, const nbType y) { setLeft(x-m_largDiv);setTop(y-m_hautDiv); }
-        inline void setPos(const Coord& coord) { setPos(coord.x,coord.y); }
-        void setPosAléa();
+        void largeur(const nbType largeur);
+        void hauteur(const nbType hauteur);
+        void dimension(const nbType largeur, const nbType hauteur);
+        inline void pos(const nbType x, const nbType y) { setLeft(x-m_largDiv);setTop(y-m_hautDiv); }
+        inline void pos(const Coord& coord) { pos(coord.x,coord.y); }
+        void posAléa();
         // angle entre 0 et 2pi
-        void setAngleDeDirection(const angleType angle);
-        inline void setMouvant(const bool mouvant) { m_mouvant = mouvant; }
-        inline void setMaxDistanceDeDeplacement(const nbType max) { m_maxDistanceDeDeplacement = max; }
-        inline void setMaxAngleDeDirection(const nbType angleDeDirection) { m_maxAngleDeDirection = angleDeDirection; }
+        void angleDeDirection(const angleType angle);
+        inline void mouvant(const bool mouvant) { m_estMouvant = mouvant; }
+        inline void maxDistanceDeDéplacement(const nbType max) { m_maxDistanceDeDeplacement = max; }
+        inline void maxAngleDeDirection(const nbType angleDeDirection) { m_maxAngleDeDirection = angleDeDirection; }
 
         void setLeft(const nbType left);
         void setTop (const nbType top);
@@ -74,24 +76,24 @@ class Etre
         inline void estVivant(const bool vivant) { m_estVivant = vivant; }
 
         // getters
-        inline Forme forme() const { return m_forme; }
-        inline nbType getMaxPosX() const { return m_largeurDuMonde; }
-        inline nbType getMaxPosY() const { return m_hauteurDuMonde; }
-        inline nbType getLargeur() const { return m_largeur; }
-        inline nbType getHauteur() const { return m_hauteur; }
-        inline nbType getRayon() const { return m_largDiv; }
-        inline Coord getPos() const { return m_pos; }
-        inline Couleur& getCouleur() { return m_couleur; }
-        inline angleType getAngleDeDirection() const { return m_angleDeDirection; }
-        inline bool getMouvant() const { return m_mouvant; }
-        inline nbType getMaxDistanceDeDeplacement() const { return m_maxDistanceDeDeplacement; }
-        inline bool estVivant() const { return m_estVivant; }
-        inline Tic tempsDeVie() const { return m_tempsDeVie; }
+        Forme forme() const { return m_forme; }
+        nbType maxPosX() const { return m_largeurDuMonde; }
+        nbType maxPosY() const { return m_hauteurDuMonde; }
+        nbType largeur() const { return m_largeur; }
+        nbType hauteur() const { return m_hauteur; }
+        nbType rayon() const { return m_largDiv; }
+        Coord pos() const { return m_pos; }
+        Couleur& couleur() { return m_couleur; }
+        angleType angleDeDirection() const { return m_angleDeDirection; }
+        bool mouvant() const { return m_estMouvant; }
+        nbType maxDistanceDeDéplacement() const { return m_maxDistanceDeDeplacement; }
+        bool estVivant() const { return m_estVivant; }
+        Tic tempsDeVie() const { return m_tempsDeVie; }
 
-        inline nbType getLeft()   const { return m_pos.x - m_largDiv ; }
-        inline nbType getTop()    const { return m_pos.y - m_hautDiv ; }
-        inline nbType getRight()  const { return m_pos.x + m_largDiv ; }
-        inline nbType getBottom() const { return m_pos.y + m_hautDiv ; }
+        nbType getLeft()   const { return m_pos.x - m_largDiv ; }
+        nbType getTop()    const { return m_pos.y - m_hautDiv ; }
+        nbType getRight()  const { return m_pos.x + m_largDiv ; }
+        nbType getBottom() const { return m_pos.y + m_hautDiv ; }
 
         // sub
         // l'être avance son angle de rotation et la distanceDeDeplacement/maxDistDepl
@@ -100,6 +102,7 @@ class Etre
 
         virtual void renaît();
 
+        // ajoute 1 à m_tempsDeVie si m_estVivant et avance() si m_estMouvant
         void tic();
 
         angleType getAngleEntreMoiEt(const Etre* lui) const;
@@ -115,12 +118,14 @@ class Etre
         nbType m_largDiv;
         nbType m_hautDiv;
 
-        bool m_mouvant;
+        bool m_estMouvant;
         nbType m_maxDistanceDeDeplacement;
         angleType m_angleDeDirection;
         angleType m_maxAngleDeDirection;
 
         bool m_estVivant;
         Tic m_tempsDeVie;
+
+        RéseauDeNeurones m_réseauDeNeurones;
 
 };

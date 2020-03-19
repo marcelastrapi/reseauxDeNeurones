@@ -3,6 +3,16 @@
 RéseauDeNeurones::RéseauDeNeurones():
     m_input(1),m_output(1)
 { }
+
+RéseauDeNeurones::RéseauDeNeurones(const size_t _nbNeuronesInput, 
+                const size_t _nbHiddenLayers, 
+                const size_t _nbNeuronesHiddenLayers,
+                const size_t _nbNeuronesOutput):
+    m_input(_nbNeuronesInput),m_output(_nbNeuronesOutput)
+{
+    nbHiddenLayers(_nbHiddenLayers,_nbNeuronesHiddenLayers);
+}
+
 RéseauDeNeurones::~RéseauDeNeurones()
 {
     for (LigneDeNeurones* ligne: m_hiddenLayers)
@@ -10,7 +20,7 @@ RéseauDeNeurones::~RéseauDeNeurones()
 }
 
 // setters
-void RéseauDeNeurones::nbHiddenLayers(const size_t nbHiddenLayers)
+void RéseauDeNeurones::nbHiddenLayers(const size_t nbHiddenLayers, const size_t nbNeurones)
 {
     auto currentNbHiddenLayers = m_hiddenLayers.size();
     if (currentNbHiddenLayers >= nbHiddenLayers)
@@ -18,14 +28,15 @@ void RéseauDeNeurones::nbHiddenLayers(const size_t nbHiddenLayers)
 
         LignesDeNeurones::iterator it = m_hiddenLayers.begin();
         std::advance(it,nbHiddenLayers);
-        // alors je dois supprimer des neurones
+        // alors je dois supprimer des hiddenLayers
+        // TODO est-ce que les pointeurs vers les neurones sont ici bien delete?
         m_hiddenLayers.erase(it , m_hiddenLayers.end());
     }
     else
     {
-        // là je dois ajouter des neurones
+        // là je dois ajouter des hiddenLayers
         for (size_t i = currentNbHiddenLayers; i < nbHiddenLayers; i++)
-            ajouteUnHiddenLayer();
+            ajouteUnHiddenLayer(nbNeurones);
     }
 
 }

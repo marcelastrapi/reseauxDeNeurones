@@ -37,9 +37,9 @@ unsigned int minWinHeight = 4;
 unsigned int windowWidth  = 0; // Default, fullscreen
 unsigned int windowHeight = 0;
 
-unsigned int tickTime = 2; // 24 image/s = 41.66 ms
-unsigned short incrTickTime = 2; // en ms
-unsigned int minTickTime = 2; // en ms
+int tickTime = 3; // 24 image/s = 41.66 ms
+short incrTickTime = 2; // en ms
+int minTickTime = 1; // en ms
 
 vector<sf::Color> colors;
 sf::Color bgColor = sf::Color::Black;
@@ -52,10 +52,12 @@ unsigned int textTime = 3; // en seconde
 
 sf::Text tauxDeCarnageText;
 sf::Clock clockTauxDeCarnage;
-unsigned int tauxDeCarnageTime = 1; // en seconde
+int tauxDeCarnageTime = 1; // en seconde
 
 sf::Clock clockDuMonde;
-unsigned int tempsDuMonde = 10; // en millisecond
+int tempsDuMonde = 1; // en millisecond
+int incrTempsDuMonde = 1;
+int minTempsDuMonde = 0;
 
 enum Mode
 {
@@ -127,25 +129,23 @@ void creerToutLesEtres(Monde& monde)
 
     // Je veux un requin
     requin = new Requin();
-    requin->setDimensionDuMonde(monde.getLargeur(), monde.getHauteur());
-    requin->setDimension(30, 30.f);
-    /* requin->setDimension(48.540f, 30.f); */
-    requin->setCouleur(Couleur(255,0,0));
-    Coord posDepart = Coord(monde.getLargeur() / 2 , monde.getHauteur() / 2 );
-    requin->setPos(posDepart);
-    requin->setMouvant(true);
-    requin->setMaxDistanceDeDeplacement(4);
-    requin->setMaxAngleDeDirection(0.3f);
+    requin->dimensionDuMonde(monde.largeur(), monde.hauteur());
+    requin->dimension(30, 30.f);
+    /* requin->dimension(48.540f, 30.f); */
+    requin->couleur(Couleur(255,0,0));
+    Coord posDepart = Coord(monde.largeur() / 2 , monde.hauteur() / 2 );
+    requin->pos(posDepart);
+    requin->maxDistanceDeDéplacement(1);
+    requin->maxAngleDeDirection(0.3f);
     requin->print();
 
     /* requin2 = new Requin(); */
-    /* requin2->setDimensionDuMonde(monde.getLargeur(), monde.getHauteur()); */
-    /* requin2->setDimension(30, 30.f); */
-    /* requin2->setCouleur(Couleur(0,0,255)); */
-    /* requin2->setPosAléa(); */
-    /* requin2->setMouvant(true); */
-    /* requin2->setMaxDistanceDeDeplacement(10); */
-    /* requin2->setMaxAngleDeDirection(0.3f); */
+    /* requin2->dimensionDuMonde(monde.largeur(), monde.hauteur()); */
+    /* requin2->dimension(30, 30.f); */
+    /* requin2->couleur(Couleur(0,0,255)); */
+    /* requin2->posAléa(); */
+    /* requin2->maxDistanceDeDéplacement(10); */
+    /* requin2->maxAngleDeDirection(0.3f); */
     /* requin2->print(); */
 
     // Je veux des poissons
@@ -156,13 +156,11 @@ void creerToutLesEtres(Monde& monde)
     for (unsigned int i = 0; i < nombreDePoissons; i++)
     {
         Poisson* p = new Poisson();
-        p->setDimensionDuMonde(monde.getLargeur(),monde.getHauteur());
-        p->setDimension(taillePoisson,taillePoisson);
-        p->setPosAléa();
-        p->setCouleur(clPoisson);
-        p->setMouvant(true);
-        p->setMaxDistanceDeDeplacement(4);
-        /* p->setMaxDistanceDeDeplacement(requin->getMaxDistanceDeDeplacement() ); */
+        p->dimensionDuMonde(monde.largeur(),monde.hauteur());
+        p->dimension(taillePoisson,taillePoisson);
+        p->posAléa();
+        p->couleur(clPoisson);
+        p->maxDistanceDeDéplacement(requin->maxDistanceDeDéplacement() );
 
         poissons.push_back(p);
         monde.ajouteEtre(p);
@@ -184,7 +182,6 @@ void creerToutLesEtres(Monde& monde)
 ////////////////////////////////////////////////////
 //                    MAIN                        //
 ////////////////////////////////////////////////////
-#include <reseauDeNeurones.hpp>
 int main (int argc, char* argv[] )
 {
     // Convertion le tableau d'argument en vector (plus pratique)
@@ -196,52 +193,32 @@ int main (int argc, char* argv[] )
 
     gereLesArguments(args);
 
+    Rnd::randomize();
+
     ////////////////////////////////////////  
     // TEST
     ////////////////////////////////////////  
 
-    Rnd::randomize();
+    /* RéseauDeNeurones réseauDeNeurones(2,2,5,1); */
+    /* réseauDeNeurones.ajouteUnHiddenLayer(10); */
 
-    RéseauDeNeurones réseauDeNeurones;
+    /* réseauDeNeurones.connecteLesLignesEntreElles(); */
 
-    réseauDeNeurones.input().nbNeurones(2);
-    réseauDeNeurones.nbHiddenLayers(2);
-    réseauDeNeurones.connecteLesLignesEntreElles();
+    /* réseauDeNeurones.poidsAléa(-3.14f,3.14f); */
+    /* réseauDeNeurones.output().poidsAléa(0,1); */
 
-    réseauDeNeurones.poidsAléa(-3.14f,3.14f);
-    réseauDeNeurones.output().poidsAléa(0,1);
-
-    réseauDeNeurones.input().at(0)->valeur(2);
-    réseauDeNeurones.input().at(1)->valeur(-3);
+    /* réseauDeNeurones.input().at(0)->valeur(2); */
+    /* réseauDeNeurones.input().at(1)->valeur(-3); */
     
-    réseauDeNeurones.calculeLesValeursDeToutMesNeurones();
+    /* réseauDeNeurones.calculeLesValeursDeToutMesNeurones(); */
 
-    for (auto val: réseauDeNeurones.tableauxDesRésultats())
-        show("val",val);
+    /* for (auto val: réseauDeNeurones.tableauxDesRésultats()) */
+    /*     show("val",val); */
 
-    réseauDeNeurones.print(true);
+    /* réseauDeNeurones.print(true); */
 
-    /* show("res",res); */
+    /* return 0; */
 
-    /* LigneDeNeurones hiddenLayer1(8); */
-    /* LigneDeNeurones hiddenLayer2(8); */
-    /* LigneDeNeurones output(1); */
-
-    /* input.connecteMoiÀUneAutreLigne(hiddenLayer1); */
-    /* hiddenLayer1.connecteMoiÀUneAutreLigne(hiddenLayer2); */
-    /* hiddenLayer2.connecteMoiÀUneAutreLigne(output); */
-
-    /* input.neurones(0)->valeur(3); */
-    /* hiddenLayer1.effectueLesCalculesDesValeursPourToutMesNeurones(); */
-    /* hiddenLayer2.effectueLesCalculesDesValeursPourToutMesNeurones(); */
-    /* output.effectueLesCalculesDesValeursPourToutMesNeurones(); */
-
-    /* input.print(); */
-    /* hiddenLayer1.print(); */
-    /* hiddenLayer2.print(); */
-    /* output.print(); */
-
-    return 0;
     ////////////////////////////////////////  
 
 
@@ -319,10 +296,8 @@ int main (int argc, char* argv[] )
 
                 if (event.key.code == sf::Keyboard::R)
                 {
-                    requin->setNbCiblesMangées(0);
+                    requin->nbCiblesMangées(0);
                     clockTotalTime.restart();
-                    for (Poisson* p: poissons)
-                        p->initialiseLesVariablesAléatoires();
                     notify("Reboot");
                 }
 
@@ -348,39 +323,28 @@ int main (int argc, char* argv[] )
 
                 if (event.key.code == sf::Keyboard::Left)
                 {
-                    requin->setAngleDeDirection(3.14f);
+                    requin->angleDeDirection(3.14f);
                     requin->avance();
                 }
                 if (event.key.code == sf::Keyboard::Up)
                 {
-                    requin->setAngleDeDirection(3.14f*0.5f);
+                    requin->angleDeDirection(3.14f*0.5f);
                     requin->avance();
                 }
                 if (event.key.code == sf::Keyboard::Right)
                 {
-                    requin->setAngleDeDirection(0.f);
+                    requin->angleDeDirection(0.f);
                     requin->avance();
                 }
                 if (event.key.code == sf::Keyboard::Down)
                 {
-                    requin->setAngleDeDirection(-3.14f*0.5f);
+                    requin->angleDeDirection(-3.14f*0.5f);
                     requin->avance();
                 }
 
                 if (event.key.code == sf::Keyboard::D)
                 {
-                    long bestTempsDeVie;
-                    Poisson* meilleurPoisson;
-                    for (Poisson* p: poissons)
-                    {
-                        if (p->m_maxTempsDeVie > bestTempsDeVie) {
-                            bestTempsDeVie = p->m_maxTempsDeVie;
-                            meilleurPoisson = p;
-                        }
-                    }
-                    /* note("bestTempsDeVie:"+to_string(bestTempsDeVie.count())); */
-                    /* show("var1",meilleurPoisson->m_variablesAléatoires[0]); */
-                    meilleurPoisson->print();
+                    continue;
                 }
             }
 
@@ -389,8 +353,8 @@ int main (int argc, char* argv[] )
                 if (event.mouseButton.button == sf::Mouse::Left)
                 {
                     modeMouseOn = true;
-                    requin->setMouvant(false);
-                    requin->setPos(event.mouseButton.x,event.mouseButton.y);
+                    requin->mouvant(false);
+                    requin->pos(event.mouseButton.x,event.mouseButton.y);
                     /* unsigned int xBool = event.mouseButton.x; */
                     /* unsigned int yBool = event.mouseButton.y; */
                 }
@@ -400,13 +364,13 @@ int main (int argc, char* argv[] )
                 if (event.mouseButton.button == sf::Mouse::Left)
                 {
                     modeMouseOn = false;
-                    requin->setMouvant(true);
+                    requin->mouvant(true);
                 }
             }
 
             if (event.type == sf::Event::MouseMoved && modeMouseOn)
             {
-                requin->setPos(event.mouseMove.x,event.mouseMove.y);
+                requin->pos(event.mouseMove.x,event.mouseMove.y);
             }
 
             if (event.key.code == sf::Keyboard::Add || (event.type == sf::Event::MouseWheelMoved && event.mouseWheel.delta == -1))
@@ -414,9 +378,9 @@ int main (int argc, char* argv[] )
                 switch (mode)
                 {
                     case TEMPS_DU_MONDE:
-                        tempsDuMonde -= incrTickTime;
-                        if (tempsDuMonde < minTickTime) tempsDuMonde = minTickTime;
-                        notify("tempsDuMonde:"+to_string(tickTime)+"ms");
+                        tempsDuMonde -= incrTempsDuMonde;
+                        if (tempsDuMonde < minTempsDuMonde) tempsDuMonde = minTempsDuMonde;
+                        notify("tempsDuMonde:"+to_string(tempsDuMonde)+"ms");
                         break;
 
                     case TEMPS_AFFICHAGE:
@@ -428,8 +392,18 @@ int main (int argc, char* argv[] )
             }
             if (event.key.code == sf::Keyboard::Subtract || (event.type == sf::Event::MouseWheelMoved && event.mouseWheel.delta == 1))
             {
-                tickTime += incrTickTime;
-                notify("tickTime:"+to_string(tickTime)+"ms");
+                switch (mode)
+                {
+                    case TEMPS_DU_MONDE:
+                        tempsDuMonde += incrTempsDuMonde;
+                        notify("tempsDuMonde:"+to_string(tempsDuMonde)+"ms");
+                        break;
+
+                    case TEMPS_AFFICHAGE:
+                        tickTime += incrTickTime;
+                        notify("tickTime:"+to_string(tickTime)+"ms");
+                        break;
+                }
             }
         }
 
@@ -440,12 +414,13 @@ int main (int argc, char* argv[] )
 
         if (clockTauxDeCarnage.getElapsedTime().asSeconds() >= tauxDeCarnageTime) {
             iDrawSomething = true;
-            tauxDeCarnageText.setString(to_string( requin->getNbCiblesMangées()/clockTotalTime.getElapsedTime().asSeconds() ));
+            tauxDeCarnageText.setString(to_string( requin->nbCiblesMangées()/clockTotalTime.getElapsedTime().asSeconds() ));
             clockTauxDeCarnage.restart();
         }
 
         if (clockDuMonde.getElapsedTime().asMilliseconds() >= tempsDuMonde)
         {
+            clockDuMonde.restart();
             if (play) 
             {
 
@@ -453,7 +428,8 @@ int main (int argc, char* argv[] )
 
                 // Je regarde si le requin à besoin d'une nouvelle cible
                 /* requin->prendLaDirectionDeLaCibleLaPlusProche(); */
-                requin->setAngleDeDirection(requin->getAngleEntreMoiEt(requin->getProchaineCible()));
+                requin->angleDeDirection(requin->getAngleEntreMoiEt(requin->prochaineCible()));
+                /* show("angleDeDirection",requin->angleDeDirection()); */
                 requin->avance();
                 /* requin2->avance(); */
 
@@ -465,7 +441,7 @@ int main (int argc, char* argv[] )
             }
         }
 
-        if (clock.getElapsedTime().asMilliseconds() >= static_cast<int>(tickTime) ) {
+        if (clock.getElapsedTime().asMilliseconds() >= tickTime ) {
 
             clock.restart();
 
@@ -483,7 +459,7 @@ int main (int argc, char* argv[] )
             for (unsigned int i = 0; i < monde.getNbEtres(); i++)
             {
                 etre = monde.getEtreNo(i);
-                mcl = &etre->getCouleur();
+                mcl = &etre->couleur();
                 cl = sf::Color(mcl->r,mcl->g,mcl->b,mcl->a);
                 posx = etre->getLeft();
                 posy = etre->getTop();
@@ -493,10 +469,10 @@ int main (int argc, char* argv[] )
                 {
                     case Cercle:
                         {
-                            sf::CircleShape circle(etre->getLargeur()*0.5f);
+                            sf::CircleShape circle(etre->largeur()*0.5f);
                             circle.setFillColor(cl);
                             circle.setPosition(posx , posy);
-                            /* circle.setRotation(radToDeg(etre->getAngleDeDirection())); */
+                            /* circle.setRotation(radToDeg(etre->angleDeDirection())); */
 
                             /* note("pos:"+to_string(pos->x)+","+to_string(pos->y)); */
                             window.draw(circle);
@@ -507,10 +483,10 @@ int main (int argc, char* argv[] )
 
                     case Rectangle: 
                         {
-                            sf::RectangleShape rect(sf::Vector2f(etre->getLargeur(),etre->getHauteur()));
+                            sf::RectangleShape rect(sf::Vector2f(etre->largeur(),etre->hauteur()));
                             rect.setFillColor(cl);
                             rect.setPosition(posx , posy);
-                            /* rect.setRotation(-radToDeg(etre->getAngleDeDirection())); */
+                            /* rect.setRotation(-radToDeg(etre->angleDeDirection())); */
                             window.draw(rect);
                             iDrawSomething = true;
 
