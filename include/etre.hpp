@@ -60,7 +60,7 @@ class Etre
         void largeur(const nbType largeur);
         void hauteur(const nbType hauteur);
         void dimension(const nbType largeur, const nbType hauteur);
-        inline void pos(const nbType x, const nbType y) { setLeft(x-m_largDiv);setTop(y-m_hautDiv); }
+        inline void pos(const nbType x, const nbType y) { left(x-m_largDiv);top(y-m_hautDiv); }
         inline void pos(const Coord& coord) { pos(coord.x,coord.y); }
         void posAléa();
         // angle entre 0 et 2pi
@@ -69,10 +69,10 @@ class Etre
         inline void maxDistanceDeDéplacement(const nbType max) { m_maxDistanceDeDeplacement = max; }
         inline void maxAngleDeDirection(const nbType angleDeDirection) { m_maxAngleDeDirection = angleDeDirection; }
 
-        void setLeft(const nbType left);
-        void setTop (const nbType top);
-        inline void setRight (const nbType right)  { setLeft(right -  m_largeur); }
-        inline void setBottom(const nbType bottom) { setTop (bottom - m_hauteur); }
+        void left(const nbType _left);
+        void top (const nbType _top);
+        inline void right (const nbType _right)  { left(_right -  m_largeur); }
+        inline void bottom(const nbType _bottom) { top (_bottom - m_hauteur); }
         inline void estVivant(const bool vivant) { m_estVivant = vivant; }
 
         // getters
@@ -90,10 +90,10 @@ class Etre
         bool estVivant() const { return m_estVivant; }
         Tic tempsDeVie() const { return m_tempsDeVie; }
 
-        nbType getLeft()   const { return m_pos.x - m_largDiv ; }
-        nbType getTop()    const { return m_pos.y - m_hautDiv ; }
-        nbType getRight()  const { return m_pos.x + m_largDiv ; }
-        nbType getBottom() const { return m_pos.y + m_hautDiv ; }
+        nbType left()   const { return m_pos.x - m_largDiv ; }
+        nbType top()    const { return m_pos.y - m_hautDiv ; }
+        nbType right()  const { return m_pos.x + m_largDiv ; }
+        nbType bottom() const { return m_pos.y + m_hautDiv ; }
 
         // sub
         // l'être avance son angle de rotation et la distanceDeDeplacement/maxDistDepl

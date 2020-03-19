@@ -427,10 +427,9 @@ int main (int argc, char* argv[] )
                 // TODO faire en sorte que ce soit le monde qui avant d'un pas plutot que chaque être ici
 
                 // Je regarde si le requin à besoin d'une nouvelle cible
-                /* requin->prendLaDirectionDeLaCibleLaPlusProche(); */
-                requin->angleDeDirection(requin->getAngleEntreMoiEt(requin->prochaineCible()));
-                /* show("angleDeDirection",requin->angleDeDirection()); */
-                requin->avance();
+                requin->prendLaDirectionDeLaCibleLaPlusProche();
+                /* requin->angleDeDirection(requin->getAngleEntreMoiEt(requin->prochaineCible())); */
+                monde.tic();
                 /* requin2->avance(); */
 
                 /* for (Poisson* p: poissons) */
@@ -461,8 +460,8 @@ int main (int argc, char* argv[] )
                 etre = monde.getEtreNo(i);
                 mcl = &etre->couleur();
                 cl = sf::Color(mcl->r,mcl->g,mcl->b,mcl->a);
-                posx = etre->getLeft();
-                posy = etre->getTop();
+                posx = etre->left();
+                posy = etre->top();
 
                 /* etre->print(); */
                 switch (etre->forme()) 

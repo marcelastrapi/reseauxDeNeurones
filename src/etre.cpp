@@ -38,30 +38,35 @@ void Etre::dimensionDuMonde(const nbType largeur, const nbType hauteur)
     m_largeurDuMonde = largeur;
     m_hauteurDuMonde = hauteur;
 }
+void Etre::dimension(const nbType _largeur, const nbType _hauteur)
+{
+    largeur(_largeur);
+    hauteur(_hauteur);
+}
 
 void Etre::posAléa()
 {
-    setLeft(static_cast<float>( Rnd::_int( 
+    left(static_cast<float>( Rnd::_int( 
                 static_cast<int>(0),
                 static_cast<int>(m_largeurDuMonde - m_largeur) 
                 )));
-    setTop(static_cast<float>( Rnd::_int( 
+    top(static_cast<float>( Rnd::_int( 
                 static_cast<int>(0),
                 static_cast<int>(m_hauteurDuMonde - m_hauteur) 
                 )));
 }
 
-void Etre::setLeft(const nbType left)
+void Etre::left(const nbType _left)
 {
-    m_pos.x = left + m_largDiv;
-    if (getLeft() < 0) setLeft(0);
-    if (getRight() >= m_largeurDuMonde) setRight(m_largeurDuMonde-1);
+    m_pos.x = _left + m_largDiv;
+    if (left() < 0) left(0);
+    if (right() >= m_largeurDuMonde) right(m_largeurDuMonde-1);
 }
-void Etre::setTop(const nbType top)
+void Etre::top(const nbType _top)
 {
-    m_pos.y = top + m_hautDiv;
-    if (getTop() < 0) setTop(0);
-    if (getBottom() >= m_hauteurDuMonde) setBottom(m_hauteurDuMonde-1);
+    m_pos.y = _top + m_hautDiv;
+    if (top() < 0) top(0);
+    if (bottom() >= m_hauteurDuMonde) bottom(m_hauteurDuMonde-1);
 }
 
 void Etre::largeur(const nbType largeur)
@@ -73,12 +78,6 @@ void Etre::hauteur(const nbType hauteur)
 {
     m_hauteur = hauteur;
     m_hautDiv = hauteur*0.5f;
-}
-
-void Etre::dimension(const nbType _largeur, const nbType _hauteur)
-{
-    largeur(_largeur);
-    hauteur(_hauteur);
 }
 
 void Etre::angleDeDirection(const nbType angle)
