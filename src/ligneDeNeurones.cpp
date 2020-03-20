@@ -7,6 +7,13 @@ LigneDeNeurones::LigneDeNeurones(const size_t nbNeurones)
         ajouteUnNeurone();
 
 }
+LigneDeNeurones::LigneDeNeurones(LigneDeNeurones& ligneÀCopier)
+{
+    this->nbNeurones(ligneÀCopier.nbNeurones());
+    size_t i(0);
+    for (Neurone* n: m_neurones)
+        n = ligneÀCopier.at(i++);
+}
 
 LigneDeNeurones::~LigneDeNeurones()
 {

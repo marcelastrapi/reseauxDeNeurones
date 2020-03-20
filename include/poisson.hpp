@@ -25,6 +25,7 @@ class Poisson: public Etre
         void renaît() override;
 
         // setters
+        inline void plusGrandTempsDeVie(const Tic pgtdv) { m_plusGrandTempsDeVie = pgtdv; }
         
         // getters
         Tic plusGrandTempsDeVie() const { return m_plusGrandTempsDeVie; }

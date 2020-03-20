@@ -18,8 +18,11 @@ class Monde
         inline size_t getNbEtres() const { return this->m_toutLesEtres.getTotal(); }
         inline Etre* getEtreNo(unsigned int i) const { return m_toutLesEtres.getEtreNo(i); }
 
+        Tic ticDepuisCréation() const { return m_ticDepuisCréation; }
+
         // Setters
         inline void ajouteEtre(Etre* etre) { m_toutLesEtres.ajouteEtre(etre); }
+
 
         // Sub
         void tic();
@@ -35,7 +38,7 @@ class Monde
         unsigned int m_largeur;
         unsigned int m_hauteur;
 
-        Tic m_ticÉcouléDépuisCréation;
+        Tic m_ticDepuisCréation;
 
         // Tout qui est présent dans le monde
         // C'est un tableau de podoubleeurs vers des objets de la class mère Etre

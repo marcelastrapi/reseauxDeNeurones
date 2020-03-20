@@ -14,6 +14,7 @@ class LigneDeNeurones
 
         // Ctor && Dtor
         LigneDeNeurones(const size_t nbNeurones);
+        LigneDeNeurones(LigneDeNeurones& ligneÀCopier);
         ~LigneDeNeurones();
 
         // Pour pouvoir faire comme dans un vector (itérer)
@@ -26,7 +27,12 @@ class LigneDeNeurones
 
         // setters
         void nbNeurones(const size_t nbNeurones);
-        inline void poidsAléa(const nbType min = 0, const nbType max = 1) { for (Neurone* n: m_neurones) n->poidsAléa(min,max); }
+        inline void poidsAléa(const nbType min , const nbType max )
+        { for (Neurone* n: m_neurones) n->poidsAléa(min,max); }
+        inline void poidsAléa(const nbType fourchetteAutourDuPoids)
+        { for (Neurone* n: m_neurones) n->poidsAléa(fourchetteAutourDuPoids); }
+        inline void seuil(const nbType _seuil)
+        { for (Neurone* n: m_neurones) n->seuil(_seuil); }
 
         // getters
         inline size_t nbNeurones() const { return m_neurones.size(); }

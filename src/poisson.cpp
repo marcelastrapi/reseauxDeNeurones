@@ -7,14 +7,14 @@ Poisson::Poisson(): m_plusGrandTempsDeVie(0)
     m_forme = Cercle;
 
     // RéseauDeNeurones 
-    m_réseauDeNeurones.nbNeuronesInput(1);
-    m_réseauDeNeurones.nbHiddenLayers(2,8);
-    m_réseauDeNeurones.nbNeuronesOuput(1);
+    m_réseauDeNeurones.nbNeuronesInput(2);
+    m_réseauDeNeurones.nbHiddenLayers(2,16);
+    m_réseauDeNeurones.nbNeuronesOutput(1);
     m_réseauDeNeurones.connecteLesLignesEntreElles();
 
-    m_réseauDeNeurones.poidsAléa(-3.14f,3.14f);
+    m_réseauDeNeurones.poidsAléa(-2.f,2.f);
     /* m_réseauDeNeurones.output().poidsAléa(0,1); */
-    m_réseauDeNeurones.output().at(0)->seuil(-500);
+    m_réseauDeNeurones.output().at(0)->seuil(-1000);
 }
 
 // sub
@@ -39,7 +39,9 @@ void Poisson::print() const
 {
     Etre::print();
     note("Je suis un poisson");
+    m_réseauDeNeurones.print(true);
     show("Je suis vivant depuis",m_tempsDeVie);
+    show("Plus grand temps de vie",m_plusGrandTempsDeVie);
 }
 
 //////////////////////////////////////////////////////// PRIVATE

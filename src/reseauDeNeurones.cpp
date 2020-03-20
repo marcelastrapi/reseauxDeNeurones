@@ -16,6 +16,17 @@ RéseauDeNeurones::RéseauDeNeurones(const size_t _nbNeuronesInput,
     connecteLesLignesEntreElles();
 }
 
+RéseauDeNeurones::RéseauDeNeurones(RéseauDeNeurones& réseauÀCopier):
+    m_input(réseauÀCopier.input()),
+    m_output(réseauÀCopier.output())
+{
+    size_t i(0);
+    for (LigneDeNeurones* hiddenLayer: m_hiddenLayers)
+        *hiddenLayer = *réseauÀCopier.hiddenLayers().at(i++);
+
+    connecteLesLignesEntreElles();
+}
+
 RéseauDeNeurones::~RéseauDeNeurones()
 {
     for (LigneDeNeurones* ligne: m_hiddenLayers)
@@ -51,6 +62,20 @@ void RéseauDeNeurones::poidsAléa(const nbType min, const nbType max)
         hiddenLayer->poidsAléa(min,max);
     m_output.poidsAléa(min,max);
 }
+void RéseauDeNeurones::poidsAléa(const nbType fourchetteAutourDuPoids)
+{
+    m_output.poidsAléa(fourchetteAutourDuPoids);
+    m_input.poidsAléa(fourchetteAutourDuPoids);
+    for (LigneDeNeurones* hiddenLayer: m_hiddenLayers)
+        hiddenLayer->poidsAléa(fourchetteAutourDuPoids);
+}
+void RéseauDeNeurones::seuil(const nbType _seuil)
+{
+    m_input.seuil(_seuil);
+    for (LigneDeNeurones* hiddenLayer: m_hiddenLayers)
+        hiddenLayer->seuil(_seuil);
+    m_output.seuil(_seuil);
+}
 
 void RéseauDeNeurones::tableauxDesValeursEnEntrée(const TblValeurs& _tblVals)
 {
@@ -65,7 +90,7 @@ void RéseauDeNeurones::print(bool tout) const
     note ("Réseau de Neurones");
     show("input",m_input.nbNeurones());
     show("hidden layers",m_hiddenLayers.size());
-    show("ouput",m_output.nbNeurones());
+    show("output",m_output.nbNeurones());
     note("nbNeurones par hiddenLayers");
     for (LigneDeNeurones* ligne: m_hiddenLayers)
         show("nbNeurones",ligne->nbNeurones());

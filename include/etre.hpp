@@ -80,6 +80,10 @@ class Etre
         std::vector<nbType> tableauxDesRésultats() { return m_réseauDeNeurones.tableauxDesRésultats(); }
         inline void calculeLesValeursDeToutMesNeurones() { m_réseauDeNeurones.calculeLesValeursDeToutMesNeurones(); }
 
+        inline void réseauDeNeurones(const RéseauDeNeurones& _réseauDeNeurones)
+        { m_réseauDeNeurones = _réseauDeNeurones; }
+
+
         // getters
         Forme forme() const { return m_forme; }
         nbType maxPosX() const { return m_largeurDuMonde; }
@@ -101,7 +105,7 @@ class Etre
         nbType bottom() const { return m_pos.y + m_hautDiv ; }
 
         RéseauDeNeurones& réseauDeNeurones() { return m_réseauDeNeurones; }
-        LigneDeNeurones& ouput() { return m_réseauDeNeurones.output(); }
+        LigneDeNeurones& output() { return m_réseauDeNeurones.output(); }
 
         // sub
         // l'être avance son angle de rotation et la distanceDeDeplacement/maxDistDepl

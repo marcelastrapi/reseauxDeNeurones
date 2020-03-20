@@ -29,7 +29,8 @@ void Requin::ajouteCible(Etre* nouvelleCible)
 // override
 void Requin::renaît()
 {
-    m_nbCiblesMangées = 0;
+    /* m_nbCiblesMangées = 0; */
+    Etre::renaît();
 }
 
 //////////////////////////////////////////////////////////// PRIVATE

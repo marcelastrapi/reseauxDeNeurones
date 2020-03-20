@@ -19,6 +19,8 @@ class Requin: public Etre
         // setters
         inline void nbCiblesMangées(const unsigned int _nbCiblesMangée) { m_nbCiblesMangées = _nbCiblesMangée; }
 
+
+
         // getters
         inline size_t nbCibles() const { return m_cibles.getTotal(); }
         inline unsigned int nbCiblesMangées() const { return m_nbCiblesMangées; }

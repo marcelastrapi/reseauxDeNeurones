@@ -20,6 +20,7 @@ class Neurone
         using const_iterator = Neurones::const_iterator;
 
         Neurone();
+        Neurone(const Neurone& neuroneÀCopier);
 
         // Pour pouvoir faire comme dans un vector (itérer)
         iterator begin() { return m_neuronesConnectés.begin(); }
@@ -30,7 +31,7 @@ class Neurone
         const_iterator cend() const { return m_neuronesConnectés.cend(); }
 
         // setters
-        void poidsAléa(const nbType min = 0, const nbType max = 1);
+        void poidsAléa(const nbType, const nbType max);
         void poidsAléa(const nbType fourchetteAutourDuPoids);
         inline void poids (const nbType _poids ) { m_poids  = _poids ; }
         inline void valeur(const nbType _valeur) { m_valeur = _valeur; }
@@ -39,6 +40,7 @@ class Neurone
         // getters
         inline nbType poids() const { return m_poids; }
         inline nbType valeur() const { return m_valeur; }
+        inline nbType seuil() const { return m_seuil; }
         inline size_t nbConnexions() const { return m_neuronesConnectés.size(); }
 
         // sub

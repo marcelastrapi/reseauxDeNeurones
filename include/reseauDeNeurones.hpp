@@ -18,13 +18,16 @@ class RéseauDeNeurones
                 const size_t _nbHiddenLayers, 
                 const size_t _nbNeuronesHiddenLayers,
                 const size_t _nbNeuronesOutput);
+        RéseauDeNeurones(RéseauDeNeurones& réseauÀCopier);
         ~RéseauDeNeurones();
 
         // setters
         inline void nbNeuronesInput(const size_t nbNeurones){ m_input.nbNeurones(nbNeurones) ;}
-        inline void nbNeuronesOuput(const size_t nbNeurones){ m_output.nbNeurones(nbNeurones);}
+        inline void nbNeuronesOutput(const size_t nbNeurones){ m_output.nbNeurones(nbNeurones);}
         void nbHiddenLayers(const size_t nbHiddenLayers, const size_t nbNeurones = 4);
-        void poidsAléa(const nbType min = 0, const nbType max = 1);
+        void poidsAléa(const nbType min, const nbType max);
+        void poidsAléa(const nbType fourchetteAutourDuPoids);
+        void seuil(const nbType _seuil);
         void tableauxDesValeursEnEntrée(const TblValeurs& _tblVals);
 
         // getters

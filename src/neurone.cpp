@@ -5,7 +5,13 @@ Neurone::Neurone():
     m_valeur(0),
     m_seuil(0)
 {
-    poidsAléa();
+    poidsAléa(0,1);
+}
+
+Neurone::Neurone(const Neurone& neuroneÀCopier)
+{
+    m_poids = neuroneÀCopier.poids();
+    m_seuil = neuroneÀCopier.seuil();
 }
 
 // setters

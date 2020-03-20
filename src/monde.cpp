@@ -3,7 +3,7 @@
 Monde::Monde(unsigned int largeur, unsigned int hauteur):
     m_largeur(largeur),
     m_hauteur(hauteur),
-    m_ticÉcouléDépuisCréation(0)
+    m_ticDepuisCréation(0)
 { }
 
 Coord Monde::getRoundCoord(Etre::nbType x, Etre::nbType y)
@@ -29,7 +29,7 @@ Coord Monde::getRoundCoord(Etre::nbType x, Etre::nbType y)
 // Sub
 void Monde::tic()
 {
-    m_ticÉcouléDépuisCréation++;
+    m_ticDepuisCréation++;
     for (Etre* e: m_toutLesEtres)
         e->tic();
 }
