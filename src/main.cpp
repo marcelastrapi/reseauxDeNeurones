@@ -59,6 +59,8 @@ int tempsDuMonde = 1; // en millisecond
 int incrTempsDuMonde = 1;
 int minTempsDuMonde = 0;
 
+Tic selectionTime(5000);
+
 enum Mode
 {
     TEMPS_DU_MONDE,
@@ -187,6 +189,40 @@ void creerToutLesEtres(Monde& monde)
 
     note("Création du monde avec leurs habitants TERMINÉ");
 
+}
+
+void selectionneEtRepliqueMeilleursPoisson()
+{
+
+    // Je cherche qui à le meilleur temps de vie
+    Poisson* survivorFish;
+    Tic plusGrandTempsDeVie(0);
+    size_t i(0);
+    size_t ip(0);
+    for (Poisson* p: poissons)
+    {
+        if (p->plusGrandTempsDeVie() > plusGrandTempsDeVie)
+        {
+            plusGrandTempsDeVie = p->plusGrandTempsDeVie();
+            survivorFish = p;
+            ip = i;
+        }
+        i++;
+    }
+    note("Est notre gagnant est:");
+    notify("Gagnant est le neurone : " + to_string(ip) + " tempsDeVie: " + to_string(plusGrandTempsDeVie));
+    /* survivorFish->print(); */
+
+    i = 0;
+    for (Poisson* p: poissons)
+    {
+        p->plusGrandTempsDeVie(0);
+        p->renaît();
+        if (i++ == ip) continue;
+        p->réseauDeNeurones(survivorFish->réseauDeNeurones());
+        p->réseauDeNeurones().poidsAléa(0.3);
+        /* p->réseauDeNeurones().output().poidsAléa(-3.14f,3.14f); */
+    }
 }
 
 
@@ -373,34 +409,7 @@ int main (int argc, char* argv[] )
 
                 if (event.key.code == sf::Keyboard::D)
                 {
-                    // Je cherche qui à le meilleur temps de vie
-                    Poisson* survivorFish;
-                    Tic plusGrandTempsDeVie(0);
-                    size_t i(0);
-                    size_t ip(0);
-                    for (Poisson* p: poissons)
-                    {
-                        if (p->plusGrandTempsDeVie() > plusGrandTempsDeVie)
-                        {
-                            plusGrandTempsDeVie = p->plusGrandTempsDeVie();
-                            survivorFish = p;
-                            ip = i;
-                        }
-                        i++;
-                    }
-                    note("Est notre gagnant est:");
-                    notify("Gagnant est le neurone : " + to_string(ip) + " tempsDeVie: " + to_string(plusGrandTempsDeVie));
-                    survivorFish->print();
-
-                    i = 0;
-                    for (Poisson* p: poissons)
-                    {
-                        p->plusGrandTempsDeVie(0);
-                        if (i++ == ip) continue;
-                        p->réseauDeNeurones(survivorFish->réseauDeNeurones());
-                        p->réseauDeNeurones().poidsAléa(0.1);
-                        p->réseauDeNeurones().output().poidsAléa(-3.14f,3.14f);
-                    }
+                    selectionneEtRepliqueMeilleursPoisson();
                 }
             }
 
@@ -504,7 +513,7 @@ int main (int argc, char* argv[] )
                 for (Poisson* p: poissons)
                 {
                     tblValsInput.clear();
-                        /* tblValsInput.push_back(p->getAngleEntreMoiEt(requins.at(i++))); */
+                    /* tblValsInput.push_back(p->getAngleEntreMoiEt(requins.at(i++))); */
                     for (Requin* requin: requins)
                         tblValsInput.push_back(p->getAngleEntreMoiEt(requin));
 
@@ -521,6 +530,10 @@ int main (int argc, char* argv[] )
                 }
 
                 monde.tic();
+
+                if (monde.ticDepuisCréation() % selectionTime == selectionTime-2)
+                    selectionneEtRepliqueMeilleursPoisson();
+                    
                 /* requin2->avance(); */
 
             }
