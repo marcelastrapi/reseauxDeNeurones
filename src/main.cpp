@@ -37,7 +37,7 @@ unsigned int minWinHeight = 4;
 unsigned int windowWidth  = 0; // Default, fullscreen
 unsigned int windowHeight = 0;
 
-int tickTime = 3; // 24 image/s = 41.66 ms
+int tickTime = 41; // 24 image/s = 41.66 ms
 short incrTickTime = 2; // en ms
 int minTickTime = 1; // en ms
 
@@ -55,11 +55,11 @@ sf::Clock clockTauxDeCarnage;
 int tauxDeCarnageTime = 1; // en seconde
 
 sf::Clock clockDuMonde;
-int tempsDuMonde = 1; // en millisecond
+int tempsDuMonde = 0; // en millisecond
 int incrTempsDuMonde = 1;
 int minTempsDuMonde = 0;
 
-Tic selectionTime(5000);
+Tic selectionTime(4000);
 
 enum Mode
 {
@@ -130,22 +130,20 @@ void creerToutLesEtres(Monde& monde)
     // requin.
 
     // Je veux un requin
-    size_t nbRequins(10);
+    size_t nbRequins(2);
     Requin* requin;
     for (size_t i=0; i < nbRequins; i++)
     {
+
         requin = new Requin();
         requin->dimensionDuMonde(monde.largeur(), monde.hauteur());
         requin->dimension(30, 30.f);
-        /* requin->dimension(48.540f, 30.f); */
         requin->couleur(Couleur(255,0,0));
-        /* Coord posDepart = Coord(monde.largeur() / 2 , monde.hauteur() / 2 ); */
-        /* requin->pos(posDepart); */
-        /* requin->posAléa(); */
         requin->maxDistanceDeDéplacement(10);
         requin->maxAngleDeDirection(0.3f);
+        requin->posAléa();
         requins.push_back(requin);
-        /* requin->print(); */
+
     }
 
     /* requin2 = new Requin(); */
@@ -169,11 +167,13 @@ void creerToutLesEtres(Monde& monde)
         p->dimension(taillePoisson,taillePoisson);
         p->posAléa();
         p->couleur(clPoisson);
-        p->maxDistanceDeDéplacement(requin->maxDistanceDeDéplacement() );
+        p->maxDistanceDeDéplacement(requin->maxDistanceDeDéplacement() +2 );
         p->réseauDeNeurones().nbNeuronesInput(nbRequins + 2);
-        p->réseauDeNeurones().nbHiddenLayers(3,20);
+        p->réseauDeNeurones().nbHiddenLayers(3,32);
         p->réseauDeNeurones().poidsAléa(-3,3);
         p->réseauDeNeurones().seuil(-4);
+        show("i",i);
+        p->réseauDeNeurones().print();
 
         poissons.push_back(p);
         monde.ajouteEtre(p);
@@ -214,13 +214,16 @@ void selectionneEtRepliqueMeilleursPoisson()
     /* survivorFish->print(); */
 
     i = 0;
+    nbType fourchetteAutourDuPoids = 0.03;
+    if (plusGrandTempsDeVie < 500) fourchetteAutourDuPoids = 1;
+    if (plusGrandTempsDeVie > 1000) fourchetteAutourDuPoids = 0.01;
     for (Poisson* p: poissons)
     {
         p->plusGrandTempsDeVie(0);
         p->renaît();
         if (i++ == ip) continue;
         p->réseauDeNeurones(survivorFish->réseauDeNeurones());
-        p->réseauDeNeurones().poidsAléa(0.3);
+        p->réseauDeNeurones().poidsAléa(fourchetteAutourDuPoids);
         /* p->réseauDeNeurones().output().poidsAléa(-3.14f,3.14f); */
     }
 }
@@ -485,9 +488,9 @@ int main (int argc, char* argv[] )
                 {
                     auto score = 
                         static_cast<float>(requin->nbCiblesMangées()) /
-                        static_cast<float>(monde.ticDepuisCréation()) * 100.f
+                        static_cast<float>((monde.ticDepuisCréation()) +1) * 100.f
                         ;
-                    tauxDeCarnageText.setString( to_string(requin->nbCiblesMangées()) + "\n" + to_string( score ));
+                    tauxDeCarnageText.setString( to_string(monde.ticDepuisCréation() ) + "\n" + to_string(requin->nbCiblesMangées()) + "\n" + to_string( score ));
                     clockTauxDeCarnage.restart();
                 }
 
@@ -504,8 +507,8 @@ int main (int argc, char* argv[] )
 
                 // Je regarde si le requin à besoin d'une nouvelle cible
                 for (Requin* requin: requins)
-                    /* requin->prendLaDirectionDeLaCibleLaPlusProche(); */
-                    requin->angleDeDirection(requin->getAngleEntreMoiEt(requin->prochaineCible()));
+                    requin->prendLaDirectionDeLaCibleLaPlusProche();
+                    /* requin->angleDeDirection(requin->getAngleEntreMoiEt(requin->prochaineCible())); */
 
                 RéseauDeNeurones::TblValeurs tblValsInput;
 
@@ -531,8 +534,9 @@ int main (int argc, char* argv[] )
 
                 monde.tic();
 
-                if (monde.ticDepuisCréation() % selectionTime == selectionTime-2)
-                    selectionneEtRepliqueMeilleursPoisson();
+                if (monde.ticDepuisCréation() > 0)
+                    if (monde.ticDepuisCréation() % selectionTime == selectionTime-1)
+                        selectionneEtRepliqueMeilleursPoisson();
                     
                 /* requin2->avance(); */
 

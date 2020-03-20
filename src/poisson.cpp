@@ -8,7 +8,7 @@ Poisson::Poisson(): m_plusGrandTempsDeVie(0)
 
     // RéseauDeNeurones 
     m_réseauDeNeurones.nbNeuronesInput(2);
-    m_réseauDeNeurones.nbHiddenLayers(2,16);
+    /* m_réseauDeNeurones.nbHiddenLayers(2,16); */
     m_réseauDeNeurones.nbNeuronesOutput(1);
     m_réseauDeNeurones.connecteLesLignesEntreElles();
 
@@ -40,7 +40,7 @@ void Poisson::print() const
     Etre::print();
     note("Je suis un poisson");
     m_réseauDeNeurones.print(true);
-    show("Je suis vivant depuis",m_tempsDeVie);
+        show("Je suis vivant depuis",m_tempsDeVie);
     show("Plus grand temps de vie",m_plusGrandTempsDeVie);
 }
 
