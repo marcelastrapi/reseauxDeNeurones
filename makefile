@@ -10,12 +10,13 @@ DEPS := $(OBJS:.o=.d)
 CC   := clang++-6.0
 
 INC_DIRS := $(shell find $(SRC_DIRS) -type d)
-INC_FLAGS := -Iinclude -Isrc
+INC_FLAGS := $(addprefix -I,$(INC_DIRS)) -Iinclude
 
 WARNING  := -pedantic -Wall -Wextra -Wold-style-cast -Woverloaded-virtual -Wfloat-equal -Wwrite-strings -Wpointer-arith -Wcast-qual -Wcast-align -Wconversion -Wshadow -Weffc++ -Wredundant-decls -Wdouble-promotion -Winit-self -Wswitch-default -Wswitch-enum -Wundef -Wlong-long -Winline
 LIBS := -lsfml-system -lsfml-window -lsfml-graphics
 
 CPPFLAGS ?= $(INC_FLAGS) -MMD -MP -std=c++14
+
 
 release: CPPFLAGS += -O2 -Wall
 release: $(TARGET_EXEC)
@@ -39,9 +40,8 @@ $(BUILD_DIR)/%.cpp.o: %.cpp
 .PHONY: clean
 
 clean:
-	$(RM) $(TARGET_EXEC)
 	$(RM) -r $(BUILD_DIR)
-	$(RM) test
+	$(RM) $(TARGET_EXEC)
 
 -include $(DEPS)
 

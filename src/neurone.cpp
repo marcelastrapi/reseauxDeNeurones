@@ -46,7 +46,6 @@ nbType Neurone::calculeMaValeurEnFonctionDesMesConnexions()
     for (const Neurone& n: *m_lignePrécédente)
     {
         m_valeur += m_connexions.at(i++).poids * n.valeur();
-        /* show("m_valeur",m_valeur); */
     }
 
     // ce produit passer par la fonction max(0,x) sera ma valeur

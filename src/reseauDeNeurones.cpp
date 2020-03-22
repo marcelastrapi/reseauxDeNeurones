@@ -81,7 +81,7 @@ void RéseauDeNeurones::tableauxDesValeursEnEntrée(const TblValeurs& _tblVals)
 RéseauDeNeurones::TblValeurs RéseauDeNeurones::tableauxDesRésultats() const
 {
     TblValeurs rep;
-    for (const Neurone& n: m_input)
+    for (const Neurone& n: m_output)
         rep.emplace_back(n.valeur());
     return rep;
 }
@@ -104,7 +104,10 @@ void RéseauDeNeurones::print(bool tout) const
         for (const Neurone& n: m_input) n.print();
         note("\n\t\t|| HIDDEN LAYERS ||\n");
         for (const LigneDeNeurones& hiddenLayer: m_hiddenLayers)
+        {
+            note("\n\t\t\t|| HIDDEN LAYER ||\n");
             for (const Neurone& n: hiddenLayer) n.print();
+        }
         note("\n\t\t|| OUTPUT ||\n");
         for (const Neurone& n: m_output) n.print();
     }

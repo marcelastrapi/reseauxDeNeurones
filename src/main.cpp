@@ -168,10 +168,12 @@ void creerToutLesEtres(Monde& monde)
         p->couleur(clPoisson);
         p->maxDistanceDeDéplacement(requin->maxDistanceDeDéplacement() +2 );
         p->réseauDeNeurones().nbNeuronesInput(nbRequins + 2);
-        p->réseauDeNeurones().nbHiddenLayers(3,32);
-        p->réseauDeNeurones().poidsAléa(-3,3);
+        p->réseauDeNeurones().nbHiddenLayers(2,8);
+        p->réseauDeNeurones().nbNeuronesOutput(1);
+        p->réseauDeNeurones().connecteLesLignesEntreElles();
+        p->réseauDeNeurones().poidsAléa(1);
         p->réseauDeNeurones().seuil(-4);
-        show("i",i);
+        p->réseauDeNeurones().output().at(0).seuil(-1000);
         p->réseauDeNeurones().print();
 
         poissons.push_back(p);
@@ -190,43 +192,69 @@ void creerToutLesEtres(Monde& monde)
 
 }
 
-void selectionneEtRepliqueMeilleursPoisson()
+Requin* meilleursRequin()
 {
+    Requin* meilleursRequin = requins.at(0);
+    auto topNbCiblesMangées = meilleursRequin->nbCiblesMangées();
+    for (Requin* r: requins)
+    {
+        if (r->nbCiblesMangées() > topNbCiblesMangées)
+        {
+            topNbCiblesMangées = r->nbCiblesMangées();
+            meilleursRequin = r;
+        }
+    }
+    return meilleursRequin;
+}
 
-    // Je cherche qui à le meilleur temps de vie
-    Poisson* survivorFish;
-    Tic plusGrandTempsDeVie(0);
-    size_t i(0);
-    size_t ip(0);
+Poisson* meilleursPoisson()
+{
+    Poisson* meilleursPoisson = poissons.at(0);
+    auto topPlusGrandTempsDeVie = meilleursPoisson->plusGrandTempsDeVie();
     for (Poisson* p: poissons)
     {
-        if (p->plusGrandTempsDeVie() > plusGrandTempsDeVie)
+        if (p->plusGrandTempsDeVie() > topPlusGrandTempsDeVie)
         {
-            plusGrandTempsDeVie = p->plusGrandTempsDeVie();
-            survivorFish = p;
-            ip = i;
+            topPlusGrandTempsDeVie = p->plusGrandTempsDeVie();
+            meilleursPoisson = p;
         }
-        i++;
     }
-    note("Est notre gagnant est:");
-    notify("Gagnant est le neurone : " + to_string(ip) + " tempsDeVie: " + to_string(plusGrandTempsDeVie));
-    /* survivorFish->print(); */
+    return meilleursPoisson;
+}
 
-    i = 0;
-    nbType fourchetteAutourDuPoids = 0.03;
-    if (plusGrandTempsDeVie < 500) fourchetteAutourDuPoids = 1;
-    if (plusGrandTempsDeVie > 1000) fourchetteAutourDuPoids = 0.01;
+void selectionneEtRepliqueMeilleursPoisson()
+{
+    Requin* killerShark = meilleursRequin();
+    Poisson* survivorFish = meilleursPoisson();
+
+    notify( "Meilleurs score pour un requin: "          + 
+            to_string(killerShark->nbCiblesMangées())   + 
+            "\n"                                        +
+            "Plus long temps de vie pour un poisson: "  + 
+            to_string(survivorFish->plusGrandTempsDeVie()));
+
+    // Je réinit à 0 les nbCiblesMangées
+    for (Requin* r: requins) r->nbCiblesMangées(0);
+
+    nbType fourchetteAutourDuPoids(1/((float)killerShark->tempsDeVie()/(float)selectionTime));
+    show("fourchetteAutourDuPoids",fourchetteAutourDuPoids);
+    if (fourchetteAutourDuPoids > 1) fourchetteAutourDuPoids = 1;
+    if (fourchetteAutourDuPoids < 0.05) fourchetteAutourDuPoids = 0.05;
+    show("fourchetteAutourDuPoids",fourchetteAutourDuPoids);
+    /* if (plusGrandTempsDeVie < 500) fourchetteAutourDuPoids = 1; */
+    /* if (plusGrandTempsDeVie > 1000) fourchetteAutourDuPoids = 0.01; */
     for (Poisson* p: poissons)
     {
         p->plusGrandTempsDeVie(0);
         p->renaît();
-        if (i++ == ip) continue;
         p->réseauDeNeurones(survivorFish->réseauDeNeurones());
+        p->réseauDeNeurones().connecteLesLignesEntreElles();
         p->réseauDeNeurones().poidsAléa(fourchetteAutourDuPoids);
         /* p->réseauDeNeurones().output().poidsAléa(-3.14f,3.14f); */
     }
-}
+    /* survivorFish->réseauDeNeurones().print(true); */
 
+}
 
 
 ////////////////////////////////////////////////////
@@ -405,8 +433,7 @@ int main (int argc, char* argv[] )
 
                 if (event.key.code == sf::Keyboard::P)
                 {
-                    for (Poisson* p: poissons)
-                        p->print();
+                    meilleursPoisson()->print();
                 }
 
                 if (event.key.code == sf::Keyboard::D)
@@ -517,17 +544,17 @@ int main (int argc, char* argv[] )
                     tblValsInput.clear();
                     /* tblValsInput.push_back(p->getAngleEntreMoiEt(requins.at(i++))); */
                     for (Requin* requin: requins)
-                        tblValsInput.push_back(p->getAngleEntreMoiEt(requin));
+                        tblValsInput.emplace_back(p->getAngleEntreMoiEt(requin));
 
-                    tblValsInput.push_back(p->pos().x); // dist depuis la gauche
-                    tblValsInput.push_back(p->pos().y); // dist depuis le haut
+                    tblValsInput.push_back(p->pos().x/(float)monde.largeur());
+                    tblValsInput.push_back(p->pos().y/(float)monde.hauteur());
                     /* tblValsInput.push_back(p->pos().x); */
                     /* tblValsInput.push_back(p->pos().y); */
 
                     p->tableauxDesValeursEnEntrée(tblValsInput);
                     p->calculeLesValeursDeToutMesNeurones();
-                    p->angleDeDirection( p->tableauxDesRésultats().at(0) );
-                    /* show("angleDeDirection",p->angleDeDirection()); */
+                    /* p->angleDeDirection( p->réseauDeNeurones().output().at(0).valeur() ); */
+                    p->angleDeDirection( p->tableauxDesRésultats().at(0));
                     /* p->réseauDeNeurones().print(true); */
                 }
 
