@@ -105,7 +105,7 @@ class Etre
         nbType bottom() const { return m_pos.y + m_hautDiv ; }
 
         RéseauDeNeurones& réseauDeNeurones() { return m_réseauDeNeurones; }
-        LigneDeNeurones& output() { return m_réseauDeNeurones.output(); }
+        RéseauDeNeurones::LigneDeNeurones& output() { return m_réseauDeNeurones.output(); }
 
         // sub
         // l'être avance son angle de rotation et la distanceDeDeplacement/maxDistDepl

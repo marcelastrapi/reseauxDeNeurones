@@ -7,7 +7,6 @@ using namespace displayer;
 #include <monde.hpp>
 #include <requin.hpp>
 
-
 //////////////////////////
 // Déclaration générale //
 //////////////////////////

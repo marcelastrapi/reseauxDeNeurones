@@ -1,6 +1,6 @@
 #pragma once
 
-#include <ligneDeNeurones.hpp>
+#include <neurone.hpp>
 
 #include <vector>
 
@@ -8,7 +8,9 @@ class RéseauDeNeurones
 {
 
     public:
-        using LignesDeNeurones = std::vector<LigneDeNeurones*>;
+        using Neurones = Neurone::Neurones;
+        using LigneDeNeurones = Neurone::Neurones;
+        using LignesDeNeurones = std::vector<Neurones>;
         using TblValeurs = std::vector<nbType>;
         //TODO il faudrait probablement un pointeur intelligent pour ne pas avoir à recopier tout le temps le tableau dans tableauxDesRésultats()
 
@@ -22,8 +24,8 @@ class RéseauDeNeurones
         ~RéseauDeNeurones();
 
         // setters
-        inline void nbNeuronesInput(const size_t nbNeurones){ m_input.nbNeurones(nbNeurones) ;}
-        inline void nbNeuronesOutput(const size_t nbNeurones){ m_output.nbNeurones(nbNeurones);}
+        inline void nbNeuronesInput(const size_t nbNeurones){ m_input.resize(nbNeurones) ;}
+        inline void nbNeuronesOutput(const size_t nbNeurones){ m_output.resize(nbNeurones);}
         void nbHiddenLayers(const size_t nbHiddenLayers, const size_t nbNeurones = 4);
         void poidsAléa(const nbType min, const nbType max);
         void poidsAléa(const nbType fourchetteAutourDuPoids);
@@ -31,15 +33,15 @@ class RéseauDeNeurones
         void tableauxDesValeursEnEntrée(const TblValeurs& _tblVals);
 
         // getters
-        inline LigneDeNeurones& input() { return m_input; }
-        inline LignesDeNeurones& hiddenLayers() { return m_hiddenLayers; }
-        inline LigneDeNeurones& output() { return m_output; }
-        inline TblValeurs tableauxDesRésultats() const { return m_output.tableauxDesRésultats(); }
+        LigneDeNeurones& input() { return m_input; }
+        LignesDeNeurones& hiddenLayers() { return m_hiddenLayers; }
+        LigneDeNeurones& output() { return m_output; }
+        TblValeurs tableauxDesRésultats() const;
         
-        inline size_t nbHiddenLayers() { return m_hiddenLayers.size(); }
+        inline size_t nbHiddenLayers() const { return m_hiddenLayers.size(); }
 
         // sub
-        inline void ajouteUnHiddenLayer(const size_t nbNeurones = 4) { m_hiddenLayers.push_back(new LigneDeNeurones(nbNeurones)); }
+        inline void ajouteUnHiddenLayer(const size_t nbNeurones = 4) { m_hiddenLayers.emplace_back(LigneDeNeurones(nbNeurones)); }
         void connecteLesLignesEntreElles();
         void calculeLesValeursDeToutMesNeurones();
 
@@ -51,6 +53,4 @@ class RéseauDeNeurones
         LignesDeNeurones m_hiddenLayers;
         LigneDeNeurones m_output;
 
-        // private sub
-        void effaceToutesLesConnections();
 };

@@ -63,7 +63,7 @@ void LigneDeNeurones::connecteMoiÀUneAutreLigne(LigneDeNeurones& autreLigne)
 void LigneDeNeurones::calculeLesValeursDeToutMesNeurones()
 {
     for (Neurone* n: m_neurones)
-        n->calculeMaValeurEnFonctionDesMesConnections();
+        n->calculeMaValeurEnFonctionDesMesConnexions();
 }
 void LigneDeNeurones::print() const
 {

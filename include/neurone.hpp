@@ -13,22 +13,23 @@ typedef float nbType;
 class Neurone
 {
     private:
-        using Neurones = std::vector<Neurone*>;
 
     public:
-        using iterator = Neurones::iterator;
-        using const_iterator = Neurones::const_iterator;
+        struct Connexion
+        {
+            nbType poids;
+            Connexion(nbType _poids = 0):poids(_poids) {}
+            void poidsAléa(const nbType min, const nbType max)
+            { poids = Rnd::rnd<nbType>(min,max); }
+            void poidsAléa(const nbType fourchetteAutourDuPoids)
+            { poids += Rnd::rnd<nbType>( -fourchetteAutourDuPoids, fourchetteAutourDuPoids); }
+        };
+
+        using Neurones = std::vector<Neurone>;
+        using Connexions = std::vector<Connexion>;
 
         Neurone();
         Neurone(const Neurone& neuroneÀCopier);
-
-        // Pour pouvoir faire comme dans un vector (itérer)
-        iterator begin() { return m_neuronesConnectés.begin(); }
-        iterator end() { return m_neuronesConnectés.end(); }
-        const_iterator begin() const { return m_neuronesConnectés.begin(); }
-        const_iterator end() const { return m_neuronesConnectés.end(); }
-        const_iterator cbegin() const { return m_neuronesConnectés.cbegin(); }
-        const_iterator cend() const { return m_neuronesConnectés.cend(); }
 
         // setters
         void poidsAléa(const nbType, const nbType max);
@@ -36,27 +37,33 @@ class Neurone
         inline void poids (const nbType _poids ) { m_poids  = _poids ; }
         inline void valeur(const nbType _valeur) { m_valeur = _valeur; }
         inline void seuil (const nbType _seuil ) { m_seuil  = _seuil ; }
+        void lignePrécédente(Neurones&);
 
         // getters
-        inline nbType poids() const { return m_poids; }
-        inline nbType valeur() const { return m_valeur; }
-        inline nbType seuil() const { return m_seuil; }
-        inline size_t nbConnexions() const { return m_neuronesConnectés.size(); }
+        nbType valeur() const { return m_valeur; }
+        nbType seuil() const { return m_seuil; }
+        size_t nbConnexions() const { return m_connexions.size(); }
+        Connexions connexions() const { return m_connexions; }
 
         // sub
-        void connecteMoiÀUnAutreNeurone(Neurone* neurone);
         void print() const;
 
-        inline void effaceToutesLesConnections() { m_neuronesConnectés.clear(); }
-
         // functions
-        nbType calculeMaValeurEnFonctionDesMesConnections();
+        nbType calculeMaValeurEnFonctionDesMesConnexions();
 
     private:
         nbType m_poids;
         nbType m_valeur;
         nbType m_seuil;
         // vector de pointeur vers les neurones qui sont connecté à moi
-        Neurones m_neuronesConnectés;
+        Neurones* m_lignePrécédente;
+        Connexions m_connexions;
+
+    public:
+        static void CONNECTE_NEURONES_À_NEURONES(Neurones& ligne1, Neurones& ligne2)
+        { 
+            for (Neurone& n: ligne2)
+                n.lignePrécédente(ligne1);
+        }
 
 };
