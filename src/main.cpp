@@ -129,7 +129,7 @@ void creerToutLesEtres(Monde& monde)
     // requin.
 
     // Je veux un requin
-    size_t nbRequins(2);
+    size_t nbRequins(1);
     Requin* requin;
     for (size_t i=0; i < nbRequins; i++)
     {
@@ -138,11 +138,11 @@ void creerToutLesEtres(Monde& monde)
         requin->dimensionDuMonde(monde.largeur(), monde.hauteur());
         requin->dimension(30, 30.f);
         requin->couleur(Couleur(255,0,0));
-        requin->maxDistanceDeDéplacement(10);
-        requin->maxAngleDeDirection(0.3f);
+        requin->maxDistanceDeDéplacement(1);
+        requin->maxAngleDeDirection(3.14f/4.f);
         requin->posAléa();
+        /* requin->mouvant(false); */
         requins.push_back(requin);
-
     }
 
     /* requin2 = new Requin(); */
@@ -155,7 +155,7 @@ void creerToutLesEtres(Monde& monde)
     /* requin2->print(); */
 
     // Je veux des poissons
-    unsigned int nombreDePoissons = 300;
+    unsigned int nombreDePoissons = 200;
     Couleur clPoisson = Couleur(0,255,0);
     Etre::nbType taillePoisson = 10;
 
@@ -167,12 +167,12 @@ void creerToutLesEtres(Monde& monde)
         p->posAléa();
         p->couleur(clPoisson);
         p->maxDistanceDeDéplacement(requin->maxDistanceDeDéplacement() +2 );
-        p->réseauDeNeurones().nbNeuronesInput(nbRequins + 2);
+        p->réseauDeNeurones().nbNeuronesInput(nbRequins + 10);
         p->réseauDeNeurones().nbHiddenLayers(2,8);
         p->réseauDeNeurones().nbNeuronesOutput(1);
         p->réseauDeNeurones().connecteLesLignesEntreElles();
-        p->réseauDeNeurones().poidsAléa(1);
-        p->réseauDeNeurones().seuil(-4);
+        p->réseauDeNeurones().poidsAléa(-1,3);
+        p->réseauDeNeurones().seuil(0);
         p->réseauDeNeurones().output().at(0).seuil(-1000);
         p->réseauDeNeurones().print();
 
@@ -222,10 +222,12 @@ Poisson* meilleursPoisson()
     return meilleursPoisson;
 }
 
-void selectionneEtRepliqueMeilleursPoisson()
+void selectionneEtRepliqueMeilleursPoisson(const Monde& monde)
 {
     Requin* killerShark = meilleursRequin();
     Poisson* survivorFish = meilleursPoisson();
+
+    for (Requin* r: requins) r->posAléa();
 
     notify( "Meilleurs score pour un requin: "          + 
             to_string(killerShark->nbCiblesMangées())   + 
@@ -236,13 +238,11 @@ void selectionneEtRepliqueMeilleursPoisson()
     // Je réinit à 0 les nbCiblesMangées
     for (Requin* r: requins) r->nbCiblesMangées(0);
 
-    nbType fourchetteAutourDuPoids(1/((float)killerShark->tempsDeVie()/(float)selectionTime));
+    nbType fourchetteAutourDuPoids(1/((float)monde.ticDepuisCréation()/(float)selectionTime));
     show("fourchetteAutourDuPoids",fourchetteAutourDuPoids);
     if (fourchetteAutourDuPoids > 1) fourchetteAutourDuPoids = 1;
-    if (fourchetteAutourDuPoids < 0.05) fourchetteAutourDuPoids = 0.05;
+    if (fourchetteAutourDuPoids < 0.001) fourchetteAutourDuPoids = 0.001;
     show("fourchetteAutourDuPoids",fourchetteAutourDuPoids);
-    /* if (plusGrandTempsDeVie < 500) fourchetteAutourDuPoids = 1; */
-    /* if (plusGrandTempsDeVie > 1000) fourchetteAutourDuPoids = 0.01; */
     for (Poisson* p: poissons)
     {
         p->plusGrandTempsDeVie(0);
@@ -438,7 +438,7 @@ int main (int argc, char* argv[] )
 
                 if (event.key.code == sf::Keyboard::D)
                 {
-                    selectionneEtRepliqueMeilleursPoisson();
+                    selectionneEtRepliqueMeilleursPoisson(monde);
                 }
             }
 
@@ -509,16 +509,8 @@ int main (int argc, char* argv[] )
             iDrawSomething = true;
             if (requins.size() > 0)
             {
-                Requin* requin = requins.at(0);
-                if (requin->tempsDeVie() > 0)
-                {
-                    auto score = 
-                        static_cast<float>(requin->nbCiblesMangées()) /
-                        static_cast<float>((monde.ticDepuisCréation()) +1) * 100.f
-                        ;
-                    tauxDeCarnageText.setString( to_string(monde.ticDepuisCréation() ) + "\n" + to_string(requin->nbCiblesMangées()) + "\n" + to_string( score ));
-                    clockTauxDeCarnage.restart();
-                }
+                tauxDeCarnageText.setString( to_string(monde.ticDepuisCréation()/(float)selectionTime ));
+                clockTauxDeCarnage.restart();
 
             }
         }
@@ -533,8 +525,13 @@ int main (int argc, char* argv[] )
 
                 // Je regarde si le requin à besoin d'une nouvelle cible
                 for (Requin* requin: requins)
+                {
+
                     requin->prendLaDirectionDeLaCibleLaPlusProche();
                     /* requin->angleDeDirection(requin->getAngleEntreMoiEt(requin->prochaineCible())); */
+                    /* requin->detectLaCibleLaPlusProche(); */
+                    /* requin->angleDeDirection(Rnd::rnd<nbType>(-3.14,3.14)); */
+                }
 
                 RéseauDeNeurones::TblValeurs tblValsInput;
 
@@ -560,9 +557,9 @@ int main (int argc, char* argv[] )
 
                 monde.tic();
 
-                if (monde.ticDepuisCréation() > 0)
-                    if (monde.ticDepuisCréation() % selectionTime == selectionTime-1)
-                        selectionneEtRepliqueMeilleursPoisson();
+                /* if (monde.ticDepuisCréation() > 0) */
+                if (monde.ticDepuisCréation() % selectionTime == selectionTime-1)
+                    selectionneEtRepliqueMeilleursPoisson(monde);
                     
                 /* requin2->avance(); */
 

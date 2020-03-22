@@ -13,7 +13,7 @@
 class Requin: public Etre
 {
     public:
-        static const ESPECE espece = REQUIN;
+        const ESPECE espece = REQUIN;
         Requin();
 
         // setters
@@ -55,6 +55,7 @@ class Requin: public Etre
         Etre::nbType m_minDistDeLaCibleLaPlusProche;
         Etre* m_cibleLaPlusProche;
 
+        void detectLaCibleLaPlusProche() ;
     private:
         Etres m_cibles;
         unsigned int m_nbCiblesMangées;
@@ -62,7 +63,6 @@ class Requin: public Etre
 
         // Chasse
         void mange(Etre* etre);
-        void detectLaCibleLaPlusProche() ;
 
     public: void prendLaDirectionDeLaCibleLaPlusProche();
 

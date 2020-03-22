@@ -41,7 +41,7 @@ class Etre
 {
 
     public:
-        static const ESPECE espece = ETRE;
+        const ESPECE espece = ETRE;
         typedef float nbType;
         typedef float angleType;
 

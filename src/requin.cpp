@@ -30,7 +30,7 @@ void Requin::ajouteCible(Etre* nouvelleCible)
 void Requin::renaît()
 {
     /* m_nbCiblesMangées = 0; */
-    Etre::renaît();
+    /* Etre::renaît(); */
 }
 
 //////////////////////////////////////////////////////////// PRIVATE

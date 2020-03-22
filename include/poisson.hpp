@@ -13,7 +13,7 @@ using std::array;
 class Poisson: public Etre
 {
     public:
-        static const ESPECE espece = POISSON;
+        const ESPECE espece = POISSON;
         Poisson();
 
         // print

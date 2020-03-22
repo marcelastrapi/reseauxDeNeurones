@@ -59,16 +59,16 @@ void Etre::posAléa()
 void Etre::left(const nbType _left)
 {
     m_pos.x = _left + m_largDiv;
-    /* if (left() < 0 or right() >= m_largeurDuMonde) renaît(); */
-    if (left() < 0) left(0);
-    if (right() >= m_largeurDuMonde) right(m_largeurDuMonde-1);
+    if (left() < 0 or right() >= m_largeurDuMonde) renaît();
+    /* if (left() < 0) left(0); */
+    /* if (right() >= m_largeurDuMonde) right(m_largeurDuMonde-1); */
 }
 void Etre::top(const nbType _top)
 {
     m_pos.y = _top + m_hautDiv;
-    /* if (top() < 0 or bottom() >= m_hauteurDuMonde) renaît(); */
-    if (top() < 0) top(0);
-    if (bottom() >= m_hauteurDuMonde) bottom(m_hauteurDuMonde-1);
+    if (top() < 0 or bottom() >= m_hauteurDuMonde) renaît();
+    /* if (top() < 0) top(0); */
+    /* if (bottom() >= m_hauteurDuMonde) bottom(m_hauteurDuMonde-1); */
 }
 
 void Etre::largeur(const nbType largeur)
@@ -85,10 +85,22 @@ void Etre::hauteur(const nbType hauteur)
 void Etre::angleDeDirection(const nbType angle)
 {
 
-    /* if (dist(angle,m_angleDeDirection) > m_maxAngleDeDirection) */
-    /*     angle = m_maxAngleDeDirection */
+    /* auto distance = dist(min(angle,m_angleDeDirection),max(angle,m_angleDeDirection)); */
 
-    m_angleDeDirection = angle;
+
+    /* if ( distance > m_maxAngleDeDirection) */
+    /* { */
+    /*     /1* note("________________________________________"); *1/ */
+    /*     /1* show("m_angleDeDirection",m_angleDeDirection); *1/ */
+    /*     /1* show("angle",angle); *1/ */
+    /*     /1* show("distance",distance); *1/ */
+    /*     if (distance > 3.14) */
+    /*         m_angleDeDirection += m_maxAngleDeDirection; */
+    /*     else */
+    /*         m_angleDeDirection -= m_maxAngleDeDirection; */
+    /* } */
+    /* else */
+        m_angleDeDirection = angle;
 
 }
 
