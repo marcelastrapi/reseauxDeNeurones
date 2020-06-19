@@ -1,8 +1,6 @@
 #pragma once
 
 #include <etre.hpp>
-#include <etres.hpp>
-
 #include <utils.hpp>
 
 /*
@@ -22,12 +20,12 @@ class Requin: public Etre
 
 
         // getters
-        inline size_t nbCibles() const { return m_cibles.getTotal(); }
+        inline size_t nbCibles() const { return m_cibles.size(); }
         inline unsigned int nbCiblesMangées() const { return m_nbCiblesMangées; }
 
         Etre* prochaineCible() 
         {
-            Etre* cibleEnCours = m_cibles.getEtreNo(m_icibleEnCours);
+            Etre* cibleEnCours = m_cibles.at(m_icibleEnCours);
             auto distance = dist(cibleEnCours->pos(), m_pos);
 
             if (distance <= cibleEnCours->rayon() + rayon())
@@ -36,12 +34,12 @@ class Requin: public Etre
                 /* note("J'ai enfin bouffer:"); */
                 /* cibleEnCours->print(); */
 
-                m_icibleEnCours = (m_icibleEnCours + 1)% m_cibles.getTotal();
+                m_icibleEnCours = (m_icibleEnCours + 1)% m_cibles.size();
             }
 
             /* note("prochaineCible"); */
-            /* m_cibles.getEtreNo(m_icibleEnCours)->print(); */
-            return m_cibles.getEtreNo(m_icibleEnCours);
+            /* m_cibles.at(m_icibleEnCours)->print(); */
+            return m_cibles.at(m_icibleEnCours);
         }
 
         // print

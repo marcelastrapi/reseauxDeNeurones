@@ -45,7 +45,7 @@ void RéseauDeNeurones::nbHiddenLayers(const size_t nbHiddenLayers, const size_t
         for (size_t i = currentNbHiddenLayers; i < nbHiddenLayers; i++)
             ajouteUnHiddenLayer(nbNeurones);
     }
-
+    connecteLesLignesEntreElles();
 }
 
 void RéseauDeNeurones::poidsAléa(const nbType min, const nbType max)

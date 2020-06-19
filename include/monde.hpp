@@ -2,7 +2,6 @@
 
 #include <coord.hpp>
 #include <etre.hpp>
-#include <etres.hpp>
 #include <poisson.hpp>
 
 class Monde
@@ -15,14 +14,13 @@ class Monde
         inline unsigned int hauteur() const { return this->m_hauteur; }
 
         inline Etres& getToutLesEtres() { return this->m_toutLesEtres; }
-        inline size_t getNbEtres() const { return this->m_toutLesEtres.getTotal(); }
-        inline Etre* getEtreNo(unsigned int i) const { return m_toutLesEtres.getEtreNo(i); }
+        inline size_t getNbEtres() const { return this->m_toutLesEtres.size(); }
+        inline Etre* at(unsigned int i) const { return m_toutLesEtres.at(i); }
 
         Tic ticDepuisCréation() const { return m_ticDepuisCréation; }
 
         // Setters
-        inline void ajouteEtre(Etre* etre) { m_toutLesEtres.ajouteEtre(etre); }
-
+        inline void ajouteEtre(Etre* etre) { m_toutLesEtres.push_back(etre); }
 
         // Sub
         void tic();
@@ -30,7 +28,7 @@ class Monde
         // Display
         void print() const {
             for (unsigned int i = 0; i < getNbEtres(); i++)
-                m_toutLesEtres.getEtreNo(i)->print();
+                m_toutLesEtres.at(i)->print();
         }
 
     private:

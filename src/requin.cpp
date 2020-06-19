@@ -23,7 +23,7 @@ void Requin::print() const
 //sub
 void Requin::ajouteCible(Etre* nouvelleCible)
 {
-    m_cibles.ajouteEtre(nouvelleCible);
+    m_cibles.push_back(nouvelleCible);
 }
 
 // override
@@ -45,7 +45,7 @@ void Requin::detectLaCibleLaPlusProche()
 
     for (size_t i=0; i < nbCibles(); i++)
     {
-        tmp = m_cibles.getEtreNo(i);
+        tmp = m_cibles.at(i);
         distance = dist(tmp->pos(), m_pos);
         // Si je vois que la distance la cible //TODO faudrait que ce soit plus précis
         // est assez petite ... alors MANGE-LE

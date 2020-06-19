@@ -141,3 +141,5 @@ class Etre
         RéseauDeNeurones m_réseauDeNeurones;
 
 };
+
+typedef std::vector<Etre*> Etres;
