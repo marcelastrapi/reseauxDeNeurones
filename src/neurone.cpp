@@ -48,8 +48,11 @@ nbType Neurone::calculeMaValeurEnFonctionDesMesConnexions()
         m_valeur += m_connexions.at(i++).poids * n.valeur();
     }
 
-    // ce produit passer par la fonction max(0,x) sera ma valeur
+    // ce produit passé par la fonction max(0,x) sera ma valeur
     m_valeur = max(m_seuil,m_valeur);
+
+    // fast sigmoid
+    /* m_valeur = m_valeur / (1 + abs(m_valeur)); */
 
     return m_valeur;
 }

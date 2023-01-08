@@ -60,7 +60,7 @@ int tempsDuMonde = 0; // en millisecond
 int incrTempsDuMonde = 1;
 int minTempsDuMonde = 0;
 
-Tic selectionTime(4000);
+Tic selectionTime(40000);
 
 enum Mode
 {
@@ -130,8 +130,8 @@ void creerToutLesEtres(Monde& monde)
     // après générations d'auto-clonages pourront apprendre à esquiver le
     // requin.
 
-    // Je veux un requin
-    size_t nbRequins(2);
+    // Je veux n requin.s
+    size_t nbRequins(3);
     Requin* requin;
     for (size_t i=0; i < nbRequins; i++)
     {
@@ -239,7 +239,8 @@ void selectionneEtRepliqueMeilleursPoisson(const Monde& monde)
     // Je réinit à 0 les nbCiblesMangées
     for (Requin* r: requins) r->nbCiblesMangées(0);
 
-    nbType fourchetteAutourDuPoids(1/((float)monde.ticDepuisCréation()/(float)selectionTime));
+    /* nbType fourchetteAutourDuPoids(1/((float)monde.ticDepuisCréation()/(float)selectionTime)); */
+    nbType fourchetteAutourDuPoids(0.1);
     /* show("fourchetteAutourDuPoids",fourchetteAutourDuPoids); */
     if (fourchetteAutourDuPoids > 1) fourchetteAutourDuPoids = 1;
     if (fourchetteAutourDuPoids < 0.5) fourchetteAutourDuPoids = 0.5;
@@ -330,7 +331,7 @@ int main (int argc, char* argv[] )
 
     // Text infos // TODO mettre le nom en relatif
     sf::Font font;
-    font.loadFromFile("/home/pi/.scripts/termine/maths/apprentissage/rsc/NotoMono-Regular.ttf");
+    font.loadFromFile("/home/pi/.scripts/termine/c++/apprentissage/rsc/NotoMono-Regular.ttf");
     noteText.setFont(font);
     noteText.setCharacterSize(17);
     noteText.setFillColor(sf::Color::Yellow);

@@ -93,10 +93,11 @@ void RéseauDeNeurones::print(bool tout) const
     show("input",m_input.size());
     show("hidden layers",m_hiddenLayers.size());
     show("output",m_output.size());
-    if (nbHiddenLayers() > 0)
+    if (nbHiddenLayers() > 0) {
         note("nbNeurones par hiddenLayers");
         for (const LigneDeNeurones& ligne: m_hiddenLayers)
             show("nbNeurones",ligne.size());
+    }
 
     if (tout)
     {

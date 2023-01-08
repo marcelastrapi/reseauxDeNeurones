@@ -12,8 +12,6 @@ typedef float nbType;
 
 class Neurone
 {
-    private:
-
     public:
         struct Connexion
         {
