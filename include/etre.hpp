@@ -9,7 +9,7 @@ using namespace displayer;
 
 #include <reseauDeNeurones.hpp>
 
-enum Forme 
+enum Forme
 {
     Cercle,
     Rectangle
@@ -31,8 +31,8 @@ enum ESPECE
       PI/2  monte
       PI    va è gauche
      -PI/2  descend
-   
-   
+
+
 */
 
 typedef long Tic;
@@ -67,7 +67,7 @@ class Etre
         void angleDeDirection(const angleType angle);
         inline void mouvant(const bool mouvant) { m_estMouvant = mouvant; }
         inline void maxDistanceDeDéplacement(const nbType max) { m_maxDistanceDeDeplacement = max; }
-        inline void maxAngleDeDirection(const nbType angleDeDirection) { m_maxAngleDeDirection = angleDeDirection; }
+        /* inline void maxAngleDeDirection(const angleType angleDeDirection) { m_maxAngleDeDirection = angleDeDirection; } */
 
         void left(const nbType _left);
         void top (const nbType _top);
@@ -133,7 +133,7 @@ class Etre
         bool m_estMouvant;
         nbType m_maxDistanceDeDeplacement;
         angleType m_angleDeDirection;
-        angleType m_maxAngleDeDirection;
+        /* angleType m_maxAngleDeDirection; */
 
         bool m_estVivant;
         Tic m_tempsDeVie;

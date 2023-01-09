@@ -3,7 +3,7 @@
 #include <cmath> // pour atan2f()
 
 // ctor
-Etre::Etre(): 
+Etre::Etre():
     m_pos(Coord(0,0)),
     m_forme(Rectangle),
     m_couleur(Couleur(0,0,0)),
@@ -13,7 +13,7 @@ Etre::Etre():
     m_estMouvant(false),
     m_maxDistanceDeDeplacement(0),
     m_angleDeDirection(0),
-    m_maxAngleDeDirection(360),
+    /* m_maxAngleDeDirection(2*3.14f), */
     m_estVivant(false),
     m_tempsDeVie(0),
     m_réseauDeNeurones()
@@ -28,7 +28,7 @@ void Etre::print() const
     note("dimensionDuMonde: " + to_string(m_largeurDuMonde) + ',' + to_string(m_hauteurDuMonde) );
     note("couleur:" + m_couleur.toString());
     note("m_maxDistanceDeDeplacement:" + to_string(m_maxDistanceDeDeplacement));
-    note("m_maxAngleDeDirection:" + to_string(m_maxAngleDeDirection));
+    /* note("m_maxAngleDeDirection:" + to_string(m_maxAngleDeDirection)); */
     note("m_angleDeDirection:" + to_string(m_angleDeDirection));
 }
 
@@ -46,13 +46,13 @@ void Etre::dimension(const nbType _largeur, const nbType _hauteur)
 
 void Etre::posAléa()
 {
-    left(static_cast<float>( Rnd::_int( 
+    left(static_cast<float>( Rnd::_int(
                 static_cast<int>(0),
-                static_cast<int>(m_largeurDuMonde - m_largeur) 
+                static_cast<int>(m_largeurDuMonde - m_largeur)
                 )));
-    top(static_cast<float>( Rnd::_int( 
+    top(static_cast<float>( Rnd::_int(
                 static_cast<int>(0),
-                static_cast<int>(m_hauteurDuMonde - m_hauteur) 
+                static_cast<int>(m_hauteurDuMonde - m_hauteur)
                 )));
 }
 
@@ -85,28 +85,12 @@ void Etre::hauteur(const nbType hauteur)
 void Etre::angleDeDirection(const nbType angle)
 {
 
-    /* auto distance = dist(min(angle,m_angleDeDirection),max(angle,m_angleDeDirection)); */
-
-
-    /* if ( distance > m_maxAngleDeDirection) */
-    /* { */
-    /*     /1* note("________________________________________"); *1/ */
-    /*     /1* show("m_angleDeDirection",m_angleDeDirection); *1/ */
-    /*     /1* show("angle",angle); *1/ */
-    /*     /1* show("distance",distance); *1/ */
-    /*     if (distance > 3.14) */
-    /*         m_angleDeDirection += m_maxAngleDeDirection; */
-    /*     else */
-    /*         m_angleDeDirection -= m_maxAngleDeDirection; */
-    /* } */
-    /* else */
-        m_angleDeDirection = angle;
-
+    m_angleDeDirection = angle;
 }
 
 // réseaux de neurones
 
-// functions 
+// functions
 Etre::angleType Etre::getAngleEntreMoiEt(const Etre* lui) const
 {
     auto pos = lui->pos();

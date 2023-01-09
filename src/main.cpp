@@ -74,6 +74,7 @@ vector<Requin*> requins;
 vector<Poisson*> poissons;
 
 bool modeMouseOn = false;
+bool modeGraphique = true;
 
 //////////////////////////////////////////////////////////////////////
 // Functions
@@ -131,7 +132,7 @@ void creerToutLesEtres(Monde& monde)
     // requin.
 
     // Je veux n requin.s
-    size_t nbRequins(3);
+    size_t nbRequins(4);
     Requin* requin;
     for (size_t i=0; i < nbRequins; i++)
     {
@@ -141,7 +142,7 @@ void creerToutLesEtres(Monde& monde)
         requin->dimension(30, 30.f);
         requin->couleur(Couleur(255,0,0));
         requin->maxDistanceDeDéplacement(1);
-        requin->maxAngleDeDirection(3.14f/4.f);
+        /* requin->maxAngleDeDirection(3.14f/4.f); */
         requin->posAléa();
         /* requin->mouvant(false); */
         requins.push_back(requin);
@@ -157,7 +158,7 @@ void creerToutLesEtres(Monde& monde)
     /* requin2->print(); */
 
     // Je veux des poissons
-    unsigned int nombreDePoissons = 200;
+    unsigned int nombreDePoissons = 400;
     Couleur clPoisson = Couleur(0,255,0);
     Etre::nbType taillePoisson = 10;
 
@@ -169,8 +170,9 @@ void creerToutLesEtres(Monde& monde)
         p->posAléa();
         p->couleur(clPoisson);
         p->maxDistanceDeDéplacement(requin->maxDistanceDeDéplacement() +2 );
+        // nbRequins + 2 pour la pos du poisson
         p->réseauDeNeurones().nbNeuronesInput(nbRequins + 2);
-        p->réseauDeNeurones().nbHiddenLayers(2,9);
+        p->réseauDeNeurones().nbHiddenLayers(1,4);
         p->réseauDeNeurones().nbNeuronesOutput(1);
         p->réseauDeNeurones().connecteLesLignesEntreElles();
         p->réseauDeNeurones().poidsAléa(-1,1);
@@ -230,27 +232,28 @@ void selectionneEtRepliqueMeilleursPoisson(const Monde& monde)
 
     for (Requin* r: requins) r->posAléa();
 
-    notify( "Meilleurs score pour un requin: "          +
+    notify(
+            "Meilleurs score pour un requin: "          +
             to_string(killerShark->nbCiblesMangées())   +
             "\n"                                        +
             "Plus long temps de vie pour un poisson: "  +
-            to_string(survivorFish->plusGrandTempsDeVie()));
+            to_string(survivorFish->plusGrandTempsDeVie()) + " / " + to_string(selectionTime)
+          );
 
     // Je réinit à 0 les nbCiblesMangées
     for (Requin* r: requins) r->nbCiblesMangées(0);
 
     /* nbType fourchetteAutourDuPoids(1/((float)monde.ticDepuisCréation()/(float)selectionTime)); */
-    nbType fourchetteAutourDuPoids(0.1);
+    nbType fourchetteAutourDuPoids(0.05);
     /* show("fourchetteAutourDuPoids",fourchetteAutourDuPoids); */
-    if (fourchetteAutourDuPoids > 1) fourchetteAutourDuPoids = 1;
-    if (fourchetteAutourDuPoids < 0.5) fourchetteAutourDuPoids = 0.5;
+    /* if (fourchetteAutourDuPoids > 1) fourchetteAutourDuPoids = 1; */
+    /* if (fourchetteAutourDuPoids < 0.5) fourchetteAutourDuPoids = 0.5; */
     show("fourchetteAutourDuPoids",fourchetteAutourDuPoids);
     for (Poisson* p: poissons)
     {
         p->plusGrandTempsDeVie(0);
         p->réseauDeNeurones(survivorFish->réseauDeNeurones());
         p->réseauDeNeurones().poidsAléa(fourchetteAutourDuPoids);
-        /* p->réseauDeNeurones().output().poidsAléa(-3.14f,3.14f); */
     }
 }
 
@@ -372,6 +375,8 @@ int main (int argc, char* argv[] )
                 {
                     for (Requin* requin: requins)
                         requin->renaît();
+                    for (Poisson* poisson: poissons)
+                        poisson->renaît();
                     notify("Reboot");
                 }
 
@@ -431,6 +436,18 @@ int main (int argc, char* argv[] )
                 if (event.key.code == sf::Keyboard::P)
                 {
                     meilleursPoisson()->print();
+                }
+
+                if (event.key.code == sf::Keyboard::G)
+                {
+                    if (modeGraphique == true)
+                    {
+                        modeGraphique = false;
+                        notify("mode graphique: false");
+                    }else{
+                        modeGraphique = true;
+                        notify("mode graphique: true");
+                    }
                 }
 
                 if (event.key.code == sf::Keyboard::D)
@@ -523,7 +540,6 @@ int main (int argc, char* argv[] )
                 // Je regarde si le requin à besoin d'une nouvelle cible
                 for (Requin* requin: requins)
                     requin->prendLaDirectionDeLaCibleLaPlusProche();
-                    /* requin->angleDeDirection(requin->getAngleEntreMoiEt(requin->prochaineCible())); */
 
                 RéseauDeNeurones::TblValeurs tblValsInput;
 
@@ -541,7 +557,8 @@ int main (int argc, char* argv[] )
 
                     p->tableauxDesValeursEnEntrée(tblValsInput);
                     p->calculeLesValeursDeToutMesNeurones();
-                    p->angleDeDirection( p->réseauDeNeurones().output().at(0).valeur() );
+                    /* p->angleDeDirection( p->réseauDeNeurones().output().at(0).valeur() ); */
+                    p->angleDeDirection( p->réseauDeNeurones().output().at(0).valeur()*2*3.14f );
                     /* p->angleDeDirection( p->tableauxDesRésultats().at(0)); */
                     /* p->réseauDeNeurones().print(true); */
                 }
@@ -557,7 +574,8 @@ int main (int argc, char* argv[] )
             }
         }
 
-        if (clock.getElapsedTime().asMilliseconds() >= tickTime ) {
+        if (clock.getElapsedTime().asMilliseconds() >= tickTime )
+        {
 
             clock.restart();
 
@@ -568,52 +586,54 @@ int main (int argc, char* argv[] )
 
 
             // Je dessine tout le monde
-            Etre* etre;
-            sf::Color cl;
-            Couleur* mcl;
-            Etre::nbType posx,posy;
-            for (unsigned int i = 0; i < monde.getNbEtres(); i++)
-            {
-                etre = monde.at(i);
-                mcl = &etre->couleur();
-                cl = sf::Color(mcl->r,mcl->g,mcl->b,mcl->a);
-                posx = etre->left();
-                posy = etre->top();
-
-                /* etre->print(); */
-                switch (etre->forme())
+            if (modeGraphique) {
+                Etre* etre;
+                sf::Color cl;
+                Couleur* mcl;
+                Etre::nbType posx,posy;
+                for (unsigned int i = 0; i < monde.getNbEtres(); i++)
                 {
-                    case Cercle:
-                        {
-                            sf::CircleShape circle(etre->largeur()*0.5f);
-                            circle.setFillColor(cl);
-                            circle.setPosition(posx , posy);
-                            /* circle.setRotation(radToDeg(etre->angleDeDirection())); */
+                    etre = monde.at(i);
+                    mcl = &etre->couleur();
+                    cl = sf::Color(mcl->r,mcl->g,mcl->b,mcl->a);
+                    posx = etre->left();
+                    posy = etre->top();
 
-                            /* note("pos:"+to_string(pos->x)+","+to_string(pos->y)); */
-                            window.draw(circle);
-                            iDrawSomething = true;
+                    /* etre->print(); */
+                    switch (etre->forme())
+                    {
+                        case Cercle:
+                            {
+                                sf::CircleShape circle(etre->largeur()*0.5f);
+                                circle.setFillColor(cl);
+                                circle.setPosition(posx , posy);
+                                /* circle.setRotation(radToDeg(etre->angleDeDirection())); */
 
-                            break;
-                        }
+                                /* note("pos:"+to_string(pos->x)+","+to_string(pos->y)); */
+                                window.draw(circle);
+                                iDrawSomething = true;
 
-                    case Rectangle:
-                        {
-                            sf::RectangleShape rect(sf::Vector2f(etre->largeur(),etre->hauteur()));
-                            rect.setFillColor(cl);
-                            rect.setPosition(posx , posy);
-                            /* rect.setRotation(-radToDeg(etre->angleDeDirection())); */
-                            window.draw(rect);
-                            iDrawSomething = true;
+                                break;
+                            }
 
-                            break;
-                        }
+                        case Rectangle:
+                            {
+                                sf::RectangleShape rect(sf::Vector2f(etre->largeur(),etre->hauteur()));
+                                rect.setFillColor(cl);
+                                rect.setPosition(posx , posy);
+                                /* rect.setRotation(-radToDeg(etre->angleDeDirection())); */
+                                window.draw(rect);
+                                iDrawSomething = true;
+
+                                break;
+                            }
+
+                    }
+
 
                 }
 
-
             }
-
 
             window.draw(noteText);
             window.draw(tauxDeCarnageText);
