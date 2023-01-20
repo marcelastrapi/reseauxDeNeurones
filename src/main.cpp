@@ -132,7 +132,7 @@ void creerToutLesEtres(Monde& monde)
     // requin.
 
     // Je veux n requin.s
-    size_t nbRequins(4);
+    size_t nbRequins(1);
     Requin* requin;
     for (size_t i=0; i < nbRequins; i++)
     {
@@ -158,7 +158,7 @@ void creerToutLesEtres(Monde& monde)
     /* requin2->print(); */
 
     // Je veux des poissons
-    unsigned int nombreDePoissons = 400;
+    unsigned int nombreDePoissons = 50;
     Couleur clPoisson = Couleur(0,255,0);
     Etre::nbType taillePoisson = 10;
 
@@ -172,7 +172,7 @@ void creerToutLesEtres(Monde& monde)
         p->maxDistanceDeDéplacement(requin->maxDistanceDeDéplacement() +2 );
         // nbRequins + 2 pour la pos du poisson
         p->réseauDeNeurones().nbNeuronesInput(nbRequins + 2);
-        p->réseauDeNeurones().nbHiddenLayers(1,4);
+        p->réseauDeNeurones().nbHiddenLayers(4,4);
         p->réseauDeNeurones().nbNeuronesOutput(1);
         p->réseauDeNeurones().connecteLesLignesEntreElles();
         p->réseauDeNeurones().poidsAléa(-1,1);

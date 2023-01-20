@@ -1,3 +1,6 @@
-je pourrais faire en sorte que la sortie soit 2 neurones:
+- je pourrais faire en sorte que la sortie soit 2 neurones:
     ajoute maxAngleDeDirection
     enleve maxAngleDeDirection
+
+- mettre entre zéro et 1 ou -1 et 1 ?
+- remplacer le seuil par le biais ?

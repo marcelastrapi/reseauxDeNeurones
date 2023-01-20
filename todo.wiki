@@ -1,4 +1,0 @@
-* [ ] mettre en zéro et 1 ou -1 et 1
-* [ ] remplacer le seuil par le biais ?
-* [ ] le problème viens du ctor de copy du réseaux ET d'un neurone
-      solution: Connexion ( poids)
