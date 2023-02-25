@@ -136,7 +136,6 @@ void creerToutLesEtres(Monde& monde)
     Requin* requin;
     for (size_t i=0; i < nbRequins; i++)
     {
-
         requin = new Requin();
         requin->dimensionDuMonde(monde.largeur(), monde.hauteur());
         requin->dimension(30, 30.f);
@@ -158,7 +157,7 @@ void creerToutLesEtres(Monde& monde)
     /* requin2->print(); */
 
     // Je veux des poissons
-    unsigned int nombreDePoissons = 50;
+    unsigned int nombreDePoissons = 1;
     Couleur clPoisson = Couleur(0,255,0);
     Etre::nbType taillePoisson = 10;
 
@@ -171,7 +170,7 @@ void creerToutLesEtres(Monde& monde)
         p->couleur(clPoisson);
         p->maxDistanceDeDéplacement(requin->maxDistanceDeDéplacement() +2 );
         // nbRequins + 2 pour la pos du poisson
-        p->réseauDeNeurones().nbNeuronesInput(nbRequins + 2);
+        p->réseauDeNeurones().nbNeuronesInput(nbRequins);
         p->réseauDeNeurones().nbHiddenLayers(4,4);
         p->réseauDeNeurones().nbNeuronesOutput(1);
         p->réseauDeNeurones().connecteLesLignesEntreElles();
@@ -244,7 +243,11 @@ void selectionneEtRepliqueMeilleursPoisson(const Monde& monde)
     for (Requin* r: requins) r->nbCiblesMangées(0);
 
     /* nbType fourchetteAutourDuPoids(1/((float)monde.ticDepuisCréation()/(float)selectionTime)); */
-    nbType fourchetteAutourDuPoids(0.05);
+    int nbGeneration = monde.ticDepuisCréation() / selectionTime;
+
+    nbType fourchetteAutourDuPoids(0.5/pow(2,nbGeneration));
+    /* show("nbGeneration",nbGeneration); */
+    /* show("fourchetteAutourDuPoids",fourchetteAutourDuPoids); */
     /* show("fourchetteAutourDuPoids",fourchetteAutourDuPoids); */
     /* if (fourchetteAutourDuPoids > 1) fourchetteAutourDuPoids = 1; */
     /* if (fourchetteAutourDuPoids < 0.5) fourchetteAutourDuPoids = 0.5; */
@@ -534,7 +537,6 @@ int main (int argc, char* argv[] )
             clockDuMonde.restart();
             if (play)
             {
-
                 // TODO faire en sorte que ce soit le monde qui avant d'un pas plutot que chaque être ici
 
                 // Je regarde si le requin à besoin d'une nouvelle cible
@@ -544,14 +546,17 @@ int main (int argc, char* argv[] )
                 RéseauDeNeurones::TblValeurs tblValsInput;
 
                 /* size_t i(0); */
+
+                /* Poisson poissonDuMoment = poissons.at(0); */
+
                 for (Poisson* p: poissons)
                 {
                     tblValsInput.clear();
                     for (Requin* requin: requins)
                         tblValsInput.emplace_back(p->getAngleEntreMoiEt(requin));
 
-                    tblValsInput.push_back(p->pos().x/(float)monde.largeur());
-                    tblValsInput.push_back(p->pos().y/(float)monde.hauteur());
+                    /* tblValsInput.push_back(p->pos().x/(float)monde.largeur()); */
+                    /* tblValsInput.push_back(p->pos().y/(float)monde.hauteur()); */
                     /* tblValsInput.push_back(p->pos().x); */
                     /* tblValsInput.push_back(p->pos().y); */
 
@@ -565,18 +570,16 @@ int main (int argc, char* argv[] )
 
                 monde.tic();
 
-                /* if (monde.ticDepuisCréation() > 0) */
-                if (monde.ticDepuisCréation() % selectionTime == selectionTime-1)
-                    selectionneEtRepliqueMeilleursPoisson(monde);
+                /* if (monde.ticDepuisCréation() % selectionTime == selectionTime-1) */
+                /*     selectionneEtRepliqueMeilleursPoisson(monde); */
 
                 /* requin2->avance(); */
-
             }
         }
 
+        /* Ici on dessine le monde */
         if (clock.getElapsedTime().asMilliseconds() >= tickTime )
         {
-
             clock.restart();
 
             // Comme ca je ne redessine pas 2 fois de suite la même image
@@ -629,10 +632,7 @@ int main (int argc, char* argv[] )
                             }
 
                     }
-
-
                 }
-
             }
 
             window.draw(noteText);
@@ -640,7 +640,6 @@ int main (int argc, char* argv[] )
 
             if (iDrawSomething) window.display();
             /* play = false; */
-
         }
     }
 
