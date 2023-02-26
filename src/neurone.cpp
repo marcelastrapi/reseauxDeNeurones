@@ -1,13 +1,16 @@
 #include <neurone.hpp>
 
-Neurone::Neurone():
-    m_valeur(0),
-    m_seuil(0)
+/* Neurone::Neurone(): */
+/*     m_valeur(0), estUnBiais(false) */
+/* { } */
+Neurone::Neurone(const nbType val, const bool estUnBiais):
+    estUnBiais(estUnBiais), m_valeur(val)
 { }
 Neurone::Neurone(const Neurone& neuroneÀCopier)
 {
+    m_valeur = neuroneÀCopier.m_valeur;
+    estUnBiais = neuroneÀCopier.estUnBiais;
     m_connexions = neuroneÀCopier.connexions();
-    m_seuil = neuroneÀCopier.seuil();
 }
 
 // setters
@@ -28,9 +31,12 @@ void Neurone::lignePrécédente(Neurones& ligne)
 // sub
 void Neurone::print() const
 {
-    note("__________ Je suis un Neurone");
+    if (this->estUnBiais){
+        note("__________ Je suis un Biais");
+    }else{
+        note("__________ Je suis un Neurone");
+    }
     show("nombre de connexion",this->nbConnexions());
-    show("m_seuil",m_seuil);
     for (auto& c: m_connexions)
         show("poids",c.poids);
     show("valeurs",m_valeur);
@@ -39,6 +45,10 @@ void Neurone::print() const
 // functions
 nbType Neurone::calculeMaValeurEnFonctionDesMesConnexions()
 {
+    if (this->estUnBiais) {
+        return m_valeur;
+    }
+
     // Je dois donc ajouter tout les produits poids*valeurs des mes neurones
     // connectés
     m_valeur = 0;
@@ -48,11 +58,10 @@ nbType Neurone::calculeMaValeurEnFonctionDesMesConnexions()
         m_valeur += m_connexions.at(i++).poids * n.valeur();
     }
 
-    // ce produit passé par la fonction max(0,x) sera ma valeur
-    /* m_valeur = max(m_seuil,m_valeur); */
-
     // fast sigmoid
-    /* m_valeur = m_valeur / (1 + abs(m_valeur)); */
+    m_valeur = m_valeur / (1 + abs(m_valeur));
+
+    /* m_valeur /= this->nbConnexions(); */
 
     return m_valeur;
 }

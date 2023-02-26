@@ -32,6 +32,7 @@ void Poisson::print() const
     m_réseauDeNeurones.print(true);
         show("Je suis vivant depuis",m_tempsDeVie);
     show("Plus grand temps de vie",m_plusGrandTempsDeVie);
+    show("nombre de victoires",m_nbVictoire);
 }
 
 //////////////////////////////////////////////////////// PRIVATE

@@ -60,15 +60,29 @@ void Etre::left(const nbType _left)
 {
     m_pos.x = _left + m_largDiv;
     /* if (left() < 0 or right() >= m_largeurDuMonde) renaît(); */
-    if (left() < 0) left(0);
+
+    // monde pas rond
+    if (left() < 0) left(1);
     if (right() >= m_largeurDuMonde) right(m_largeurDuMonde-1);
+
+    /* // monde rond */
+    /* if (left() < 0) right(m_largeurDuMonde-1); */
+    /* if (right() >= m_largeurDuMonde) left(1); */
+
 }
 void Etre::top(const nbType _top)
 {
     m_pos.y = _top + m_hautDiv;
     /* if (top() < 0 or bottom() >= m_hauteurDuMonde) renaît(); */
-    if (top() < 0) top(0);
+
+    // monde pas rond
+    if (top() < 0) top(1);
     if (bottom() >= m_hauteurDuMonde) bottom(m_hauteurDuMonde-1);
+
+    /* // monde rond */
+    /* if (top() < 0) bottom(m_hauteurDuMonde-1); */
+    /* if (bottom() >= m_hauteurDuMonde) top(1); */
+
 }
 
 void Etre::largeur(const nbType largeur)
@@ -84,7 +98,6 @@ void Etre::hauteur(const nbType hauteur)
 
 void Etre::angleDeDirection(const nbType angle)
 {
-
     m_angleDeDirection = angle;
 }
 

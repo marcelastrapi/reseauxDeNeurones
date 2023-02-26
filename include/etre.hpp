@@ -51,6 +51,10 @@ class Etre
         // print pour débugger
         virtual void print() const = 0;
 
+        bool operator< (const Etre &other) const {
+            return this->m_nbVictoire < other.nbVictoire();
+        }
+
         // setters
         inline void forme(const Forme forme) { m_forme = forme; }
         inline void couleur(const Couleur& cl) { m_couleur = cl; }
@@ -63,7 +67,7 @@ class Etre
         inline void pos(const nbType x, const nbType y) { left(x-m_largDiv);top(y-m_hautDiv); }
         inline void pos(const Coord& coord) { pos(coord.x,coord.y); }
         void posAléa();
-        // angle entre 0 et 2pi
+        // angle entre -pi et pi (-pi et pi va a gauche et 0 à droite)
         void angleDeDirection(const angleType angle);
         inline void mouvant(const bool mouvant) { m_estMouvant = mouvant; }
         inline void maxDistanceDeDéplacement(const nbType max) { m_maxDistanceDeDeplacement = max; }
@@ -74,6 +78,9 @@ class Etre
         inline void right (const nbType _right)  { left(_right -  m_largeur); }
         inline void bottom(const nbType _bottom) { top (_bottom - m_hauteur); }
         inline void estVivant(const bool vivant) { m_estVivant = vivant; }
+        inline void nbVictoire(const unsigned int nVal) { m_nbVictoire = nVal; }
+        inline void ajoute1Victoire() { m_nbVictoire++; }
+        inline void resetNbVictoire() { m_nbVictoire = 0; }
 
         inline void tableauxDesValeursEnEntrée(const std::vector<nbType>& _tblVals)
         { m_réseauDeNeurones.tableauxDesValeursEnEntrée(_tblVals); }
@@ -98,6 +105,7 @@ class Etre
         nbType maxDistanceDeDéplacement() const { return m_maxDistanceDeDeplacement; }
         bool estVivant() const { return m_estVivant; }
         Tic tempsDeVie() const { return m_tempsDeVie; }
+        inline unsigned int nbVictoire() const { return m_nbVictoire; }
 
         nbType left()   const { return m_pos.x - m_largDiv ; }
         nbType top()    const { return m_pos.y - m_hautDiv ; }
@@ -127,7 +135,7 @@ class Etre
         nbType m_hauteurDuMonde;
         nbType m_largeur;
         nbType m_hauteur;
-        nbType m_largDiv;
+        nbType m_largDiv; // largeur divisé par 2
         nbType m_hautDiv;
 
         bool m_estMouvant;
@@ -137,6 +145,7 @@ class Etre
 
         bool m_estVivant;
         Tic m_tempsDeVie;
+        unsigned int m_nbVictoire;
 
         RéseauDeNeurones m_réseauDeNeurones;
 

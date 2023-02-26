@@ -4,8 +4,8 @@ RéseauDeNeurones::RéseauDeNeurones():
     m_input(1),m_output(1)
 { }
 
-RéseauDeNeurones::RéseauDeNeurones(const size_t _nbNeuronesInput, 
-                const size_t _nbHiddenLayers, 
+RéseauDeNeurones::RéseauDeNeurones(const size_t _nbNeuronesInput,
+                const size_t _nbHiddenLayers,
                 const size_t _nbNeuronesHiddenLayers,
                 const size_t _nbNeuronesOutput):
     m_input(_nbNeuronesInput),m_output(_nbNeuronesOutput)
@@ -19,6 +19,7 @@ RéseauDeNeurones::RéseauDeNeurones(RéseauDeNeurones& réseauÀCopier):
     m_output(réseauÀCopier.output())
 {
     size_t i(0);
+    // TODO est-ce que vraiment ça copie le réseau ?
     nbHiddenLayers(réseauÀCopier.hiddenLayers().size());
     for (LigneDeNeurones& hiddenLayer: m_hiddenLayers)
         hiddenLayer = réseauÀCopier.hiddenLayers().at(i++);
@@ -29,6 +30,8 @@ RéseauDeNeurones::RéseauDeNeurones(RéseauDeNeurones& réseauÀCopier):
 RéseauDeNeurones::~RéseauDeNeurones() { }
 
 // setters
+// TODO big bug, ne marche pas du tout si à l'init on a mis un certains
+// nombre de neurones, il ne modifie que le dernier ?
 void RéseauDeNeurones::nbHiddenLayers(const size_t nbHiddenLayers, const size_t nbNeurones)
 {
     auto currentNbHiddenLayers = m_hiddenLayers.size();
@@ -62,13 +65,13 @@ void RéseauDeNeurones::poidsAléa(const nbType fourchetteAutourDuPoids)
         for (Neurone& n : hiddenLayer) n.poidsAléa(fourchetteAutourDuPoids);
     for (Neurone& n: m_output) n.poidsAléa(fourchetteAutourDuPoids);
 }
-void RéseauDeNeurones::seuil(const nbType _seuil)
-{
-    for (Neurone& n: m_input) n.seuil(_seuil);
-    for (LigneDeNeurones& hiddenLayer: m_hiddenLayers)
-        for (Neurone& n : hiddenLayer) n.seuil(_seuil);
-    for (Neurone& n: m_output) n.seuil(_seuil);
-}
+/* void RéseauDeNeurones::seuil(const nbType _seuil) */
+/* { */
+/*     for (Neurone& n: m_input) n.seuil(_seuil); */
+/*     for (LigneDeNeurones& hiddenLayer: m_hiddenLayers) */
+/*         for (Neurone& n : hiddenLayer) n.seuil(_seuil); */
+/*     for (Neurone& n: m_output) n.seuil(_seuil); */
+/* } */
 
 void RéseauDeNeurones::tableauxDesValeursEnEntrée(const TblValeurs& _tblVals)
 {
@@ -112,6 +115,10 @@ void RéseauDeNeurones::print(bool tout) const
         note("\n\t\t|| OUTPUT ||\n");
         for (const Neurone& n: m_output) n.print();
     }
+}
+
+void RéseauDeNeurones::ajouteUnHiddenLayer(const size_t nbNeurones){
+    m_hiddenLayers.emplace_back(LigneDeNeurones(nbNeurones));
 }
 
 void RéseauDeNeurones::connecteLesLignesEntreElles()

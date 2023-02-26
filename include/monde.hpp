@@ -3,6 +3,7 @@
 #include <coord.hpp>
 #include <etre.hpp>
 #include <poisson.hpp>
+#include <algorithm>
 
 class Monde
 {
@@ -21,6 +22,12 @@ class Monde
 
         // Setters
         inline void ajouteEtre(Etre* etre) { m_toutLesEtres.push_back(etre); }
+
+        inline void supprimeEtre(Etre* etre){
+            m_toutLesEtres.erase(std::remove(
+                        m_toutLesEtres.begin(), m_toutLesEtres.end(),
+                        etre), m_toutLesEtres.end());
+        }
 
         // Sub
         void tic();
@@ -41,7 +48,6 @@ class Monde
         // Tout qui est présent dans le monde
         // C'est un tableau de podoubleeurs vers des objets de la class mère Etre
         Etres m_toutLesEtres;
-
 
         Coord getRoundCoord(Etre::nbType x, Etre::nbType y);
 

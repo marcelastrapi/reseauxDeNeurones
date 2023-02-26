@@ -3,7 +3,7 @@
 #include <utils.hpp>
 
 // Ctor
-Requin::Requin(): 
+Requin::Requin():
     m_nbCiblesMangées(0),
     m_icibleEnCours(0)
 {
@@ -20,12 +20,6 @@ void Requin::print() const
     note("Je suis un requin");
 }
 
-//sub
-void Requin::ajouteCible(Etre* nouvelleCible)
-{
-    m_cibles.push_back(nouvelleCible);
-}
-
 // override
 void Requin::renaît()
 {
@@ -38,7 +32,7 @@ void Requin::renaît()
 // Chasse
 void Requin::detectLaCibleLaPlusProche()
 {
-    float minDist = this->m_largeurDuMonde;
+    float minDist = sqrt(pow(2,this->m_largeurDuMonde) + pow(2, this->m_hauteurDuMonde));
     float distance = 0;
     Etre* candidat;
     Etre* tmp;
@@ -74,17 +68,5 @@ void Requin::prendLaDirectionDeLaCibleLaPlusProche()
     detectLaCibleLaPlusProche();
 
     auto nouvelleAngle = getAngleEntreMoiEt( m_cibleLaPlusProche );
-    /* show("m_angle",m_angle); */
-    /* show("dist(nouvelleAngle,m_angle)",dist(nouvelleAngle,m_angle)); */
-    /* auto distEntreLes2Angles = dist(nouvelleAngle,m_angle); */
-    /* if (distEntreLes2Angles > m_maxAngleDeRotation) */
-    /* { */
-    /*     if (nouvelleAngle > m_angle) */
-    /*         nouvelleAngle = m_angle + m_maxAngleDeRotation; */
-    /*     else */
-    /*         nouvelleAngle = m_angle - m_maxAngleDeRotation; */
-    /* } */
-    /* show("nouvelleAngle",nouvelleAngle); */
     this->angleDeDirection(nouvelleAngle);
-    /* show("Nouvelle angle pour requin",m_angle); */
 }

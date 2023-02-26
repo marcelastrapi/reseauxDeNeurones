@@ -2,6 +2,7 @@
 
 #include <etre.hpp>
 #include <utils.hpp>
+#include <algorithm>
 
 /*
    \\\brief class Requin
@@ -23,7 +24,7 @@ class Requin: public Etre
         inline size_t nbCibles() const { return m_cibles.size(); }
         inline unsigned int nbCiblesMangées() const { return m_nbCiblesMangées; }
 
-        Etre* prochaineCible() 
+        Etre* prochaineCible()
         {
             Etre* cibleEnCours = m_cibles.at(m_icibleEnCours);
             auto distance = dist(cibleEnCours->pos(), m_pos);
@@ -45,8 +46,15 @@ class Requin: public Etre
         // print
         void print() const override;
 
-        // sub
-        void ajouteCible(Etre* nouvelleCible);
+        //sub
+        inline void ajouteCible(Etre* nouvelleCible) { m_cibles.push_back(nouvelleCible); }
+
+        inline void supprimeCible(Etre* etre) {
+            m_cibles.erase(std::remove(
+                        m_cibles.begin(), m_cibles.end(),
+                        etre), m_cibles.end());
+        }
+
         inline void avance() { Etre::avance(); }
         void renaît() override;
 

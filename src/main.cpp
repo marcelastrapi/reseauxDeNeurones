@@ -56,9 +56,11 @@ sf::Clock clockTauxDeCarnage;
 int tauxDeCarnageTime = 1; // en seconde
 
 sf::Clock clockDuMonde;
-int tempsDuMonde = 0; // en millisecond
+int tempsDuMonde = 10; // en millisecond
 int incrTempsDuMonde = 1;
 int minTempsDuMonde = 0;
+
+unsigned int nbGeneration = 0;
 
 Tic selectionTime(40000);
 
@@ -72,6 +74,7 @@ Mode mode = TEMPS_DU_MONDE;
 vector<Requin*> requins;
 /* Requin* requin2; */
 vector<Poisson*> poissons;
+unsigned int indexPoisson = 0;
 
 bool modeMouseOn = false;
 bool modeGraphique = true;
@@ -140,24 +143,16 @@ void creerToutLesEtres(Monde& monde)
         requin->dimensionDuMonde(monde.largeur(), monde.hauteur());
         requin->dimension(30, 30.f);
         requin->couleur(Couleur(255,0,0));
-        requin->maxDistanceDeDéplacement(1);
+        requin->maxDistanceDeDéplacement(3);
         /* requin->maxAngleDeDirection(3.14f/4.f); */
         requin->posAléa();
         /* requin->mouvant(false); */
         requins.push_back(requin);
     }
 
-    /* requin2 = new Requin(); */
-    /* requin2->dimensionDuMonde(monde.largeur(), monde.hauteur()); */
-    /* requin2->dimension(30, 30.f); */
-    /* requin2->couleur(Couleur(0,0,255)); */
-    /* requin2->posAléa(); */
-    /* requin2->maxDistanceDeDéplacement(10); */
-    /* requin2->maxAngleDeDirection(0.3f); */
-    /* requin2->print(); */
 
     // Je veux des poissons
-    unsigned int nombreDePoissons = 1;
+    unsigned int nombreDePoissons = 20;
     Couleur clPoisson = Couleur(0,255,0);
     Etre::nbType taillePoisson = 10;
 
@@ -168,23 +163,30 @@ void creerToutLesEtres(Monde& monde)
         p->dimension(taillePoisson,taillePoisson);
         p->posAléa();
         p->couleur(clPoisson);
-        p->maxDistanceDeDéplacement(requin->maxDistanceDeDéplacement() +2 );
+        p->maxDistanceDeDéplacement(requin->maxDistanceDeDéplacement() -1);
         // nbRequins + 2 pour la pos du poisson
-        p->réseauDeNeurones().nbNeuronesInput(nbRequins);
-        p->réseauDeNeurones().nbHiddenLayers(4,4);
+        p->réseauDeNeurones().nbNeuronesInput(6);
+        p->réseauDeNeurones().nbHiddenLayers(2, 4);
+        for (auto& hiddenLayer: p->réseauDeNeurones().hiddenLayers()){
+            hiddenLayer.emplace_back(Neurone(1,true));
+        };
         p->réseauDeNeurones().nbNeuronesOutput(1);
         p->réseauDeNeurones().connecteLesLignesEntreElles();
         p->réseauDeNeurones().poidsAléa(-1,1);
-        p->réseauDeNeurones().seuil(-4);
-        p->réseauDeNeurones().output().at(0).seuil(-10000000);
-        p->réseauDeNeurones().print();
+        /* p->réseauDeNeurones().print(); */
 
         poissons.push_back(p);
-        monde.ajouteEtre(p);
+        /* monde.ajouteEtre(p); */
         /* requins.at(i)->ajouteCible(p); */
-        for (Requin* requin: requins)
-            requin->ajouteCible(p); // héhéhéé
+        /* for (Requin* requin: requins) */
+        /*     requin->ajouteCible(p); // héhéhéé */
     }
+
+    indexPoisson = 0;
+    monde.ajouteEtre(poissons.at(0));
+    for (Requin* requin: requins)
+        requin->ajouteCible(poissons.at(0)); // héhéhéé
+    monde.print();
 
     // j'ajoute le requin dans le monde
     // (en dernier pour qu'il soit dessiner sur les poissons
@@ -229,28 +231,30 @@ void selectionneEtRepliqueMeilleursPoisson(const Monde& monde)
     Requin* killerShark = meilleursRequin();
     Poisson* survivorFish = meilleursPoisson();
 
-    for (Requin* r: requins) r->posAléa();
+    survivorFish->print();
+
+    /* for (Requin* r: requins) r->posAléa(); */
 
     notify(
             "Meilleurs score pour un requin: "          +
             to_string(killerShark->nbCiblesMangées())   +
             "\n"                                        +
             "Plus long temps de vie pour un poisson: "  +
-            to_string(survivorFish->plusGrandTempsDeVie()) + " / " + to_string(selectionTime)
+            to_string(survivorFish->plusGrandTempsDeVie())
           );
 
     // Je réinit à 0 les nbCiblesMangées
     for (Requin* r: requins) r->nbCiblesMangées(0);
 
     /* nbType fourchetteAutourDuPoids(1/((float)monde.ticDepuisCréation()/(float)selectionTime)); */
-    int nbGeneration = monde.ticDepuisCréation() / selectionTime;
+    /* int nbGeneration = monde.ticDepuisCréation() / selectionTime; */
 
-    nbType fourchetteAutourDuPoids(0.5/pow(2,nbGeneration));
+    nbType fourchetteAutourDuPoids(0.1/nbGeneration);
     /* show("nbGeneration",nbGeneration); */
     /* show("fourchetteAutourDuPoids",fourchetteAutourDuPoids); */
     /* show("fourchetteAutourDuPoids",fourchetteAutourDuPoids); */
     /* if (fourchetteAutourDuPoids > 1) fourchetteAutourDuPoids = 1; */
-    /* if (fourchetteAutourDuPoids < 0.5) fourchetteAutourDuPoids = 0.5; */
+    if (fourchetteAutourDuPoids < 0.005) fourchetteAutourDuPoids = 0.005;
     show("fourchetteAutourDuPoids",fourchetteAutourDuPoids);
     for (Poisson* p: poissons)
     {
@@ -280,11 +284,25 @@ int main (int argc, char* argv[] )
     // TEST
     ////////////////////////////////////////
 
-    /* RéseauDeNeurones réseauDeNeurones(1,2,8,1); */
+    /* Neurone n = Neurone(); */
+    /* n.print(); */
+    /* Neurone b = Neurone(0.6, true); */
+    /* b.print(); */
 
-    /* réseauDeNeurones.connecteLesLignesEntreElles(); */
+    /* vector<RéseauDeNeurones> v(3); */
 
-    /* réseauDeNeurones.poidsAléa(-3.14f,3.14f); */
+    /* RéseauDeNeurones r1; */
+    /* r1.nbNeuronesInput(1); */
+    /* r1.nbHiddenLayers(1,2); */
+    /* /1* for (auto& h: r1.hiddenLayers()){ *1/ */
+    /* /1*     h.emplace_back(Neurone(0.6,true)); *1/ */
+    /* /1* }; *1/ */
+    /* r1.nbNeuronesOutput(1); */
+    /* r1.connecteLesLignesEntreElles(); */
+    /* r1.poidsAléa(0,1); */
+    /* /1* r1.calculeLesValeursDeToutMesNeurones(); *1/ */
+    /* /1* r1.print(true); *1/ */
+
     /* réseauDeNeurones.output().poidsAléa(0,1); */
 
     /* RéseauDeNeurones::TblValeurs tblValeursEnEntrée = { 2 }; */
@@ -436,6 +454,20 @@ int main (int argc, char* argv[] )
                     }
                 }
 
+                // Affiche la list des possons avec leurs scores
+                if (event.key.code == sf::Keyboard::S)
+                {
+                    int i = 0;
+                    for (Poisson* p: poissons) {
+                        show(to_string(i++) + ":", p->nbVictoire());
+                    }
+                }
+
+                if (event.key.code == sf::Keyboard::O)
+                {
+                    poissons.at(indexPoisson)->print();
+                }
+
                 if (event.key.code == sf::Keyboard::P)
                 {
                     meilleursPoisson()->print();
@@ -526,9 +558,9 @@ int main (int argc, char* argv[] )
             iDrawSomething = true;
             if (requins.size() > 0)
             {
-                tauxDeCarnageText.setString( to_string(monde.ticDepuisCréation()/(float)selectionTime ));
+                /* tauxDeCarnageText.setString( to_string(monde.ticDepuisCréation()/(float)selectionTime )); */
+                tauxDeCarnageText.setString( to_string(indexPoisson) + "/" + to_string(nbGeneration) );
                 clockTauxDeCarnage.restart();
-
             }
         }
 
@@ -540,6 +572,7 @@ int main (int argc, char* argv[] )
                 // TODO faire en sorte que ce soit le monde qui avant d'un pas plutot que chaque être ici
 
                 // Je regarde si le requin à besoin d'une nouvelle cible
+
                 for (Requin* requin: requins)
                     requin->prendLaDirectionDeLaCibleLaPlusProche();
 
@@ -547,28 +580,72 @@ int main (int argc, char* argv[] )
 
                 /* size_t i(0); */
 
-                /* Poisson poissonDuMoment = poissons.at(0); */
-
-                for (Poisson* p: poissons)
+                Poisson* p = poissons.at(indexPoisson);
+                tblValsInput.clear();
+                for (Requin* requin: requins)
                 {
-                    tblValsInput.clear();
-                    for (Requin* requin: requins)
-                        tblValsInput.emplace_back(p->getAngleEntreMoiEt(requin));
-
-                    /* tblValsInput.push_back(p->pos().x/(float)monde.largeur()); */
-                    /* tblValsInput.push_back(p->pos().y/(float)monde.hauteur()); */
-                    /* tblValsInput.push_back(p->pos().x); */
-                    /* tblValsInput.push_back(p->pos().y); */
-
-                    p->tableauxDesValeursEnEntrée(tblValsInput);
-                    p->calculeLesValeursDeToutMesNeurones();
-                    /* p->angleDeDirection( p->réseauDeNeurones().output().at(0).valeur() ); */
-                    p->angleDeDirection( p->réseauDeNeurones().output().at(0).valeur()*2*3.14f );
-                    /* p->angleDeDirection( p->tableauxDesRésultats().at(0)); */
-                    /* p->réseauDeNeurones().print(true); */
+                    /* tblValsInput.emplace_back(requin->angleDeDirection()/3.14f); */
+                    tblValsInput.emplace_back(requin->pos().x);
+                    tblValsInput.emplace_back(requin->pos().y);
                 }
 
+                tblValsInput.push_back(monde.largeur());
+                tblValsInput.push_back(monde.hauteur());
+                tblValsInput.push_back(p->pos().x);
+                tblValsInput.push_back(p->pos().y);
+
+                p->tableauxDesValeursEnEntrée(tblValsInput);
+                p->calculeLesValeursDeToutMesNeurones();
+                /* p->angleDeDirection( p->réseauDeNeurones().output().at(0).valeur() ); */
+                p->angleDeDirection( p->réseauDeNeurones().output().at(0).valeur()*3.14f );
+                /* p->angleDeDirection( p->tableauxDesRésultats().at(0)); */
+                /* p->réseauDeNeurones().print(true); */
+
                 monde.tic();
+
+                // si le poisson actuel est mort
+                if (p->plusGrandTempsDeVie() > 0) {
+
+                    monde.supprimeEtre(p);
+                    indexPoisson++;
+
+                    for (Requin* requin: requins)
+                        requin->supprimeCible(p);
+
+                    /* monde.print(); */
+
+                    // tout les poissons ont participé au concours
+                    if (indexPoisson >= poissons.size()) {
+                        indexPoisson = 0;
+                        ++nbGeneration;
+                        Poisson* survivorFish = meilleursPoisson();
+                        survivorFish->ajoute1Victoire();
+                        /* selectionneEtRepliqueMeilleursPoisson(monde); */
+                        for (Poisson* p: poissons)
+                        {
+                            p->plusGrandTempsDeVie(0);
+                        }
+
+                        if ( (nbGeneration%100) == 0)
+                        {
+                            notify("PIMP !");
+                            for (Poisson* p: poissons) {
+                                nbType fourchetteAutourDuPoids(2/p->nbVictoire());
+                                p->resetNbVictoire();
+                                p->réseauDeNeurones().poidsAléa(fourchetteAutourDuPoids);
+                            }
+                        }
+
+                    }
+
+                    monde.ajouteEtre(poissons.at(indexPoisson));
+                    for (Requin* requin: requins)
+                        requin->ajouteCible(poissons.at(indexPoisson));
+
+                    /* show("nbCible req 0", requins.at(0)->nbCibles()); */
+
+                }
+
 
                 /* if (monde.ticDepuisCréation() % selectionTime == selectionTime-1) */
                 /*     selectionneEtRepliqueMeilleursPoisson(monde); */
