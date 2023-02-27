@@ -4,6 +4,7 @@
 #include <displayer.hpp>
 using namespace displayer;
 #include <coord.hpp>
+#include <utils.hpp>
 
 using std::vector;
 
@@ -67,14 +68,17 @@ Coord posReqInit; // position initial pour le requin
 Coord posPoiInit; // position initial pour le poisson
 
 // Je veux des poissons
-unsigned int nombreDePoissons = 1000; // multiple de 10 obligatoire
+unsigned int nombreDePoissons = 10; // multiple de 10 obligatoire
 unsigned int nbHiddenLayers = 4;
 unsigned int nbNeuroneParHiddenLayers = 20;
+unsigned int nbInput = 6;
+nbType valBiais = 1;
 Couleur clPoisson = Couleur(0,255,0);
 Etre::nbType taillePoisson = 10;
 
 unsigned int pourcentageASelectionner = 10;
-float fourchetteDeBase = 1 / (float)nombreDePoissons;
+/* float fourchetteDeBase = 1 / (float)nombreDePoissons; */
+float fourchetteDeBase = 0.3;
 
 unsigned int nbGeneration = 0;
 
@@ -89,6 +93,7 @@ enum Mode
 };
 Mode mode = TEMPS_DU_MONDE;
 
+size_t nbRequins(1);
 vector<Requin*> requins;
 /* Requin* requin2; */
 vector<Poisson*> poissons;
@@ -153,7 +158,6 @@ void creerToutLesEtres(Monde& monde)
     // requin.
 
     // Je veux n requin.s
-    size_t nbRequins(1);
     Requin* requin;
     for (size_t i=0; i < nbRequins; i++)
     {
@@ -176,14 +180,16 @@ void creerToutLesEtres(Monde& monde)
         p->i = i;
         p->dimensionDuMonde(monde.largeur(),monde.hauteur());
         p->dimension(taillePoisson,taillePoisson);
-        p->posAléa();
+        /* p->posAléa(); */
+        p->pos(monde.largeur()*0.5f, monde.hauteur()*0.5f);
         p->couleur(clPoisson);
         p->maxDistanceDeDéplacement(requin->maxDistanceDeDéplacement());
+        /* p->maxDistanceDeDéplacement(1); */
         // nbRequins + 2 pour la pos du poisson
-        p->réseauDeNeurones().nbNeuronesInput(6);
+        p->réseauDeNeurones().nbNeuronesInput(nbInput);
         p->réseauDeNeurones().nbHiddenLayers(nbHiddenLayers, nbNeuroneParHiddenLayers);
         for (auto& hiddenLayer: p->réseauDeNeurones().hiddenLayers()){
-            hiddenLayer.emplace_back(Neurone(1,true));
+            hiddenLayer.emplace_back(Neurone(valBiais,true));
         };
         p->réseauDeNeurones().nbNeuronesOutput(1);
         p->réseauDeNeurones().connecteLesLignesEntreElles();
@@ -198,12 +204,14 @@ void creerToutLesEtres(Monde& monde)
     }
 
     indexPoisson = 0;
+    poissons.at(0)->pos(monde.largeur()*0.5f, monde.hauteur()*0.5f);
     monde.ajouteEtre(poissons.at(0));
+
     for (Requin* requin: requins)
     {
         requin->ajouteCible(poissons.at(0)); // héhéhéé
     }
-    monde.print();
+    /* monde.print(); */
 
     // j'ajoute le requin dans le monde
     // (en dernier pour qu'il soit dessiner sur les poissons
@@ -603,9 +611,8 @@ int main (int argc, char* argv[] )
 
                 RéseauDeNeurones::TblValeurs tblValsInput;
 
-                /* size_t i(0); */
-
                 Poisson* poissonEnLice = poissons.at(indexPoisson);
+
                 tblValsInput.clear();
                 for (Requin* requin: requins)
                 {
@@ -652,10 +659,13 @@ int main (int argc, char* argv[] )
 
                         size_t nbRef = nombreDePoissons / pourcentageASelectionner;
 
+                        // TODO BUG
+                        // avec 10 poisson, on observe qu'il y a un problème de programmation...
                         for (size_t i = nbRef; i < nombreDePoissons; i++) {
                             Poisson* poissonAModifier = poissons.at(i);
                             Poisson* poissonDeReference = poissons.at(i % nbRef);
-                            /* show("index poisson de ref:\t", i%nbRef); */
+                            show("index poisson de ref:\t", i%nbRef);
+                            show("id poisson ref:\t", poissonDeReference->i);
                             /* show("index poisson à modifier:\t", i); */
                             size_t numGeneration = i/nbRef;
                             /* show("numGeneration",numGeneration); */
@@ -674,12 +684,12 @@ int main (int argc, char* argv[] )
                             note(to_string(p->i) + "\t->\t" + to_string(p->plusGrandTempsDeVie()));
                             p->plusGrandTempsDeVie(0);
                         }
-
                     }
 
                     // C'est au tour d'un nouveau poisson
                     Poisson* nouveauPoisson = poissons.at(indexPoisson);
-                    nouveauPoisson->pos(posPoiInit);
+                    /* nouveauPoisson->pos(posPoiInit); */
+                    nouveauPoisson->pos(monde.largeur()*0.5f,monde.hauteur()*0.5f);
                     monde.ajouteEtre(nouveauPoisson);
                     /* nouveauPoisson->print(); */
 

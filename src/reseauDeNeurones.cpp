@@ -19,7 +19,6 @@ RéseauDeNeurones::RéseauDeNeurones(RéseauDeNeurones& réseauÀCopier):
     m_output(réseauÀCopier.output())
 {
     size_t i(0);
-    // TODO est-ce que vraiment ça copie le réseau ?
     nbHiddenLayers(réseauÀCopier.hiddenLayers().size());
     for (LigneDeNeurones& hiddenLayer: m_hiddenLayers)
         hiddenLayer = réseauÀCopier.hiddenLayers().at(i++);

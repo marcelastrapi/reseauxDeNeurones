@@ -9,7 +9,7 @@ class Coord {
         float y;
         Coord() { x = 0; y = 0; }
         Coord(float _x, float _y): x(_x), y(_y) {}
-        Coord(const Coord &copy) 
+        Coord(const Coord &copy)
         {
             this->x = copy.x;
             this->y = copy.y;
