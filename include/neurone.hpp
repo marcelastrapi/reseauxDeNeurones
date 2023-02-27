@@ -36,11 +36,13 @@ class Neurone
         void poidsAléa(const nbType, const nbType max);
         void poidsAléa(const nbType fourchetteAutourDuPoids);
         inline void poids (const nbType _poids ) { m_poids  = _poids ; }
+        inline void seuil (const nbType _seuil ) { m_seuil  = _seuil ; }
         inline void valeur(const nbType _valeur) { m_valeur = _valeur; }
         void lignePrécédente(Neurones&);
 
         // getters
         nbType valeur() const { return m_valeur; }
+        nbType seuil() const { return m_seuil; }
         size_t nbConnexions() const { return m_connexions.size(); }
         Connexions connexions() const { return m_connexions; }
 
@@ -53,6 +55,7 @@ class Neurone
         bool estUnBiais;
     protected:
         nbType m_poids;
+        nbType m_seuil;
         nbType m_valeur;
         // vector de pointeur vers les neurones qui sont connecté à moi
         Neurones* m_lignePrécédente;

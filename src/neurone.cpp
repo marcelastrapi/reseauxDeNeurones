@@ -35,10 +35,10 @@ void Neurone::print() const
         note("__________ Je suis un Biais");
     }else{
         note("__________ Je suis un Neurone");
+        show("nombre de connexion",this->nbConnexions());
+        for (auto& c: m_connexions)
+            show("poids",c.poids);
     }
-    show("nombre de connexion",this->nbConnexions());
-    for (auto& c: m_connexions)
-        show("poids",c.poids);
     show("valeurs",m_valeur);
 }
 
@@ -59,7 +59,10 @@ nbType Neurone::calculeMaValeurEnFonctionDesMesConnexions()
     }
 
     // fast sigmoid
-    m_valeur = m_valeur / (1 + abs(m_valeur));
+    if ((m_valeur < -1) || (m_valeur > 1))
+    {
+        m_valeur = m_valeur / (1 + abs(m_valeur));
+    }
 
     /* m_valeur /= this->nbConnexions(); */
 

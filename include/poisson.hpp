@@ -16,6 +16,10 @@ class Poisson: public Etre
         const ESPECE espece = POISSON;
         Poisson();
 
+        /* bool operator< (const Poisson &other) const { */
+        /*     return this->m_plusGrandTempsDeVie < other.m_plusGrandTempsDeVie; */
+        /* } */
+
         // print
         void print() const override;
 
@@ -29,6 +33,8 @@ class Poisson: public Etre
 
         // getters
         Tic plusGrandTempsDeVie() const { return m_plusGrandTempsDeVie; }
+
+        int i; // TODO à virer mais pratique parfois
 
     private:
         // déclariation

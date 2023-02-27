@@ -24,10 +24,10 @@ void Etre::print() const
 {
     note("_______________________________________________________");
     note("pos:" + to_string(m_pos.x) + "," + to_string(m_pos.y) );
-    note("dimension: " + to_string(m_largeur) + ',' + to_string(m_hauteur) );
-    note("dimensionDuMonde: " + to_string(m_largeurDuMonde) + ',' + to_string(m_hauteurDuMonde) );
-    note("couleur:" + m_couleur.toString());
-    note("m_maxDistanceDeDeplacement:" + to_string(m_maxDistanceDeDeplacement));
+    /* note("dimension: " + to_string(m_largeur) + ',' + to_string(m_hauteur) ); */
+    /* note("dimensionDuMonde: " + to_string(m_largeurDuMonde) + ',' + to_string(m_hauteurDuMonde) ); */
+    /* note("couleur:" + m_couleur.toString()); */
+    /* note("m_maxDistanceDeDeplacement:" + to_string(m_maxDistanceDeDeplacement)); */
     /* note("m_maxAngleDeDirection:" + to_string(m_maxAngleDeDirection)); */
     note("m_angleDeDirection:" + to_string(m_angleDeDirection));
 }

@@ -30,6 +30,7 @@ class RéseauDeNeurones
 
         void poidsAléa(const nbType min, const nbType max);
         void poidsAléa(const nbType fourchetteAutourDuPoids);
+        void seuil(const nbType _seuil);
         void tableauxDesValeursEnEntrée(const TblValeurs& _tblVals);
 
         // getters

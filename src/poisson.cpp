@@ -28,11 +28,11 @@ void Poisson::renaît()
 void Poisson::print() const
 {
     Etre::print();
-    note("Je suis un poisson");
+    note("Je suis un poisson: " + to_string(this->i));
     m_réseauDeNeurones.print(true);
-        show("Je suis vivant depuis",m_tempsDeVie);
+    /* show("Je suis vivant depuis",m_tempsDeVie); */
     show("Plus grand temps de vie",m_plusGrandTempsDeVie);
-    show("nombre de victoires",m_nbVictoire);
+    /* show("nombre de victoires",m_nbVictoire); */
 }
 
 //////////////////////////////////////////////////////// PRIVATE

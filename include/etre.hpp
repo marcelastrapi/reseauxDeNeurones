@@ -51,10 +51,6 @@ class Etre
         // print pour débugger
         virtual void print() const = 0;
 
-        bool operator< (const Etre &other) const {
-            return this->m_nbVictoire < other.nbVictoire();
-        }
-
         // setters
         inline void forme(const Forme forme) { m_forme = forme; }
         inline void couleur(const Couleur& cl) { m_couleur = cl; }

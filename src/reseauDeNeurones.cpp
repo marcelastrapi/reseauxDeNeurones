@@ -65,13 +65,13 @@ void RéseauDeNeurones::poidsAléa(const nbType fourchetteAutourDuPoids)
         for (Neurone& n : hiddenLayer) n.poidsAléa(fourchetteAutourDuPoids);
     for (Neurone& n: m_output) n.poidsAléa(fourchetteAutourDuPoids);
 }
-/* void RéseauDeNeurones::seuil(const nbType _seuil) */
-/* { */
-/*     for (Neurone& n: m_input) n.seuil(_seuil); */
-/*     for (LigneDeNeurones& hiddenLayer: m_hiddenLayers) */
-/*         for (Neurone& n : hiddenLayer) n.seuil(_seuil); */
-/*     for (Neurone& n: m_output) n.seuil(_seuil); */
-/* } */
+void RéseauDeNeurones::seuil(const nbType _seuil)
+{
+    for (Neurone& n: m_input) n.seuil(_seuil);
+    for (LigneDeNeurones& hiddenLayer: m_hiddenLayers)
+        for (Neurone& n : hiddenLayer) n.seuil(_seuil);
+    for (Neurone& n: m_output) n.seuil(_seuil);
+}
 
 void RéseauDeNeurones::tableauxDesValeursEnEntrée(const TblValeurs& _tblVals)
 {
