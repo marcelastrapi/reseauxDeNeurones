@@ -17,11 +17,16 @@ class Neurone
         {
             nbType poids;
             Connexion(nbType _poids = 0):poids(_poids) {}
+            inline bool operator== (const Connexion& toTest) const
+            { return this->poids == toTest.poids; }
+            inline bool operator!= (const Connexion& toTest) const
+            { return this->poids != toTest.poids; }
+
             void poidsAléa(const nbType min, const nbType max)
-            { poids = Rnd::rnd<nbType>(min,max); }
+            { poids = Rnd::_float(min,max); }
             void poidsAléa(const nbType fourchetteAutourDuPoids)
             {
-                poids += Rnd::rnd<nbType>( -fourchetteAutourDuPoids, fourchetteAutourDuPoids);
+                poids += Rnd::_float( -fourchetteAutourDuPoids, fourchetteAutourDuPoids);
                 // TODO rendre accessible les limites
             }
         };
@@ -31,6 +36,10 @@ class Neurone
 
         Neurone(const nbType val = 0, const bool estUnBiais = false);
         Neurone(const Neurone& neuroneÀCopier);
+
+        // operator
+        bool operator==(const Neurone& otherNeurone) const;
+        bool operator!=(const Neurone& otherNeurone) const;
 
         // setters
         void poidsAléa(const nbType, const nbType max);

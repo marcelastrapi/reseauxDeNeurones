@@ -23,6 +23,9 @@ class RéseauDeNeurones
         RéseauDeNeurones(RéseauDeNeurones& réseauÀCopier);
         ~RéseauDeNeurones();
 
+        // operators
+        bool operator==(const RéseauDeNeurones& otherRes) const;
+
         // setters
         inline void nbNeuronesInput(const size_t nbNeurones){ m_input.resize(nbNeurones) ;}
         void nbHiddenLayers(const size_t nbHiddenLayers, const size_t nbNeurones = 4);

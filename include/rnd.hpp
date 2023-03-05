@@ -16,13 +16,13 @@ de fonction inline....
 namespace Rnd {
     typedef float rndType;
 
-    inline void randomize() 
+    inline void randomize()
     {
         struct timeval t1;
         gettimeofday(&t1, nullptr );
         srand(static_cast<unsigned int>(t1.tv_usec * t1.tv_sec));
     }
-    inline void randomize(unsigned int seed) 
+    inline void randomize(unsigned int seed)
     {
         srand(seed);
     }
@@ -30,32 +30,16 @@ namespace Rnd {
     /*
        \brief template rnd(low,high)
        high NON inclue
-       donc rnd(0,2) pour des int entre 0 et 1
+       donc rnd<int>(0,2) pour des int entre 0 et 1
        */
-    template <class T>
-    inline T rnd(rndType low = 0,rndType high = 1)
-    {
-        bool negatif(false);
-        rndType diffTo0(0);
+    /* template <class T> */
+    /* inline T rnd(rndType low = 0,rndType high = 1) */
+    /* { */
+    /*     rndType rndEntre0et1 = static_cast<double>(rand()) / static_cast<rndType>(RAND_MAX); */
+    /*     return static_cast<T>( rndEntre0et1 * abs(high-low) + low ); */
+    /* } */
 
-        if (low < 0)
-        {
-            // si c'est négatif alors je rend tout le monde positif
-            negatif = true;
-            diffTo0 = low * -1;
-            low  += diffTo0;
-            high += diffTo0;
-        }
-
-        rndType rndEntre0et1 = static_cast<rndType>(rand()) / static_cast<rndType>(RAND_MAX);
-        T rep = static_cast<T>( rndEntre0et1 * (high-low) - low );
-
-        if (negatif) rep -= static_cast<T>(diffTo0); 
-
-        return rep;
-    }
-
-    inline bool _bool() 
+    inline bool _bool()
     {
         return rand() % 2;
     }
@@ -64,17 +48,31 @@ namespace Rnd {
     {
         return rand() % (max + 1);
     }
+    // [min, max[
     inline int _int(int min, int max)
     {
-        return min + rand() % (max + 1 - min) ;
+        return min + (rand() % (max-min)) ;
     }
 
-    inline double _double() // entre 0 et 1
+    // [0,1[
+    inline float _float()
+    {
+        return static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+    }
+    // entre [a,b[ donc a et b exclut
+    inline float _float(float a, float b)
+    {
+        return _int(a,b) + _float();
+    }
+
+    // [0,1[
+    inline double _double()
     {
         return static_cast<double>(rand()) / static_cast<double>(RAND_MAX);
     }
-    inline double _double(double a, double b) // entre a et b (où a >= 0 et b < 1)
+    // entre [a,b[ donc a et b exclut
+    inline double _double(double a, double b)
     {
-        return static_cast<double>( a + rand() / (static_cast<double>(RAND_MAX) - (b+a) ));
+        return _int(a,b) + _double();
     }
 };

@@ -13,6 +13,30 @@ Neurone::Neurone(const Neurone& neuroneÀCopier)
     m_connexions = neuroneÀCopier.connexions();
 }
 
+// operators
+bool Neurone::operator==(const Neurone& otherNeurone) const
+{
+    if (otherNeurone.nbConnexions() != nbConnexions())
+        return false;
+
+    for (size_t i = 0; i < otherNeurone.nbConnexions(); i++) {
+        if (m_connexions.at(i) != otherNeurone.m_connexions.at(i))
+            return false;
+    }
+    return true;
+}
+bool Neurone::operator!=(const Neurone& otherNeurone) const
+{
+    if (otherNeurone.nbConnexions() != nbConnexions())
+        return true;
+
+    for (size_t i = 0; i < otherNeurone.nbConnexions(); i++) {
+        if (m_connexions.at(i) != otherNeurone.m_connexions.at(i))
+            return true;
+    }
+    return false;
+}
+
 // setters
 void Neurone::poidsAléa(const nbType min, const nbType max)
 { for (auto& c: m_connexions) c.poidsAléa(min,max); }

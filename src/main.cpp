@@ -1,5 +1,7 @@
 #include <SFML/Graphics.hpp>
 
+#include <algorithm>
+#include <cstddef>
 #include <rnd.hpp>
 #include <displayer.hpp>
 using namespace displayer;
@@ -68,17 +70,18 @@ Coord posReqInit; // position initial pour le requin
 Coord posPoiInit; // position initial pour le poisson
 
 // Je veux des poissons
-unsigned int nombreDePoissons = 10; // multiple de 10 obligatoire
-unsigned int nbHiddenLayers = 4;
+unsigned int nombreDePoissons = 1000; // multiple de 10 obligatoire
+unsigned int nbHiddenLayers = 6;
 unsigned int nbNeuroneParHiddenLayers = 20;
 unsigned int nbInput = 6;
+float poidsMin(-1), poidsMax(1);
 nbType valBiais = 1;
 Couleur clPoisson = Couleur(0,255,0);
 Etre::nbType taillePoisson = 10;
 
 unsigned int pourcentageASelectionner = 10;
 /* float fourchetteDeBase = 1 / (float)nombreDePoissons; */
-float fourchetteDeBase = 0.3;
+float fourchetteDeBase = 1;
 
 unsigned int nbGeneration = 0;
 
@@ -193,7 +196,7 @@ void creerToutLesEtres(Monde& monde)
         };
         p->réseauDeNeurones().nbNeuronesOutput(1);
         p->réseauDeNeurones().connecteLesLignesEntreElles();
-        p->réseauDeNeurones().poidsAléa(-1,1);
+        p->réseauDeNeurones().poidsAléa(poidsMin,poidsMax);
         /* p->réseauDeNeurones().print(); */
 
         poissons.push_back(p);
@@ -312,24 +315,22 @@ int main (int argc, char* argv[] )
     // TEST
     ////////////////////////////////////////
 
-    /* Neurone n = Neurone(); */
-    /* n.print(); */
-    /* Neurone b = Neurone(0.6, true); */
-    /* b.print(); */
-
-    /* vector<RéseauDeNeurones> v(3); */
-
     /* Poisson* e1 = new Poisson(); */
+    /* e1->réseauDeNeurones().nbHiddenLayers(2,2); */
     /* e1->réseauDeNeurones().connecteLesLignesEntreElles(); */
-    /* e1->réseauDeNeurones().poidsAléa(0,1); */
-    /* e1->print(); */
+    /* e1->réseauDeNeurones().poidsAléa(0,10); */
+    /* e1->réseauDeNeurones().hiddenLayers().at(0).at(0).print(); */
     /* Poisson* e2 = new Poisson(); */
+    /* e2->réseauDeNeurones().nbHiddenLayers(2,2); */
     /* e2->réseauDeNeurones().connecteLesLignesEntreElles(); */
-    /* e2->réseauDeNeurones().poidsAléa(0,1); */
+    /* e2->réseauDeNeurones().poidsAléa(10,20); */
+    /* e2->réseauDeNeurones().hiddenLayers().at(0).at(0).print(); */
+    /* show("e1==e2", e1->réseauDeNeurones() == e2->réseauDeNeurones()); */
     /* e2->réseauDeNeurones(e1->réseauDeNeurones()); */
-    /* e2->print(); */
-    /* e2->réseauDeNeurones().poidsAléa(2); */
-    /* e1->print(); */
+    /* show("e1==e2", e1->réseauDeNeurones() == e2->réseauDeNeurones()); */
+    /* e2->réseauDeNeurones().poidsAléa(-1,0); */
+    /* show("e1==e2", e1->réseauDeNeurones() == e2->réseauDeNeurones()); */
+    /* /1* e2->print(); *1/ */
 
     /* réseauDeNeurones.output().poidsAléa(0,1); */
 
@@ -657,33 +658,54 @@ int main (int argc, char* argv[] )
                         // On va trier par ordre de temps de vie
                         std::sort(poissons.begin(), poissons.end(), comparePtrToNode);
 
-                        size_t nbRef = nombreDePoissons / pourcentageASelectionner;
+                        /* size_t nbRef = nombreDePoissons / pourcentageASelectionner; */
+                        /* size_t nbRef = 1; */
 
                         // TODO BUG
                         // avec 10 poisson, on observe qu'il y a un problème de programmation...
-                        for (size_t i = nbRef; i < nombreDePoissons; i++) {
+                        Poisson* poissonDeReference = poissons.at(0);
+
+                        note("************************************************************");
+                        note("************************************************************");
+
+                        for (auto p = poissons.rbegin(); p != poissons.rend(); ++p)
+                        {
+                            note(to_string((*p)->i) + "\t->\t" + to_string((*p)->plusGrandTempsDeVie()));
+                            (*p)->plusGrandTempsDeVie(0);
+                        }
+                        /* for (Poisson* p: poissons) */
+                        /* { */
+                        /*     /1* p->print(); *1/ */
+                        /* } */
+
+
+                        /* poissonDeReference->print(); */
+                        /* note("************************************************************"); */
+                        size_t iLayer = 0;
+                        size_t iNeurone = 0;
+                        for (size_t i = 1; i < nombreDePoissons; i++) {
                             Poisson* poissonAModifier = poissons.at(i);
-                            Poisson* poissonDeReference = poissons.at(i % nbRef);
-                            show("index poisson de ref:\t", i%nbRef);
-                            show("id poisson ref:\t", poissonDeReference->i);
+                            /* Poisson* poissonDeReference = poissons.at(i % nbRef); */
+                            /* show("index poisson de ref:\t", i%nbRef); */
+                            /* show("id poisson ref:\t", poissonDeReference->i); */
                             /* show("index poisson à modifier:\t", i); */
-                            size_t numGeneration = i/nbRef;
+                            /* size_t numGeneration = i/nbRef; */
+                            /* size_t numGeneration = 1; */
                             /* show("numGeneration",numGeneration); */
                             /* show("fourchetteDeBase * numGeneration",fourchetteDeBase * numGeneration); */
 
                             poissonAModifier->réseauDeNeurones(poissonDeReference->réseauDeNeurones());
-                            poissonAModifier->réseauDeNeurones().poidsAléa( fourchetteDeBase * numGeneration );
+                            /* poissonAModifier->réseauDeNeurones().poidsAléa( fourchetteDeBase ); */
+                            poissonAModifier->réseauDeNeurones().hiddenLayers().at(iLayer).at(iNeurone).poidsAléa(poidsMin, poidsMax);
+                            /* show("iLayer",iLayer); */
+                            /* show("iNeurone",iNeurone); */
+                            iNeurone = (++iNeurone)%nbNeuroneParHiddenLayers;
+                            if ( iNeurone == 0 ){
+                                iLayer = (++iLayer)%nbHiddenLayers;
+                            }
+                            /* poissonAModifier->print(); */
                         }
 
-                        note("************************************************************");
-                        note("************************************************************");
-
-                        for (Poisson* p: poissons)
-                        {
-                            /* p->print(); */
-                            note(to_string(p->i) + "\t->\t" + to_string(p->plusGrandTempsDeVie()));
-                            p->plusGrandTempsDeVie(0);
-                        }
                     }
 
                     // C'est au tour d'un nouveau poisson

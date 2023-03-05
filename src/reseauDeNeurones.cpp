@@ -28,6 +28,33 @@ RéseauDeNeurones::RéseauDeNeurones(RéseauDeNeurones& réseauÀCopier):
 
 RéseauDeNeurones::~RéseauDeNeurones() { }
 
+// operators
+bool RéseauDeNeurones::operator==(const RéseauDeNeurones& otherRes) const
+{
+    if (m_input.size() != otherRes.m_input.size())
+        return false;
+
+    if (m_hiddenLayers.size() != otherRes.m_hiddenLayers.size())
+        return false;
+
+    if (m_output.size() != otherRes.m_output.size())
+        return false;
+
+    // je regarde si chaque hiddenLayer est égal à l'autre
+    for (size_t i = 0; i < m_hiddenLayers.size(); i++) {
+        /* this->m_hiddenLayers.at(i) */
+        if (m_hiddenLayers.at(i).size() != otherRes.m_hiddenLayers.at(i).size())
+            return false;
+
+        for (size_t j = 0; j < m_hiddenLayers.at(i).size(); j++) {
+            if (m_hiddenLayers.at(i).at(j) != otherRes.m_hiddenLayers.at(i).at(j))
+                return false;
+        }
+    }
+
+    return true;
+}
+
 // setters
 // TODO big bug, ne marche pas du tout si à l'init on a mis un certains
 // nombre de neurones, il ne modifie que le dernier ?
