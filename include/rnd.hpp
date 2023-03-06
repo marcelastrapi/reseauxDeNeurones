@@ -48,10 +48,10 @@ namespace Rnd {
     {
         return rand() % (max + 1);
     }
-    // [min, max[
+    // [min, max]
     inline int _int(int min, int max)
     {
-        return min + (rand() % (max-min)) ;
+        return min + (rand() % (max-min+1)) ;
     }
 
     // [0,1[
@@ -59,20 +59,20 @@ namespace Rnd {
     {
         return static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
     }
-    // entre [a,b[ donc a et b exclut
+    // entre [a,b] donc a et b exclut
     inline float _float(float a, float b)
     {
-        return _int(a,b) + _float();
+        return a + (rand()/(float)RAND_MAX * (b-a)) ;
     }
 
-    // [0,1[
+    // [0,1]
     inline double _double()
     {
         return static_cast<double>(rand()) / static_cast<double>(RAND_MAX);
     }
-    // entre [a,b[ donc a et b exclut
+    // entre [a,b] donc a et b exclut
     inline double _double(double a, double b)
     {
-        return _int(a,b) + _double();
+        return a + (rand()/(double)RAND_MAX * (b-a)) ;
     }
 };

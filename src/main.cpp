@@ -70,10 +70,10 @@ Coord posReqInit; // position initial pour le requin
 Coord posPoiInit; // position initial pour le poisson
 
 // Je veux des poissons
-unsigned int nombreDePoissons = 1000; // multiple de 10 obligatoire
-unsigned int nbHiddenLayers = 6;
-unsigned int nbNeuroneParHiddenLayers = 20;
-unsigned int nbInput = 6;
+unsigned int nombreDePoissons = 10000;
+unsigned int nbHiddenLayers = 1;
+unsigned int nbNeuroneParHiddenLayers = 6;
+unsigned int nbInput = 3;
 float poidsMin(-1), poidsMax(1);
 nbType valBiais = 1;
 Couleur clPoisson = Couleur(0,255,0);
@@ -81,7 +81,7 @@ Etre::nbType taillePoisson = 10;
 
 unsigned int pourcentageASelectionner = 10;
 /* float fourchetteDeBase = 1 / (float)nombreDePoissons; */
-float fourchetteDeBase = 1;
+float fourchetteDeBase = 0.5;
 
 unsigned int nbGeneration = 0;
 
@@ -315,10 +315,22 @@ int main (int argc, char* argv[] )
     // TEST
     ////////////////////////////////////////
 
+    // test pour random
+    /* float min(100000), max(-100000000), res(0); */
+    /* for (size_t i = 0; i < 1000000; i++) { */
+    /*     res = Rnd::_int(2); */
+    /*     if (res > max) max = res; */
+    /*     if (res < min) min = res; */
+    /* } */
+    /* show("min",min); */
+    /* show("max",max); */
+
     /* Poisson* e1 = new Poisson(); */
-    /* e1->réseauDeNeurones().nbHiddenLayers(2,2); */
+    /* e1->réseauDeNeurones().nbHiddenLayers(1,6); */
     /* e1->réseauDeNeurones().connecteLesLignesEntreElles(); */
-    /* e1->réseauDeNeurones().poidsAléa(0,10); */
+    /* e1->réseauDeNeurones().poidsAléa(-1,1); */
+    /* e1->réseauDeNeurones().poidsAléa(0.5); */
+    /* e1->réseauDeNeurones().print(true); */
     /* e1->réseauDeNeurones().hiddenLayers().at(0).at(0).print(); */
     /* Poisson* e2 = new Poisson(); */
     /* e2->réseauDeNeurones().nbHiddenLayers(2,2); */
@@ -617,15 +629,16 @@ int main (int argc, char* argv[] )
                 tblValsInput.clear();
                 for (Requin* requin: requins)
                 {
-                    /* tblValsInput.emplace_back(requin->angleDeDirection()/3.14f); */
-                    tblValsInput.emplace_back(requin->pos().x);
-                    tblValsInput.emplace_back(requin->pos().y);
+                    tblValsInput.emplace_back(requin->angleDeDirection()/3.14f);
+                    /* show("requin->angleDeDirection()",requin->angleDeDirection()); */
+                    /* tblValsInput.emplace_back(requin->pos().x); */
+                    /* tblValsInput.emplace_back(requin->pos().y); */
                 }
 
-                tblValsInput.push_back(monde.largeur());
-                tblValsInput.push_back(monde.hauteur());
-                tblValsInput.push_back(poissonEnLice->pos().x);
-                tblValsInput.push_back(poissonEnLice->pos().y);
+                /* tblValsInput.push_back(monde.largeur()); */
+                /* tblValsInput.push_back(monde.hauteur()); */
+                tblValsInput.push_back(( poissonEnLice->pos().x/monde.largeur() )*2-1);
+                tblValsInput.push_back(( poissonEnLice->pos().y/monde.hauteur() )*2-1);
 
                 poissonEnLice->tableauxDesValeursEnEntrée(tblValsInput);
                 poissonEnLice->calculeLesValeursDeToutMesNeurones();
@@ -681,8 +694,8 @@ int main (int argc, char* argv[] )
 
                         /* poissonDeReference->print(); */
                         /* note("************************************************************"); */
-                        size_t iLayer = 0;
-                        size_t iNeurone = 0;
+                        /* size_t iLayer = 0; */
+                        /* size_t iNeurone = 0; */
                         for (size_t i = 1; i < nombreDePoissons; i++) {
                             Poisson* poissonAModifier = poissons.at(i);
                             /* Poisson* poissonDeReference = poissons.at(i % nbRef); */
@@ -695,14 +708,14 @@ int main (int argc, char* argv[] )
                             /* show("fourchetteDeBase * numGeneration",fourchetteDeBase * numGeneration); */
 
                             poissonAModifier->réseauDeNeurones(poissonDeReference->réseauDeNeurones());
-                            /* poissonAModifier->réseauDeNeurones().poidsAléa( fourchetteDeBase ); */
-                            poissonAModifier->réseauDeNeurones().hiddenLayers().at(iLayer).at(iNeurone).poidsAléa(poidsMin, poidsMax);
+                            poissonAModifier->réseauDeNeurones().poidsAléa( fourchetteDeBase );
+                            /* poissonAModifier->réseauDeNeurones().hiddenLayers().at(iLayer).at(iNeurone).poidsAléa(poidsMin, poidsMax); */
                             /* show("iLayer",iLayer); */
                             /* show("iNeurone",iNeurone); */
-                            iNeurone = (++iNeurone)%nbNeuroneParHiddenLayers;
-                            if ( iNeurone == 0 ){
-                                iLayer = (++iLayer)%nbHiddenLayers;
-                            }
+                            /* iNeurone = (++iNeurone)%nbNeuroneParHiddenLayers; */
+                            /* if ( iNeurone == 0 ){ */
+                            /*     iLayer = (++iLayer)%nbHiddenLayers; */
+                            /* } */
                             /* poissonAModifier->print(); */
                         }
 
@@ -710,8 +723,8 @@ int main (int argc, char* argv[] )
 
                     // C'est au tour d'un nouveau poisson
                     Poisson* nouveauPoisson = poissons.at(indexPoisson);
-                    /* nouveauPoisson->pos(posPoiInit); */
-                    nouveauPoisson->pos(monde.largeur()*0.5f,monde.hauteur()*0.5f);
+                    nouveauPoisson->pos(posPoiInit);
+                    /* nouveauPoisson->pos(monde.largeur()*0.5f,monde.hauteur()*0.5f); */
                     monde.ajouteEtre(nouveauPoisson);
                     /* nouveauPoisson->print(); */
 
