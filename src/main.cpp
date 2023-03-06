@@ -69,8 +69,10 @@ int minTempsDuMonde = 0;
 Coord posReqInit; // position initial pour le requin
 Coord posPoiInit; // position initial pour le poisson
 
+bool forceLaFinDuConcours = false;
+
 // Je veux des poissons
-unsigned int nombreDePoissons = 10000;
+unsigned int nombreDePoissons = 100000;
 unsigned int nbHiddenLayers = 1;
 unsigned int nbNeuroneParHiddenLayers = 6;
 unsigned int nbInput = 3;
@@ -192,7 +194,7 @@ void creerToutLesEtres(Monde& monde)
         p->réseauDeNeurones().nbNeuronesInput(nbInput);
         p->réseauDeNeurones().nbHiddenLayers(nbHiddenLayers, nbNeuroneParHiddenLayers);
         for (auto& hiddenLayer: p->réseauDeNeurones().hiddenLayers()){
-            hiddenLayer.emplace_back(Neurone(valBiais,true));
+            hiddenLayer.emplace_back(Neurone(Rnd::_float(-1,1),true));
         };
         p->réseauDeNeurones().nbNeuronesOutput(1);
         p->réseauDeNeurones().connecteLesLignesEntreElles();
@@ -500,6 +502,13 @@ int main (int argc, char* argv[] )
                     }
                 }
 
+                // Reviens au debut des poissons pour pouvoir voir le meilleursPoisson
+                if (event.key.code == sf::Keyboard::B)
+                {
+                    notify("Concours terminer manuellement, je trie par plusGrandTempsDeVie et je duplique le meilleurs");
+                    forceLaFinDuConcours=true;
+                }
+
                 // Affiche la list des possons avec leurs scores
                 if (event.key.code == sf::Keyboard::S)
                 {
@@ -664,7 +673,8 @@ int main (int argc, char* argv[] )
                     /* show("indexPoisson",indexPoisson); */
 
                     // tout les poissons ont participé au concours
-                    if (indexPoisson >= poissons.size()) {
+                    if ((indexPoisson >= poissons.size()) or (forceLaFinDuConcours)) {
+                        if(forceLaFinDuConcours) forceLaFinDuConcours=false;
                         indexPoisson = 0;
                         ++nbGeneration;
 
@@ -674,8 +684,6 @@ int main (int argc, char* argv[] )
                         /* size_t nbRef = nombreDePoissons / pourcentageASelectionner; */
                         /* size_t nbRef = 1; */
 
-                        // TODO BUG
-                        // avec 10 poisson, on observe qu'il y a un problème de programmation...
                         Poisson* poissonDeReference = poissons.at(0);
 
                         note("************************************************************");
@@ -694,8 +702,8 @@ int main (int argc, char* argv[] )
 
                         /* poissonDeReference->print(); */
                         /* note("************************************************************"); */
-                        /* size_t iLayer = 0; */
-                        /* size_t iNeurone = 0; */
+                        size_t iLayer = 0;
+                        size_t iNeurone = 0;
                         for (size_t i = 1; i < nombreDePoissons; i++) {
                             Poisson* poissonAModifier = poissons.at(i);
                             /* Poisson* poissonDeReference = poissons.at(i % nbRef); */
@@ -708,11 +716,11 @@ int main (int argc, char* argv[] )
                             /* show("fourchetteDeBase * numGeneration",fourchetteDeBase * numGeneration); */
 
                             poissonAModifier->réseauDeNeurones(poissonDeReference->réseauDeNeurones());
-                            poissonAModifier->réseauDeNeurones().poidsAléa( fourchetteDeBase );
-                            /* poissonAModifier->réseauDeNeurones().hiddenLayers().at(iLayer).at(iNeurone).poidsAléa(poidsMin, poidsMax); */
+                            /* poissonAModifier->réseauDeNeurones().poidsAléa( fourchetteDeBase ); */
+                            poissonAModifier->réseauDeNeurones().hiddenLayers().at(iLayer).at(iNeurone).poidsAléa(poidsMin, poidsMax);
                             /* show("iLayer",iLayer); */
                             /* show("iNeurone",iNeurone); */
-                            /* iNeurone = (++iNeurone)%nbNeuroneParHiddenLayers; */
+                            iNeurone = (++iNeurone)%nbNeuroneParHiddenLayers;
                             /* if ( iNeurone == 0 ){ */
                             /*     iLayer = (++iLayer)%nbHiddenLayers; */
                             /* } */
